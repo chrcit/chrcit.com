@@ -1,0 +1,39 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import TableOfContents from "../../components/TableOfContents.astro";
+import {
+  InferGetStaticParamsType,
+  InferGetStaticPropsType,
+  GetStaticPaths,
+} from "astro";
+
+export const getStaticPaths = (async () => {
+  const articles = await getCollection("articles");
+
+  return articles.map((entry) => {
+    return {
+      params: { slug: entry.slug },
+      props: { entry },
+    };
+  });
+}) satisfies GetStaticPaths;
+
+type Params = InferGetStaticParamsType<typeof getStaticPaths>;
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { entry } = Astro.props as Props;
+const { Content, headings } = await entry.render();
+---
+
+<Layout title={entry.title}>
+  <div class="flex flex-row gap-20">
+    <aside class="sticky top-5 max-h-[100dvh] overflow-auto scroll-m-4 left-0">
+      <h3 class="text-2xl m-0">Table of Contents</h3>
+      <TableOfContents headings={headings} />
+    </aside>
+    <article>
+      <Content />
+    </article>
+  </div>
+</Layout>
