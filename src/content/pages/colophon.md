@@ -1,6 +1,7 @@
-import Layout from "../layouts/Layout.astro";
-
-<Layout title="Colophon">
+---
+title: Colophon
+description: Colophon
+---
 
 # Colophon
 
@@ -11,5 +12,3 @@ This site is built with:
 - MDX (https://mdxjs.com/)[https://mdxjs.com/]
 - Vite (https://vitejs.dev/)[https://vitejs.dev/]
 - Vercel (https://vercel.com/)[https://vercel.com/]
-
-</Layout>

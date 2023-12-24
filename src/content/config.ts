@@ -1,24 +1,38 @@
 import { z, defineCollection } from "astro:content";
 
-const articlesCollection = defineCollection({
+const pagesCollection = defineCollection({
   type: "content",
   schema: z.object({
     title: z.string(),
-    tags: z.array(z.string()),
-    image: z.string().optional(),
-    publishedAt: z.date().optional(),
+    description: z.string(),
   }),
+});
+
+const articlesCollection = defineCollection({
+  type: "content",
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      tags: z.array(z.string()),
+      description: z.string(),
+      image: image().optional(),
+      publishedAt: z.date().optional(),
+    }),
 });
 
 const booksCollection = defineCollection({
   type: "content",
-  schema: z.object({
-    title: z.string(),
-    rating: z.number(),
-    author: z.string(),
-    url: z.string(),
-    image: z.string().optional(),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      rating: z.number(),
+      author: z.string(),
+      url: z.string(),
+      category: z.string(),
+      description: z.string(),
+      tags: z.array(z.string()),
+      cover: image(),
+    }),
 });
 
 const filmsCollection = defineCollection({
@@ -59,6 +73,7 @@ const quotesCollection = defineCollection({
 });
 
 export const collections = {
+  pages: pagesCollection,
   articles: articlesCollection,
   books: booksCollection,
   films: filmsCollection,

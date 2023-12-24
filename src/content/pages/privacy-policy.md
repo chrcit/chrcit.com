@@ -1,9 +1,11 @@
-import Layout from "../layouts/Layout.astro";
+---
+title: Privacy Policy
+description: Privacy Policy
+---
 
-<Layout title="Data Protection">
-# Data protection
+# Privacy Policy
 
-## TLDR - What data we process
+## Too long, didn't read
 
 The privacy of our website visitors is very important to us. Therefore, you should know at all times when which personal data is used and how it is used. We are subject to the provisions of the European General Data Protection Regulation (GDPR) and the supplementary provisions of the Austrian Data Protection Act (DSG).
 
@@ -102,5 +104,3 @@ We would like to point out that we do not store any personal data after your vis
 If you believe that the processing of your personal data violates the GDPR or the DPA, you have the right to lodge a complaint with a supervisory authority, in particular in the Member State of your habitual residence, place of work or place of the alleged infringement, without prejudice to any other administrative or judicial remedy.
 
 In Austria, the data protection authority (https://www.dsb.gv.at/) ensures compliance with data protection.
-
-</Layout>

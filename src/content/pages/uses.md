@@ -1,6 +1,7 @@
-import Layout from "../layouts/Layout.astro";
-
-<Layout title="Things I use">
+---
+title: /uses
+description: /uses
+---
 
 # /uses
 
@@ -72,5 +73,3 @@ import Layout from "../layouts/Layout.astro";
 - Backblaze
 - Rectangle
 - Things
-
-</Layout>

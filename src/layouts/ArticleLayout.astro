@@ -1,0 +1,29 @@
+---
+import type { MarkdownHeading } from "astro";
+import RootLayout from "./RootLayout.astro";
+import TableOfContents from "../components/TableOfContents.astro";
+
+interface Props {
+  title: string;
+  headings?: MarkdownHeading[];
+}
+
+const { title, headings } = Astro.props;
+---
+
+<RootLayout title={title}>
+  <main id="content" class="mx-auto max-w-4xl py-10">
+    <div class="flex flex-row gap-20 relative -left-[10%]">
+      {
+        headings && (
+          <aside class="sticky hidden md:block top-5 w-[300px] text-sm max-h-[100dvh] overflow-auto scroll-m-4">
+            <TableOfContents headings={headings} />
+          </aside>
+        )
+      }
+      <article class="w-full prose-lg px-3 md:px-0">
+        <slot />
+      </article>
+    </div>
+  </main>
+</RootLayout>

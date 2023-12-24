@@ -1,0 +1,56 @@
+---
+import { getCollection } from "astro:content";
+import {
+  InferGetStaticParamsType,
+  InferGetStaticPropsType,
+  GetStaticPaths,
+} from "astro";
+import { Image } from "astro:assets";
+import Layout from "../../layouts/Layout.astro";
+import ArrowLeft from "../../components/icons/ArrowLeft.astro";
+import BackButton from "../../components/BackButton.astro";
+
+export const getStaticPaths = (async () => {
+  const articles = await getCollection("books");
+
+  return articles.map((entry) => {
+    return {
+      params: { slug: entry.slug },
+      props: { entry },
+    };
+  });
+}) satisfies GetStaticPaths;
+
+type Params = InferGetStaticParamsType<typeof getStaticPaths>;
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { entry } = Astro.props as Props;
+console.log(entry);
+const { Content } = await entry.render();
+---
+
+<Layout title={entry.data.title}>
+  <div class="mb-10">
+    <BackButton href="/books" iconSize="16">Back to books</BackButton>
+  </div>
+  <article class="flex flex-row gap-10">
+    <Image
+      src={entry.data.cover}
+      width={300}
+      alt={`Book cover of ${entry.data.title}`}
+    />
+    <div class="prose">
+      <header>
+        <h1>{entry.data.title}</h1>
+        <p class="italic">{entry.data.author}</p>
+        <a target="_blank" rel="noreferrer noopener" href={entry.data.url}
+          >Link to book</a
+        >
+      </header>
+
+      <div>
+        <Content />
+      </div>
+    </div>
+  </article>
+</Layout>

@@ -1,12 +1,13 @@
 ---
 import { getCollection } from "astro:content";
-import Layout from "../../layouts/Layout.astro";
-import TableOfContents from "../../components/TableOfContents.astro";
 import {
   InferGetStaticParamsType,
   InferGetStaticPropsType,
   GetStaticPaths,
 } from "astro";
+import ArticleLayout from "../../layouts/ArticleLayout.astro";
+import BackButton from "../../components/BackButton.astro";
+import { Image } from "astro:assets";
 
 export const getStaticPaths = (async () => {
   const articles = await getCollection("articles");
@@ -26,14 +27,26 @@ const { entry } = Astro.props as Props;
 const { Content, headings } = await entry.render();
 ---
 
-<Layout title={entry.title}>
-  <div class="flex flex-row gap-20">
-    <aside class="sticky top-5 max-h-[100dvh] overflow-auto scroll-m-4 left-0">
-      <h3 class="text-2xl m-0">Table of Contents</h3>
-      <TableOfContents headings={headings} />
-    </aside>
-    <article>
+<ArticleLayout headings={headings} title={entry.data.title}>
+  {
+    entry.data.image && (
+      <Image
+        src={entry.data.image}
+        width={300}
+        alt={`Book cover of ${entry.data.title}`}
+      />
+    )
+  }
+  <div class="prose">
+    <header>
+      <h1 transition:name={`article-${entry.id}-title`}>{entry.data.title}</h1>
+      <p transition:name={`article-${entry.id}-description`}>
+        {entry.data.description}
+      </p>
+    </header>
+
+    <div>
       <Content />
-    </article>
+    </div>
   </div>
-</Layout>
+</ArticleLayout>

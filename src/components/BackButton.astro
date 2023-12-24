@@ -1,0 +1,26 @@
+---
+import ArrowLeft from "../components/icons/ArrowLeft.astro";
+import clsx from "clsx";
+
+interface Props {
+  iconSize: string;
+  className?: string;
+  href: string;
+}
+const { iconSize, href, className } = Astro.props;
+---
+
+<a
+  class={clsx("inline-flex relative group gap-1 items-center", className)}
+  href={href}
+>
+  <ArrowLeft
+    size={iconSize}
+    className="group-hover:-translate-x-full group-hover:opacity-0 transition-all"
+  />
+  <ArrowLeft
+    size={iconSize}
+    className="absolute left-0 right-0 group-hover:translate-x-0 translate-x-full group-hover:opacity-100 opacity-0 transition-all"
+  />
+  <slot />
+</a>
