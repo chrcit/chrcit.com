@@ -12,5 +12,6 @@ export default defineConfig({
             external: ['twitter-api-client']
         }
     },
+    site: 'https://chrcit.com',
     integrations: [tailwind(), sitemap(), mdx()]
 });

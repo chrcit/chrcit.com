@@ -37,31 +37,34 @@ const booksCollection = defineCollection({
 
 const filmsCollection = defineCollection({
   type: "content",
-  schema: z.object({
-    title: z.string(),
-    rating: z.number(),
-    image: z.string().optional(),
-    url: z.string(),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      rating: z.number(),
+      image: image().optional(),
+      url: z.string(),
+    }),
 });
 
 const showsCollection = defineCollection({
   type: "content",
-  schema: z.object({
-    title: z.string(),
-    rating: z.number(),
-    image: z.string().optional(),
-    url: z.string(),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      rating: z.number(),
+      image: image().optional(),
+      url: z.string(),
+    }),
 });
 
 const musiciansCollection = defineCollection({
   type: "content",
-  schema: z.object({
-    name: z.string(),
-    url: z.string(),
-    image: z.string().optional(),
-  }),
+  schema: ({ image }) =>
+    z.object({
+      name: z.string(),
+      url: z.string(),
+      image: image().optional(),
+    }),
 });
 
 const quotesCollection = defineCollection({
