@@ -1,0 +1,31 @@
+---
+import ArrowRight from "../components/icons/ArrowRight.astro";
+import clsx from "clsx";
+
+interface Props {
+  iconSize: string;
+  className?: string;
+  href?: string;
+}
+const { iconSize, href, className } = Astro.props;
+
+const Element = !!href ? "a" : "span";
+---
+
+<Element
+  class={clsx(
+    "inline-flex w-fit font-bold overflow-clip relative gap-1 items-center",
+    className
+  )}
+  href={href}
+>
+  Read more
+  <ArrowRight
+    size={iconSize}
+    className="stroke-2 group-hover:translate-x-full group-hover:opacity-0 transition-all"
+  />
+  <ArrowRight
+    size={iconSize}
+    className="stroke-2 absolute right-0 group-hover:translate-x-0 -translate-x-full group-hover:opacity-100 opacity-0 transition-all"
+  />
+</Element>

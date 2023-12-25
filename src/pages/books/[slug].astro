@@ -25,7 +25,6 @@ type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { entry } = Astro.props as Props;
-console.log(entry);
 const { Content } = await entry.render();
 ---
 
@@ -37,6 +36,9 @@ const { Content } = await entry.render();
     <Image
       src={entry.data.cover}
       width={300}
+      class="h-auto w-full"
+      densities={[1, 2, 3]}
+      transition:name={`book-${entry.id}-cover`}
       alt={`Book cover of ${entry.data.title}`}
     />
     <div class="prose">

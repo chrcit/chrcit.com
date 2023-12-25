@@ -3,8 +3,6 @@ title: Privacy Policy
 description: Privacy Policy
 ---
 
-# Privacy Policy
-
 ## Too long, didn't read
 
 The privacy of our website visitors is very important to us. Therefore, you should know at all times when which personal data is used and how it is used. We are subject to the provisions of the European General Data Protection Regulation (GDPR) and the supplementary provisions of the Austrian Data Protection Act (DSG).

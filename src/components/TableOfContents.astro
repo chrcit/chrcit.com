@@ -32,12 +32,44 @@ const buildToc = (headings: Heading[]) => {
 };
 
 const { headings } = Astro.props;
-console.log(headings);
 const toc = buildToc(headings);
 ---
 
 <nav class="not-prose">
-  <ul class="flex flex-col list-none m-0 p-0 transition-colors">
+  <ul
+    id="table-of-contents"
+    class="flex flex-col gap-1 list-none m-0 p-0 transition-colors"
+  >
     {toc.map((heading) => <TableOfContentsHeading heading={heading} />)}
   </ul>
 </nav>
+
+<script>
+  window.addEventListener("scroll", () => {
+    const links = document.querySelectorAll("#table-of-contents a");
+    const fromTop = window.scrollY;
+
+    links.forEach((link) => {
+      const href = link.getAttribute("href");
+      const hash = href.substring(href.indexOf("#"));
+      const section = document.querySelector(hash);
+
+      const top = section?.getBoundingClientRect().top;
+      const height = section?.getBoundingClientRect().height;
+
+      if (section && top <= fromTop && top + height > fromTop) {
+        console.log(
+          top,
+          height,
+          fromTop,
+          top <= fromTop,
+          top + height > fromTop
+        );
+        console.log("active", link);
+        link.setAttribute("data-active", "true");
+      } else {
+        link.setAttribute("data-active", "false");
+      }
+    });
+  });
+</script>

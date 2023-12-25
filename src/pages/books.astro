@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import TableOfContents from "../components/TableOfContents.astro";
 import { Image } from "astro:assets";
+import ListHeader from "../components/ListHeader.astro";
 
 const books = await getCollection("books");
 
@@ -35,23 +36,26 @@ const categories = [allCategory].concat(
 ---
 
 <Layout title={"Books"}>
-  <div class="flex flex-col gap-20">
-    <aside class="sticky top-5 bg-white overflow-auto scroll-m-4 left-0">
-      <nav class="flex flex-row gap-3">
-        {
-          categories.map((category) => {
-            return (
-              <a
-                href={`#books-${category.slug}`}
-                class="block no-underline px-3  py-1 rounded-md bg-black/10 hover:bg-black/20 transition-all"
-              >
-                {category.title} ({category.count})
-              </a>
-            );
-          })
-        }
-      </nav>
-    </aside>
+  <div class="flex flex-col gap-10">
+    <div>
+      <ListHeader title="Books" />
+      <aside class="sticky top-5 bg-white overflow-auto scroll-m-4 left-0">
+        <nav class="flex flex-row gap-3">
+          {
+            categories.map((category) => {
+              return (
+                <a
+                  href={`#books-${category.slug}`}
+                  class="block no-underline px-3  py-1 rounded-md bg-black/10 hover:bg-black/20 transition-all"
+                >
+                  {category.title} ({category.count})
+                </a>
+              );
+            })
+          }
+        </nav>
+      </aside>
+    </div>
     <section>
       {
         Object.entries(categoriesWithBooks).map(([category, books]) => (
@@ -66,7 +70,12 @@ const categories = [allCategory].concat(
               {books.map((book) => (
                 <a href={`/books/${book.slug}`}>
                   <article class="relative overflow-clip group max-w-[250px]">
-                    <Image src={book.data.cover} alt={book.data.title} />
+                    <Image
+                      src={book.data.cover}
+                      alt={book.data.title}
+                      densities={[1, 2, 3]}
+                      transition:name={`book-${book.id}-cover`}
+                    />
                     <div class="absolute p-4 inset-0 flex flex-col justify-end h-full w-full bg-black/60 text-white translate-y-full group-hover:translate-y-0 transition-all">
                       <h3 class="text-xl font-bold">{book.data.title}</h3>
                       <p>{book.data.description}</p>

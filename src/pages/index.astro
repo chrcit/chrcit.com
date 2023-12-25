@@ -1,12 +1,12 @@
 ---
 import { Image } from "astro:assets";
-import ProfileImage from "../images/home-profile.jpg";
-import { socials } from "../data/socials";
-import BaseLayout from "../layouts/BaseLayout.astro";
-import Particles from "../components/Particles.astro";
-
 import Particles from "astro-particles";
 import type { ISourceOptions } from "tsparticles-engine";
+import { socials } from "../data/socials";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SocialLinks from "../components/SocialLinks.astro";
+
+import ProfileImage from "../images/home-profile.jpg";
 
 const options: ISourceOptions = {
   background: {
@@ -70,7 +70,7 @@ const options: ISourceOptions = {
     },
     move: {
       enable: true,
-      speed: 6,
+      speed: 3,
       direction: "none",
       random: false,
       straight: false,
@@ -125,17 +125,11 @@ const options: ISourceOptions = {
 ---
 
 <BaseLayout title="Welcome to Astro.">
-  <Particles
-    class="w-full h-full fixed inset-0"
-    id="tsparticles"
-    options={options}
-    init="particlesInit"
-  />
   <div
-    class="flex-col md:flex-row flex gap-10 items-center bg-white/90 mx-auto w-full p-10 max-w-4xl"
+    class="flex-col md:flex-row backdrop-blur-sm flex gap-10 items-center bg-white/70 mx-auto p-10 max-w-4xl -translate-y-1/2 fixed top-1/2 left-1/2 -translate-x-1/2 w-full"
   >
     <Image
-      class=""
+      class="mx-auto w-3/4 md:w-auto"
       transition:name="profile-image"
       style={{
         clipPath: "polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)",
@@ -147,6 +141,7 @@ const options: ISourceOptions = {
     />
     <article class="prose">
       <h1 class="text-4xl font-bold">Hi, I'm Christian.</h1>
+      <SocialLinks />
       <p>
         I've been creating things on the internet for <a
           target="_blank"
@@ -170,10 +165,19 @@ const options: ISourceOptions = {
       </p>
       <p>
         <a href="/now">/now</a>
-        <a href="/use">/uses</a>
+        <a href="/uses">/uses</a>
+        <a href="/articles">/articles</a>
+        <a href="/projects">/projects</a>
       </p>
     </article>
   </div>
+
+  <Particles
+    class="w-full h-full fixed inset-0"
+    id="tsparticles"
+    options={options}
+    init="particlesInit"
+  />
 
   <script>
     import {

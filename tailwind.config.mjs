@@ -3,21 +3,24 @@ export default {
 	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
 	theme: {
 		extend: {
+			color: {
+				brand: "#8B1717"
+			},
 			fontFamily: {
 				sans: ["Monterrat", "sans-serif"],
 				serif: ["Playfair Display", "serif"],
 			},
 			typography: (theme) => ({
-
 				DEFAULT: {
 					css: {
+						'--tw-prose-links': theme('colors.brand'),
 						fontFamily: theme('fontFamily.sans').join(','),
 						color: theme('colors.gray.700'),
 						maxWidth: '70ch',
-						a: {
-							color: theme('colors.gray.900'),
+						"a": {
+							color: theme('colors.brand'),
 							'&:hover': {
-								color: theme('colors.gray.700'),
+								textDecoration: 'underline',
 							},
 
 						},

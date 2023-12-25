@@ -3,4 +3,4 @@ title: Imprint
 description: Imprint
 ---
 
-# Imprint
+Imprint

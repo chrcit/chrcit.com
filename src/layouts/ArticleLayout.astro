@@ -2,28 +2,77 @@
 import type { MarkdownHeading } from "astro";
 import RootLayout from "./RootLayout.astro";
 import TableOfContents from "../components/TableOfContents.astro";
+import { Image } from "astro:assets";
 
 interface Props {
+  id: string;
   title: string;
   headings?: MarkdownHeading[];
+  image?: {
+    src?: string;
+    width?: number;
+    height?: number;
+    format?: "png" | "jpg" | "jpeg" | "tiff" | "webp" | "gif" | "svg" | "avif";
+  }; // TODO: extract to a type or find astro type
 }
 
-const { title, headings } = Astro.props;
+const { id, title, image, headings } = Astro.props;
 ---
 
 <RootLayout title={title}>
-  <main id="content" class="mx-auto max-w-4xl py-10">
-    <div class="flex flex-row gap-20 relative -left-[10%]">
+  <article class="flex flex-col gap-10 px-5 md:px-2">
+    {
+      image && (
+        <Image
+          densities={[1, 2, 3]}
+          width={300}
+          class="w-full"
+          transition:name={`article-${id}-image`}
+          src={image}
+          width={300}
+          alt={``}
+        />
+      )
+    }
+    <h1
+      id={`article-title`}
+      class="bg-white/80 font-serif transition-all data-[scrolled=true]:text-3xl backdrop-blur-sm block py-5 z-10 sticky top-0 text-5xl"
+      transition:name={`article-${id}-title`}
+    >
+      {title}
+    </h1>
+    <section class="w-full flex flex-row gap-10">
+      <div class="prose flex-grow break-all">
+        <slot />
+      </div>
       {
         headings && (
-          <aside class="sticky hidden md:block top-5 w-[300px] text-sm max-h-[100dvh] overflow-auto scroll-m-4">
+          <aside class="sticky pt-[6em] hidden md:block top-5 w-[400px] text-sm max-h-[100dvh] overflow-auto scroll-m-4">
+            <h4 class="text-2xl font-serif mb-4">Table of Contents</h4>
             <TableOfContents headings={headings} />
+            <hr class="my-4" />
+            <h4 class="text-2xl font-serif mb-4">References</h4>
           </aside>
         )
       }
-      <article class="w-full prose-lg px-3 md:px-0">
-        <slot />
-      </article>
-    </div>
-  </main>
+    </section>
+  </article>
+
+  <script>
+    window.addEventListener("scroll", (e) => {
+      const title = document.getElementById(`article-title`);
+
+      if (title) {
+        const titleRect = title.getBoundingClientRect();
+        const delta = 600;
+        const passedTop = window.scrollY > delta;
+
+        if (passedTop) {
+          title.setAttribute("data-scrolled", "true");
+        } else {
+          title.setAttribute("data-scrolled", "false");
+        }
+      }
+    });
+  </script>
 </RootLayout>

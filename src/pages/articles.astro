@@ -2,20 +2,30 @@
 import { getCollection } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import { Image } from "astro:assets";
+import ReadMoreButton from "../components/ReadMoreButton.astro";
+import ListHeader from "../components/ListHeader.astro";
 
 const articles = await getCollection("articles");
 ---
 
 <Layout title={"Books"}>
   <section>
+    <ListHeader title="Articles" />
     {
       articles.map((article) => (
-        <a href={`/articles/${article.slug}`}>
-          <article class="flex flex-row items-start gap-10">
+        <a class="group" href={`/articles/${article.slug}`}>
+          <article class="flex flex-row items-end gap-10">
             {article.data.image && (
-              <Image src={article.data.image} alt={article.data.title} />
+              <Image
+                densities={[1, 2, 3]}
+                width={450}
+                transition:name={`article-${article.id}-image`}
+                class="w-full max-w-[450px]"
+                src={article.data.image}
+                alt={article.data.title}
+              />
             )}
-            <div class="">
+            <div class="md:relative bg-white/80 backdrop-blur-md -left-40 -bottom-5 px-4 py-5">
               <h2
                 transition:name={`article-${article.id}-title`}
                 class="text-3xl font-serif font-bold"
@@ -25,6 +35,7 @@ const articles = await getCollection("articles");
               <p transition:name={`article-${article.id}-description`}>
                 {article.data.description}
               </p>
+              <ReadMoreButton iconSize="16" />
             </div>
           </article>
         </a>

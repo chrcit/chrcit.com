@@ -20,6 +20,17 @@ const articlesCollection = defineCollection({
     }),
 });
 
+const projectsCollection = defineCollection({
+  type: "content",
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      tags: z.array(z.string()),
+      description: z.string(),
+      image: image().optional(),
+    }),
+});
+
 const booksCollection = defineCollection({
   type: "content",
   schema: ({ image }) =>
@@ -78,6 +89,7 @@ const quotesCollection = defineCollection({
 export const collections = {
   pages: pagesCollection,
   articles: articlesCollection,
+  projects: projectsCollection,
   books: booksCollection,
   films: filmsCollection,
   shows: showsCollection,

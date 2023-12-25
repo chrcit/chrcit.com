@@ -3,8 +3,6 @@ title: /uses
 description: /uses
 ---
 
-# /uses
-
 ## Gear
 
 - Macbook Pro 14" M2 Pro, 32GB RAM

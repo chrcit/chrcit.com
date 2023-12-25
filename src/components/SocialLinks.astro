@@ -1,0 +1,44 @@
+---
+import { SocialType, socials } from "../data/socials";
+import SocialIcon from "../components/SocialIcon.astro";
+
+const socialLinks: {
+  type: SocialType;
+  href: string;
+}[] = [
+  { type: "twitter", href: socials.twitter },
+  { type: "github", href: socials.github },
+  {
+    type: "linkedin",
+    href: socials.linkedin,
+  },
+  {
+    type: "instagram",
+    href: socials.instagram,
+  },
+  {
+    type: "twitch",
+    href: socials.twitch,
+  },
+  {
+    type: "youtube",
+    href: socials.youtube,
+  },
+];
+---
+
+<ul class="flex not-prose flex-row flex-wrap">
+  {
+    socialLinks.map((link) => (
+      <li class="px-2">
+        <a
+          class="hover:underline cursor-pointer underline-offset-2"
+          href={link.href}
+          title={`Link to my ${link.type}`}
+        >
+          <SocialIcon size="16" type={link.type} />
+        </a>
+      </li>
+    ))
+  }
+</ul>
