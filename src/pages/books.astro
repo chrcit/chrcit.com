@@ -1,9 +1,8 @@
 ---
 import { getCollection } from "astro:content";
-import Layout from "../layouts/Layout.astro";
-import TableOfContents from "../components/TableOfContents.astro";
 import { Image } from "astro:assets";
 import ListHeader from "../components/ListHeader.astro";
+import RootLayout from "../layouts/RootLayout.astro";
 
 const books = await getCollection("books");
 
@@ -35,58 +34,60 @@ const categories = [allCategory].concat(
 );
 ---
 
-<Layout title={"Books"}>
-  <div class="flex flex-col gap-10">
-    <div>
-      <ListHeader title="Books" />
-      <aside class="sticky top-5 bg-white overflow-auto scroll-m-4 left-0">
-        <nav class="flex flex-row gap-3">
-          {
-            categories.map((category) => {
-              return (
-                <a
-                  href={`#books-${category.slug}`}
-                  class="block no-underline px-3  py-1 rounded-md bg-black/10 hover:bg-black/20 transition-all"
-                >
-                  {category.title} ({category.count})
-                </a>
-              );
-            })
-          }
-        </nav>
-      </aside>
+<RootLayout title={"Books"}>
+  <main id="content" class="mx-auto px-5 max-w-7xl py-10">
+    <div class="flex flex-col gap-10">
+      <div>
+        <ListHeader title="Books" />
+        <aside class="sticky top-5 bg-white overflow-auto scroll-m-4 left-0">
+          <nav class="flex flex-row gap-3">
+            {
+              categories.map((category) => {
+                return (
+                  <a
+                    href={`#books-${category.slug}`}
+                    class="block no-underline px-3  py-1 rounded-md bg-black/10 hover:bg-black/20 transition-all"
+                  >
+                    {category.title}&nbsp;({category.count})
+                  </a>
+                );
+              })
+            }
+          </nav>
+        </aside>
+      </div>
+      <section class="flex flex-col gap-20">
+        {
+          Object.entries(categoriesWithBooks).map(([category, books]) => (
+            <section>
+              <h2
+                class="text-3xl w-full block py-2 border-b mb-5"
+                id={`books-${category}`}
+              >
+                {category}
+              </h2>
+              <div class="flex flex-row gap-10 overflow-auto items-center scroll-mx-10">
+                {books.map((book) => (
+                  <a href={`/books/${book.slug}`}>
+                    <article class="relative overflow-clip group w-[200px]">
+                      <Image
+                        src={book.data.cover}
+                        alt={book.data.title}
+                        densities={[1, 2, 3]}
+                        transition:name={`book-${book.id}-cover`}
+                      />
+                      <div class="absolute p-4 inset-0 flex flex-col justify-end h-full w-full bg-black/60 text-white translate-y-full group-hover:translate-y-0 transition-all">
+                        <h3 class="text-xl font-bold">{book.data.title}</h3>
+                        <p>{book.data.description}</p>
+                      </div>
+                    </article>
+                  </a>
+                ))}
+              </div>
+            </section>
+          ))
+        }
+      </section>
     </div>
-    <section>
-      {
-        Object.entries(categoriesWithBooks).map(([category, books]) => (
-          <section>
-            <h2
-              class="text-3xl w-full block py-2 border-b mb-5"
-              id={`books-${category}`}
-            >
-              {category}
-            </h2>
-            <div class="flex flex-row gap-5 overflow-auto scroll-m-5">
-              {books.map((book) => (
-                <a href={`/books/${book.slug}`}>
-                  <article class="relative overflow-clip group max-w-[250px]">
-                    <Image
-                      src={book.data.cover}
-                      alt={book.data.title}
-                      densities={[1, 2, 3]}
-                      transition:name={`book-${book.id}-cover`}
-                    />
-                    <div class="absolute p-4 inset-0 flex flex-col justify-end h-full w-full bg-black/60 text-white translate-y-full group-hover:translate-y-0 transition-all">
-                      <h3 class="text-xl font-bold">{book.data.title}</h3>
-                      <p>{book.data.description}</p>
-                    </div>
-                  </article>
-                </a>
-              ))}
-            </div>
-          </section>
-        ))
-      }
-    </section>
-  </div>
-</Layout>
+  </main>
+</RootLayout>

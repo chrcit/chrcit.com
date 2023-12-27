@@ -27,44 +27,46 @@ const { Content } = await entry.render();
 ---
 
 <RootLayout title={entry.data.title}>
-  <div class="flex flex-col flex-start px-5 md:px-2 md:flex-row gap-10">
-    <div class="w-full md:sticky top-5 max-w-[400px]">
-      {
-        entry.data.image && (
-          <Image
-            src={entry.data.image}
-            class="w-full"
-            densities={[1, 2, 3]}
-            transition:name={`project-${entry.id}-image`}
-            alt={`Screenshot of ${entry.data.title}`}
-          />
-        )
-      }
-    </div>
-    <div class="flex flex-col gap-10">
-      <header class="flex flex-col border-b pb-10 gap-5">
-        <h1
-          class="text-5xl font-serif"
-          transition:name={`project-${entry.id}-title`}
-        >
-          {entry.data.title}
-        </h1>
-        <p transition:name={`project-${entry.id}-description`}>
-          {entry.data.description}
-        </p>
+  <main id="content" class="mx-auto lg:max-w-3xl xl:max-w-4xl py-10">
+    <div class="flex flex-col flex-start px-5 md:px-2 md:flex-row gap-10">
+      <div class="w-full md:sticky top-5 max-w-[400px]">
         {
-          entry.data.tags.length > 0 && (
-            <p transition:name={`project-${entry.id}-tags`}>
-              <span class="font-bold">Topics:</span>
-              {entry.data.tags.join(", ")}
-            </p>
+          entry.data.image && (
+            <Image
+              src={entry.data.image}
+              class="w-full"
+              densities={[1, 2, 3]}
+              transition:name={`project-${entry.id}-image`}
+              alt={`Screenshot of ${entry.data.title}`}
+            />
           )
         }
-      </header>
+      </div>
+      <div class="flex flex-col gap-10">
+        <header class="flex flex-col border-b pb-10 gap-5">
+          <h1
+            class="text-5xl font-serif"
+            transition:name={`project-${entry.id}-title`}
+          >
+            {entry.data.title}
+          </h1>
+          <p transition:name={`project-${entry.id}-description`}>
+            {entry.data.description}
+          </p>
+          {
+            entry.data.tags.length > 0 && (
+              <p transition:name={`project-${entry.id}-tags`}>
+                <span class="font-bold">Topics:</span>
+                {entry.data.tags.join(", ")}
+              </p>
+            )
+          }
+        </header>
 
-      <div class="prose">
-        <Content />
+        <div class="prose">
+          <Content />
+        </div>
       </div>
     </div>
-  </div>
+  </main>
 </RootLayout>

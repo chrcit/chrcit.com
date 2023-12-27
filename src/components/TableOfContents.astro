@@ -38,7 +38,7 @@ const toc = buildToc(headings);
 <nav class="not-prose">
   <ul
     id="table-of-contents"
-    class="flex flex-col gap-1 list-none m-0 p-0 transition-colors"
+    class="flex flex-col gap-1 max-h-[300px] overflow-y-auto list-none m-0 p-0 transition-colors"
   >
     {toc.map((heading) => <TableOfContentsHeading heading={heading} />)}
   </ul>

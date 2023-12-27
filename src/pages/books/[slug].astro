@@ -6,9 +6,9 @@ import {
   GetStaticPaths,
 } from "astro";
 import { Image } from "astro:assets";
-import Layout from "../../layouts/Layout.astro";
 import ArrowLeft from "../../components/icons/ArrowLeft.astro";
 import BackButton from "../../components/BackButton.astro";
+import RootLayout from "../../layouts/RootLayout.astro";
 
 export const getStaticPaths = (async () => {
   const articles = await getCollection("books");
@@ -28,31 +28,33 @@ const { entry } = Astro.props as Props;
 const { Content } = await entry.render();
 ---
 
-<Layout title={entry.data.title}>
-  <div class="mb-10">
-    <BackButton href="/books" iconSize="16">Back to books</BackButton>
-  </div>
-  <article class="flex flex-row gap-10">
-    <Image
-      src={entry.data.cover}
-      width={300}
-      class="h-auto w-full"
-      densities={[1, 2, 3]}
-      transition:name={`book-${entry.id}-cover`}
-      alt={`Book cover of ${entry.data.title}`}
-    />
-    <div class="prose">
-      <header>
-        <h1>{entry.data.title}</h1>
-        <p class="italic">{entry.data.author}</p>
-        <a target="_blank" rel="noreferrer noopener" href={entry.data.url}
-          >Link to book</a
-        >
-      </header>
-
-      <div>
-        <Content />
-      </div>
+<RootLayout title={entry.data.title}>
+  <main id="content" class="mx-auto px-5 max-w-7xl py-10">
+    <div class="mb-10">
+      <BackButton href="/books" iconSize="16">Back to books</BackButton>
     </div>
-  </article>
-</Layout>
+    <article class="flex flex-row items-start gap-10">
+      <Image
+        src={entry.data.cover}
+        width={300}
+        class="h-auto w-full"
+        densities={[1, 2, 3]}
+        transition:name={`book-${entry.id}-cover`}
+        alt={`Book cover of ${entry.data.title}`}
+      />
+      <div class="prose">
+        <header>
+          <h1>{entry.data.title}</h1>
+          <p class="italic">{entry.data.author}</p>
+          <a target="_blank" rel="noreferrer noopener" href={entry.data.url}
+            >Link to book</a
+          >
+        </header>
+
+        <div>
+          <Content />
+        </div>
+      </div>
+    </article>
+  </main>
+</RootLayout>
