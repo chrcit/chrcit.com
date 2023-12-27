@@ -35,10 +35,10 @@ const { headings } = Astro.props;
 const toc = buildToc(headings);
 ---
 
-<nav class="not-prose text-black/50">
+<nav class="not-prose text-black/20 transition-colors hover:text-black/50">
   <ul
     id="table-of-contents"
-    class="flex flex-col gap-1 max-h-[300px] overflow-y-auto list-none m-0 p-0 transition-colors"
+    class="flex flex-col gap-1 overflow-y-auto list-none m-0 p-0 transition-colors"
   >
     {toc.map((heading) => <TableOfContentsHeading heading={heading} />)}
   </ul>

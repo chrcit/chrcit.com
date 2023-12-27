@@ -24,7 +24,7 @@ const { id, title, image, type, headings, activeTab } = Astro.props;
 ---
 
 <RootLayout activeTab={activeTab} title={title}>
-  <main id="content" class="lg:max-w-3xl xl:max-w-5xl py-10">
+  <main id="content" class="w-full max-w-5xl pr-5 py-10">
     <article class="flex flex-col px-5 md:px-0">
       {
         image && (
@@ -48,13 +48,15 @@ const { id, title, image, type, headings, activeTab } = Astro.props;
         >
           {title}
         </h1>
-        <section class="w-full flex justify-between flex-row gap-10 xl:gap-20">
+        <section
+          class="w-full flex justify-between flex-row md:gap-14 lg:gap-20 xl:gap-28"
+        >
           <div class="prose flex-grow break-all">
             <slot />
           </div>
           {
             headings && (
-              <aside class="sticky pt-[6em] hidden md:block top-5 w-[400px] text-sm max-h-[100dvh] overflow-auto scroll-m-4">
+              <aside class="sticky pt-[6em] hidden lg:block top-5 md:w-[250px] lg:w-[300px] text-sm max-h-[100dvh] overflow-auto scroll-m-4">
                 <TableOfContents headings={headings} />
               </aside>
             )
