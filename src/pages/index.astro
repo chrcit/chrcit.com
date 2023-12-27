@@ -140,8 +140,15 @@ const options: ISourceOptions = {
       alt="Image of Christian Cito, a 26 year old white man. I'm wearing a loose blue shirt and am looking to the side."
     />
     <article class="prose">
-      <h1 class="text-4xl font-bold">Hi, I'm Christian.</h1>
+      <h1 transition:name="hi-im-christian" class="text-4xl font-bold">
+        Hi, I'm Christian.
+      </h1>
       <SocialLinks />
+      <p>
+        I'm <strong>26 years</strong> old and I live in <strong>
+          Vienna, Austria</strong
+        >.
+      </p>
       <p>
         I've been creating things on the internet for <a
           target="_blank"
@@ -154,7 +161,7 @@ const options: ISourceOptions = {
           >mostly tweets</a
         >, do <a target="_blank" rel="noopener noreferrer" href={socials.github}
           >some coding</a
-        >, <a target="_blank" rel="noopener noreferrer" href={socials.github}
+        >, <a target="_blank" rel="noopener noreferrer" href={socials.instagram}
           >take photos</a
         >.
       </p>
@@ -164,7 +171,6 @@ const options: ISourceOptions = {
         >.
       </p>
       <p>
-        <a href="/now">/now</a>
         <a href="/uses">/uses</a>
         <a href="/articles">/articles</a>
         <a href="/projects">/projects</a>

@@ -9,6 +9,7 @@ import { Image } from "astro:assets";
 import ArrowLeft from "../../components/icons/ArrowLeft.astro";
 import BackButton from "../../components/BackButton.astro";
 import RootLayout from "../../layouts/RootLayout.astro";
+import TableOfContents from "../../components/TableOfContents.astro";
 
 export const getStaticPaths = (async () => {
   const articles = await getCollection("books");
@@ -25,36 +26,51 @@ type Params = InferGetStaticParamsType<typeof getStaticPaths>;
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { entry } = Astro.props as Props;
-const { Content } = await entry.render();
+const { Content, headings } = await entry.render();
 ---
 
 <RootLayout title={entry.data.title}>
-  <main id="content" class="mx-auto px-5 max-w-7xl py-10">
-    <div class="mb-10">
-      <BackButton href="/books" iconSize="16">Back to books</BackButton>
-    </div>
-    <article class="flex flex-row items-start gap-10">
+  <main id="content" class="max-w-5xl py-10">
+    <header class="flex sticky top-10 left-0 flex-row items-start py-10 gap-10">
       <Image
         src={entry.data.cover}
         width={300}
-        class="h-auto w-full"
+        class="h-auto w-full max-w-[300px]"
         densities={[1, 2, 3]}
         transition:name={`book-${entry.id}-cover`}
         alt={`Book cover of ${entry.data.title}`}
       />
       <div class="prose">
-        <header>
-          <h1>{entry.data.title}</h1>
-          <p class="italic">{entry.data.author}</p>
-          <a target="_blank" rel="noreferrer noopener" href={entry.data.url}
-            >Link to book</a
-          >
-        </header>
+        <p class="italic">Author: {entry.data.author}</p>
+        <p class="italic">Rating: {entry.data.rating}</p>
+        <p class="italic">{entry.data.description}</p>
 
-        <div>
+        <a target="_blank" rel="noreferrer noopener" href={entry.data.url}
+          >Link to book</a
+        >
+      </div>
+    </header>
+
+    <div class={"bg-white relative z-20"}>
+      <h1
+        id={`article-title`}
+        class="bg-white/80 font-serif transition-all data-[scrolled=true]:text-3xl backdrop-blur-sm block py-5 z-10 sticky top-0 text-5xl"
+        transition:name={`article-${entry.id}-title`}
+      >
+        {entry.data.title}
+      </h1>
+      <section class="w-full flex flex-row gap-10 xl:gap-20">
+        <div class="prose flex-grow break-all">
           <Content />
         </div>
-      </div>
-    </article>
+        {
+          headings && (
+            <aside class="sticky pt-[6em] hidden md:block top-5 w-[400px] text-sm max-h-[100dvh] overflow-auto scroll-m-4">
+              <TableOfContents headings={headings} />
+            </aside>
+          )
+        }
+      </section>
+    </div>
   </main>
 </RootLayout>

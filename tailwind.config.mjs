@@ -3,7 +3,7 @@ export default {
 	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
 	theme: {
 		extend: {
-			color: {
+			colors: {
 				brand: "#8B1717"
 			},
 			fontFamily: {
@@ -37,6 +37,10 @@ export default {
 						"h3": {
 							fontSize: theme('fontSize.2xl'),
 						},
+						"strong": {
+							color: theme('colors.brand'),
+							fontWeight: '600',
+						}
 					},
 				},
 

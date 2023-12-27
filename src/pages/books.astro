@@ -35,33 +35,27 @@ const categories = [allCategory].concat(
 ---
 
 <RootLayout title={"Books"}>
-  <main id="content" class="mx-auto px-5 max-w-7xl py-10">
-    <div class="flex flex-col gap-10">
-      <div>
-        <ListHeader title="Books" />
-        <aside class="sticky top-5 bg-white overflow-auto scroll-m-4 left-0">
-          <nav class="flex flex-row gap-3">
-            {
-              categories.map((category) => {
-                return (
-                  <a
-                    href={`#books-${category.slug}`}
-                    class="block no-underline px-3  py-1 rounded-md bg-black/10 hover:bg-black/20 transition-all"
-                  >
-                    {category.title}&nbsp;({category.count})
-                  </a>
-                );
-              })
-            }
-          </nav>
-        </aside>
+  <main id="content" class="max-w-7xl">
+    <div class="flex flex-col">
+      <ListHeader title="Books" />
+
+      <div class="prose py-5">
+        <blockquote class="font-serif">
+          <p class="my-3">
+            Of all the things written, I love only what a person has written
+            with his own blood. Write with blood, and you will experience that
+            blood is spirit.
+          </p>
+          <footer>Friedrich Nietzsche, <cite>The Gay Science</cite></footer>
+        </blockquote>
       </div>
-      <section class="flex flex-col gap-20">
+
+      <section class="flex flex-col mt-10 gap-20">
         {
           Object.entries(categoriesWithBooks).map(([category, books]) => (
             <section>
               <h2
-                class="text-3xl w-full block py-2 border-b mb-5"
+                class="text-4xl font-serif w-full block py-2 border-b mb-5"
                 id={`books-${category}`}
               >
                 {category}
@@ -76,9 +70,8 @@ const categories = [allCategory].concat(
                         densities={[1, 2, 3]}
                         transition:name={`book-${book.id}-cover`}
                       />
-                      <div class="absolute p-4 inset-0 flex flex-col justify-end h-full w-full bg-black/60 text-white translate-y-full group-hover:translate-y-0 transition-all">
-                        <h3 class="text-xl font-bold">{book.data.title}</h3>
-                        <p>{book.data.description}</p>
+                      <div class="absolute p-4 bottom-0 w-full flex h-fit flex-col justify-end h bg-black/60 text-white translate-y-full group-hover:translate-y-0 transition-all">
+                        Read more.
                       </div>
                     </article>
                   </a>

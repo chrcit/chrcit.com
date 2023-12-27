@@ -1,36 +1,30 @@
 ---
 import { Image } from "astro:assets";
 import ProfileImage from "../images/home-profile.jpg";
-import SocialLinks from "./SocialLinks.astro";
 ---
 
 <header
-  class="flex justify-between w-full flex-col md:flex-row items-center gap-y-5 lg:max-w-4xl xl:max-w-5xl px-3 mx-auto py-5"
+  class="flex flex-grow justify-between flex-col px-4 md:px-0 gap-5 items-center w-full py-5"
 >
-  <a href="/" class="flex flex-row gap-2 items-center">
+  <a href="/" class="w-full relative gap-3 px-3 flex flex-col">
     <Image
       transition:name="profile-image"
-      class="w-[75px] md:w-[100px] h-auto"
+      class="w-full md:w-[150px] lg:w-[175px] xl:w-[200px] h-auto"
       style={{
         clipPath: "polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)",
       }}
       densities={[1, 2, 3]}
-      width={200}
+      width={400}
       src={ProfileImage}
       alt="Image of Christian Cito, a 26 year old white man. I'm wearing a loose blue shirt and am looking to the side."
     />
-    <div class="flex flex-col gap-3">
-      <h1
-        transition:name="header-logo-title"
-        class="text-3xl font-serif font-bold italic"
-      >
-        chrcit.com
-      </h1>
-    </div>
+    <p transition:name="hi-im-christian" class="text-4xl font-serif font-bold">
+      Hi, I'm Christian.
+    </p>
   </a>
 
-  <nav transition:name="header-nav">
-    <ul class="flex flex-row gap-1">
+  <nav class="w-full italic md:flex-grow" transition:name="header-nav">
+    <ul class="flex md:flex-col overflow-auto">
       {
         [
           {
@@ -40,11 +34,10 @@ import SocialLinks from "./SocialLinks.astro";
           { name: "/projects", href: "/projects" },
           { name: "/books", href: "/books" },
           { name: "/uses", href: "/uses" },
-          { name: "/now", href: "/now" },
         ].map((link) => (
-          <li class="px-2">
+          <li class="">
             <a
-              class="hover:underline underline-offset-2 cursor-auto"
+              class="block w-full px-3 md:px-5 underline-offset-2 cursor-pointer md:border-b hover:text-white data-[active=true]:bg-brand data-[active=true]:text-white hover:bg-brand py-3"
               href={link.href}
             >
               {link.name}
@@ -55,3 +48,18 @@ import SocialLinks from "./SocialLinks.astro";
     </ul>
   </nav>
 </header>
+
+<script>
+  const navLinks = document.querySelectorAll("nav a");
+
+  navLinks.forEach((link) => {
+    // `slice` here to remove the first `/` in pathname
+    const currentPath = window.location.pathname.slice(1);
+
+    // `link.href` returns a whole url, such as: "https://somedomain.com/posts" and we only need the last part
+    const hrefArray = link.href.split("/");
+    const thisPath = hrefArray[hrefArray.length - 1];
+
+    link.setAttribute("data-active", String(currentPath === thisPath));
+  });
+</script>

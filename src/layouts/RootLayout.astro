@@ -12,8 +12,28 @@ const { title } = Astro.props;
 
 <BaseLayout title={title}>
   <SkipToContent />
-  <Header />
+  <div
+    class="flex flex-col md:fixed md:top-0 md:left-0 md:h-[100dvh] md:flex-row w-full md:z-10"
+  >
+    <aside
+      class="md:w-[250px] border-r justify-between md:px-5 flex flex-col lg:w-[300px] w-full flex-shrink-0"
+      aria-label="Sidebar with Header and Footer"
+    >
+      <Header />
 
-  <slot />
-  <Footer />
+      <div class="hidden md:block">
+        <Footer />
+      </div>
+    </aside>
+
+    <div
+      class="flex-grow relative md:z-20 md:pl-10 shadow-2xl overflow-auto min-h-[100dvh]"
+    >
+      <slot />
+
+      <div class="md:hidden">
+        <Footer />
+      </div>
+    </div>
+  </div>
 </BaseLayout>

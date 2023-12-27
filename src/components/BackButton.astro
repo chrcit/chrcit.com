@@ -6,21 +6,30 @@ interface Props {
   iconSize: string;
   className?: string;
   href: string;
+  title: string;
 }
-const { iconSize, href, className } = Astro.props;
+const { iconSize, title, href, className } = Astro.props;
 ---
 
-<a
-  class={clsx("inline-flex relative group gap-1 items-center", className)}
-  href={href}
->
-  <ArrowLeft
-    size={iconSize}
-    className="group-hover:-translate-x-full group-hover:opacity-0 transition-all"
-  />
-  <ArrowLeft
-    size={iconSize}
-    className="absolute left-0 right-0 group-hover:translate-x-0 translate-x-full group-hover:opacity-100 opacity-0 transition-all"
-  />
-  <slot />
-</a>
+<div class="py-8">
+  <a
+    transition:name="overview-header-back-button"
+    class={clsx(
+      "inline-flex font-serif text-xl relative group gap-1 items-center",
+      className
+    )}
+    href={href}
+  >
+    <ArrowLeft
+      size={iconSize}
+      className="group-hover:-translate-x-full group-hover:opacity-0 transition-all"
+    />
+    <ArrowLeft
+      size={iconSize}
+      className="absolute left-0 right-0 group-hover:translate-x-0 translate-x-full group-hover:opacity-100 opacity-0 transition-all"
+    />
+    <span class="font-serif text-3xl">
+      {title}
+    </span>
+  </a>
+</div>
