@@ -29,11 +29,14 @@ const { entry } = Astro.props as Props;
 const { Content, headings } = await entry.render();
 ---
 
-<RootLayout title={entry.data.title}>
-  <main id="content" class="max-w-5xl py-10">
-    <header class="flex sticky top-10 left-0 flex-row items-start py-10 gap-10">
+<RootLayout activeTab="/books" title={entry.data.title}>
+  <main id="content" class="max-w-5xl px-5 md:px-0 py-10">
+    <header
+      class="flex sticky top-10 left-0 flex-col md:flex-row items-start py-10 gap-10"
+    >
       <Image
         src={entry.data.cover}
+        transition:animate="none"
         width={300}
         class="h-auto w-full max-w-[300px]"
         densities={[1, 2, 3]}

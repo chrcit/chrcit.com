@@ -124,12 +124,13 @@ const options: ISourceOptions = {
 };
 ---
 
-<BaseLayout title="Welcome to Astro.">
+<BaseLayout title="chrcit.com">
   <div
     class="flex-col md:flex-row backdrop-blur-sm flex gap-10 items-center bg-white/70 mx-auto p-10 max-w-4xl -translate-y-1/2 fixed top-1/2 left-1/2 -translate-x-1/2 w-full"
   >
     <Image
       class="mx-auto w-3/4 md:w-auto"
+      transition:animate="none"
       transition:name="profile-image"
       style={{
         clipPath: "polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)",

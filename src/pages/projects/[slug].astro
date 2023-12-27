@@ -9,6 +9,7 @@ import RootLayout from "../../layouts/RootLayout.astro";
 import { Image } from "astro:assets";
 import TableOfContents from "../../components/TableOfContents.astro";
 import BackButton from "../../components/BackButton.astro";
+import ArticleLayout from "../../layouts/ArticleLayout.astro";
 
 export const getStaticPaths = (async () => {
   const articles = await getCollection("projects");
@@ -28,59 +29,13 @@ const { entry } = Astro.props as Props;
 const { Content, headings } = await entry.render();
 ---
 
-<RootLayout title={entry.data.title}>
-  <main id="content" class="max-w-5xl">
-    <div class="mb-10">
-      <BackButton href="/projects" iconSize="32" title="back to /projects" />
-    </div>
-    <div class="flex flex-col md:flex-row items-start gap-10">
-      <div class="w-full md:sticky top-5 max-w-[400px]">
-        {
-          entry.data.image && (
-            <Image
-              src={entry.data.image}
-              class="w-full"
-              densities={[1, 2, 3]}
-              transition:name={`project-${entry.id}-image`}
-              alt={`Screenshot of ${entry.data.title}`}
-            />
-          )
-        }
-      </div>
-      <div class="flex flex-col gap-10">
-        <header class="flex flex-col gap-5">
-          <p transition:name={`project-${entry.id}-description`}>
-            {entry.data.description}
-          </p>
-          {
-            entry.data.tags.length > 0 && (
-              <p transition:name={`project-${entry.id}-tags`}>
-                <span class="font-bold">Topics:</span>
-                {entry.data.tags.join(", ")}
-              </p>
-            )
-          }
-        </header>
-      </div>
-    </div>
-    <h1
-      id={`project-title`}
-      class="bg-white/80 font-serif transition-all data-[scrolled=true]:text-3xl backdrop-blur-sm block py-5 z-10 sticky top-0 text-5xl"
-      transition:name={`project-${entry.id}-title`}
-    >
-      {entry.data.title}
-    </h1>
-    <section class="w-full flex flex-row gap-10">
-      <div class="prose flex-grow break-all">
-        <Content />
-      </div>
-      {
-        headings && (
-          <aside class="sticky pt-[6em] hidden md:block top-5 w-[400px] text-sm max-h-[100dvh] overflow-auto scroll-m-4">
-            <TableOfContents headings={headings} />
-          </aside>
-        )
-      }
-    </section>
-  </main>
-</RootLayout>
+<ArticleLayout
+  activeTab="/projects"
+  type="project"
+  headings={headings}
+  title={entry.data.title}
+  image={entry.data.image}
+  id={entry.id}
+>
+  <Content />
+</ArticleLayout>

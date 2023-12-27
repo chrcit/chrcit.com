@@ -4,11 +4,14 @@ import RootLayout from "./RootLayout.astro";
 import TableOfContents from "../components/TableOfContents.astro";
 import { Image } from "astro:assets";
 import clsx from "clsx";
+import type { ActiveTabType } from "../components/Header.astro";
 
 interface Props {
   id: string;
   title: string;
   headings?: MarkdownHeading[];
+  activeTab: ActiveTabType;
+  type: "article" | "project";
   image?: {
     src?: string;
     width?: number;
@@ -17,19 +20,20 @@ interface Props {
   }; // TODO: extract to a type or find astro type
 }
 
-const { id, title, image, headings } = Astro.props;
+const { id, title, image, type, headings, activeTab } = Astro.props;
 ---
 
-<RootLayout title={title}>
+<RootLayout activeTab={activeTab} title={title}>
   <main id="content" class="lg:max-w-3xl xl:max-w-5xl py-10">
     <article class="flex flex-col px-5 md:px-0">
       {
         image && (
           <Image
+            transition:animate="none"
             densities={[1, 2, 3]}
             width={300}
             class="w-full sticky top-10 left-0 lg:max-w-3xl xl:max-w-5xl  z-10"
-            transition:name={`article-${id}-image`}
+            transition:name={`${type}-${id}-image`}
             src={image}
             width={300}
             alt={``}
@@ -38,9 +42,9 @@ const { id, title, image, headings } = Astro.props;
       }
       <div class={clsx("bg-white relative z-20")}>
         <h1
-          id={`article-title`}
+          id={`${type}-title`}
           class="bg-white/80 font-serif transition-all data-[scrolled=true]:text-3xl backdrop-blur-sm block py-5 z-10 sticky top-0 text-5xl"
-          transition:name={`article-${id}-title`}
+          transition:name={`${type}-${id}-title`}
         >
           {title}
         </h1>
@@ -61,7 +65,7 @@ const { id, title, image, headings } = Astro.props;
 
     <script>
       window.addEventListener("scroll", (e) => {
-        const title = document.getElementById(`article-title`);
+        const title = document.getElementById(`${type}-title`);
 
         if (title) {
           const titleRect = title.getBoundingClientRect();

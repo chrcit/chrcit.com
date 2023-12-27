@@ -1,6 +1,13 @@
 ---
 import { Image } from "astro:assets";
 import ProfileImage from "../images/home-profile.jpg";
+
+export type ActiveTabType = "/projects" | "/articles" | "/books";
+interface Props {
+  activeTab: ActiveTabType;
+}
+
+const { activeTab } = Astro.props;
 ---
 
 <header
@@ -8,6 +15,7 @@ import ProfileImage from "../images/home-profile.jpg";
 >
   <a href="/" class="w-full relative gap-3 px-3 flex flex-col">
     <Image
+      transition:animate="none"
       transition:name="profile-image"
       class="w-full md:w-[150px] lg:w-[175px] xl:w-[200px] h-auto"
       style={{
@@ -18,29 +26,40 @@ import ProfileImage from "../images/home-profile.jpg";
       src={ProfileImage}
       alt="Image of Christian Cito, a 26 year old white man. I'm wearing a loose blue shirt and am looking to the side."
     />
-    <p transition:name="hi-im-christian" class="text-4xl font-serif font-bold">
-      Hi, I'm Christian.
-    </p>
   </a>
 
-  <nav class="w-full italic md:flex-grow" transition:name="header-nav">
+  <nav class="w-full italic md:flex-grow">
+    <a href="/">
+      <p
+        transition:name="hi-im-christian"
+        class="text-4xl font-serif font-bold"
+      >
+        Hi, I'm Christian.
+      </p>
+    </a>
     <ul class="flex md:flex-col overflow-auto">
       {
         [
           {
-            name: "/articles",
+            name: "articles",
             href: "/articles",
           },
-          { name: "/projects", href: "/projects" },
-          { name: "/books", href: "/books" },
-          { name: "/uses", href: "/uses" },
+          { name: "projects", href: "/projects" },
+          { name: "books", href: "/books" },
+          { name: "uses", href: "/uses" },
         ].map((link) => (
           <li class="">
             <a
-              class="block w-full px-3 md:px-5 underline-offset-2 cursor-pointer md:border-b hover:text-white data-[active=true]:bg-brand data-[active=true]:text-white hover:bg-brand py-3"
+              data-active={String(link.href === activeTab)}
+              class="block w-full px-3 md:px-5 underline-offset-2 cursor-pointer md:border-b data-[active=true]:text-brand hover:text-brand   group py-3"
               href={link.href}
             >
-              {link.name}
+              <span class="text-3xl group-data-[active=true]:text-brand group-hover:text-brand">
+                /
+              </span>
+              <span class="group-hover:!text-black text-[#444] group-data-[active=true]:!text-black">
+                {link.name}
+              </span>
             </a>
           </li>
         ))
@@ -49,7 +68,7 @@ import ProfileImage from "../images/home-profile.jpg";
   </nav>
 </header>
 
-<script>
+<!-- <script>
   const navLinks = document.querySelectorAll("nav a");
 
   navLinks.forEach((link) => {
@@ -62,4 +81,4 @@ import ProfileImage from "../images/home-profile.jpg";
 
     link.setAttribute("data-active", String(currentPath === thisPath));
   });
-</script>
+</script> -->

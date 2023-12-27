@@ -1,0 +1,65 @@
+---
+import { Image } from "astro:assets";
+import type { ActiveTabType } from "../components/Header.astro";
+import ReadMoreButton from "../components/ReadMoreButton.astro";
+import RootLayout from "./RootLayout.astro";
+import ListHeader from "../components/ListHeader.astro";
+
+interface Props {
+  title: string;
+  activeTab: ActiveTabType;
+  items: {
+    type: "project" | "article" | "book";
+    id: string;
+    title: string;
+    description: string;
+    image: string;
+    slug: string;
+  }[];
+}
+
+const { title, activeTab, items } = Astro.props;
+---
+
+<RootLayout title={title} activeTab={activeTab}>
+  <section class="flex flex-col px-5 md:px-0 gap-5 py-10">
+    <ListHeader title={title} />
+
+    <div>
+      {
+        items.map((item) => (
+          <a
+            class="group  block break-words hyphens-auto w-full"
+            href={`/${item.type}s/${item.slug}`}
+          >
+            <article class="flex py-10 flex-col md:flex-row items-end ">
+              {item.image && (
+                <Image
+                  width={450}
+                  transition:animate="none"
+                  transition:name={`${item.type}-${item.id}-image`}
+                  class="max-w-full lg:w-[400px] xl:w-[400px]"
+                  densities={[1, 2, 3]}
+                  src={item.image}
+                  alt={item.title}
+                />
+              )}
+              <div class="px-4 pt-5 space-y-3">
+                <h2
+                  transition:name={`${item.type}-${item.id}-title`}
+                  class="text-5xl font-serif"
+                >
+                  {item.title}
+                </h2>
+                <p transition:name={`${item.type}-${item.id}-description`}>
+                  {item.description}
+                </p>
+                <ReadMoreButton iconSize="16" />
+              </div>
+            </article>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</RootLayout>

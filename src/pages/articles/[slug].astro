@@ -26,7 +26,9 @@ const { Content, headings } = await entry.render();
 ---
 
 <ArticleLayout
+  activeTab="/articles"
   headings={headings}
+  type="article"
   title={entry.data.title}
   image={entry.data.image}
   id={entry.id}
