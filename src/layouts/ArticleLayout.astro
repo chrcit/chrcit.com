@@ -48,7 +48,6 @@ const { id, title, image, type, headings, activeTab } = Astro.props;
           {title}
         </h1>
         <section
-          transition:animate={fade({ duration: "0.4s" })}
           class="w-full flex justify-between flex-row md:gap-14 lg:gap-14 xl:gap-28"
         >
           <div class="prose break-keep hyphens-auto">
@@ -60,14 +59,14 @@ const { id, title, image, type, headings, activeTab } = Astro.props;
                 <button
                   id="toggleToc"
                   type="button"
-                  class="fixed bg-brand py-4 font-bold text-white bottom-10 right-10 px-3 w-fit rounded-sm z-40"
+                  class="fixed bg-brand lg:hidden py-4 font-bold text-white bottom-10 right-10 px-3 w-fit rounded-sm z-40"
                 >
                   Table of Contents
                 </button>
                 <aside
                   data-open-on-mobile="false"
                   id="table-of-contents-wrapper"
-                  class="lg:sticky left-0 pb-10 px-5 lg:px-0 lg:pb-0 flex flex-col justify-end lg:left-auto h-[100dvh] lg:h-auto w-full bg-white fixed bottom-0 translate-y-full data-[open-on-mobile='true']:translate-y-0 lg:block lg:top-20 xl:top-24 lg:w-[300px] text-lg lg:text-sm xl:text-base max-h-[100dvh] overflow-auto z-30"
+                  class="lg:sticky left-0 pb-10 px-5 lg:px-0 lg:pb-0 flex flex-col justify-end lg:justify-normal lg:left-auto h-[100dvh] lg:h-auto w-full bg-white fixed bottom-0 translate-y-full data-[open-on-mobile='true']:translate-y-0 lg:translate-y-0 lg:block lg:top-20 xl:top-24 lg:w-[300px] text-lg lg:text-sm xl:text-base max-h-[100dvh] overflow-auto z-30"
                 >
                   <TableOfContents headings={headings} />
                 </aside>
