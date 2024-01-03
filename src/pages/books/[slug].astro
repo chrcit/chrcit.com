@@ -30,9 +30,9 @@ const { Content, headings } = await entry.render();
 ---
 
 <RootLayout activeTab="/books" title={entry.data.title}>
-  <main id="content" class="max-w-5xl mx-auto px-5 md:px-0 py-10">
+  <main id="content" class="w-full max-w-5xl xl:max-w-6xl mx-auto px-5 py-10">
     <header
-      class="flex sticky top-10 left-0 flex-col md:flex-row items-start py-10 gap-10"
+      class="flex sticky top-10 left-0 flex-col md:flex-row items-center py-10 gap-10"
     >
       <Image
         src={entry.data.cover}
@@ -44,8 +44,9 @@ const { Content, headings } = await entry.render();
         alt={`Book cover of ${entry.data.title}`}
       />
       <div class="prose">
+        <h1>{entry.data.title}</h1>
         <p class="italic">Author: {entry.data.author}</p>
-        <p class="italic">Rating: {entry.data.rating}</p>
+        <p class="italic">Rating: {entry.data.rating}/5</p>
         <p class="italic">{entry.data.description}</p>
 
         <a target="_blank" rel="noreferrer noopener" href={entry.data.url}
@@ -54,7 +55,7 @@ const { Content, headings } = await entry.render();
       </div>
     </header>
 
-    <div class={"bg-white relative z-20"}>
+    <!-- <div class={"bg-white relative z-20"}>
       <h1
         id={`article-title`}
         class="bg-white font-serif transition-all data-[scrolled=true]:text-3xl block py-5 z-10 sticky top-0 text-5xl"
@@ -74,6 +75,6 @@ const { Content, headings } = await entry.render();
           )
         }
       </section>
-    </div>
+    </div> -->
   </main>
 </RootLayout>

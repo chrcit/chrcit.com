@@ -6,6 +6,30 @@ export default {
 			colors: {
 				brand: "#8B1717"
 			},
+			animation: {
+				'fade-in-up': 'fade-in-up 0.3s ease-in forwards',
+				'fade-in': 'fade-in 0.3s ease-in forwards',
+			},
+			keyframes: {
+				'fade-in-up': {
+					'0%': {
+						opacity: '0',
+						transform: 'translateY(5rem)'
+					},
+					'100%': {
+						opacity: '1',
+						transform: 'translateY(0)'
+					},
+				},
+				'fade-in': {
+					'0%': {
+						opacity: '0',
+					},
+					'100%': {
+						opacity: '1',
+					},
+				},
+			},
 			fontFamily: {
 				sans: ["Monterrat", "sans-serif"],
 				serif: ["Playfair Display", "serif"],
@@ -16,7 +40,8 @@ export default {
 						'--tw-prose-links': theme('colors.brand'),
 						fontFamily: theme('fontFamily.sans').join(','),
 						color: theme('colors.gray.700'),
-						maxWidth: '70ch',
+						maxWidth: '100%',
+						width: '70ch',
 						"a": {
 							color: theme('colors.brand'),
 							'&:hover': {

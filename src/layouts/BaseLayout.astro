@@ -29,14 +29,13 @@ const { title } = Astro.props;
       data-api="/scripts/api/event"
       src="/scripts/js/script.js"></script>
 
-    <script async src="https://platform.twitter.com/widgets.js"></script>
-
     <style is:global>
       html,
       body {
         scroll-behavior: smooth;
         height: 100%;
         width: 100%;
+        font-display: block;
       }
 
       ::selection {
@@ -51,6 +50,7 @@ const { title } = Astro.props;
 
       .twitter-tweet {
         font-style: normal;
+        margin: 0 auto;
       }
     </style>
   </body>

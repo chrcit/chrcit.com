@@ -17,7 +17,7 @@ const { title, activeTab } = Astro.props;
     class="flex flex-col lg:fixed lg:top-0 lg:left-0 lg:h-[100dvh] lg:flex-row w-full lg:z-10"
   >
     <aside
-      class="lg:w-[250px] border-r justify-between lg:px-5 flex flex-col xl:w-[350px] w-full flex-shrink-0"
+      class="lg:w-[250px] border-r justify-between lg:px-5 flex flex-col xl:w-[350px] w-full flex-shrink-0 shadow-xl lg:shadow-none"
       aria-label="Sidebar with Header and Footer"
     >
       <Header activeTab={activeTab} />
@@ -28,7 +28,7 @@ const { title, activeTab } = Astro.props;
     </aside>
 
     <div
-      class="flex-grow relative lg:z-20 lg:pl-10 xl:pl-14 xl:pl-18 shadow-2xl overflow-auto min-h-[100dvh]"
+      class="flex-grow relative lg:z-20 lg:pl-10 xl:pl-14 xl:pl-18 lg:shadow-2xl overflow-auto min-h-[100dvh]"
     >
       <slot />
 
