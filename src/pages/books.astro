@@ -60,14 +60,14 @@ const categories = [allCategory].concat(
               >
                 {category}
               </h2>
-              <div class="flex flex-row gap-10 overflow-auto w-full items-center scroll-mx-10">
+              <div class="flex flex-row gap-10 overflow-auto w-full items-center  snap-x py-7">
                 {books.map((book, index) => (
                   <a
                     href={`/books/${book.slug}`}
                     style={{
-                      animationDelay: `${(index + 1) * 150}ms`,
+                      animationDelay: `${index * 150 + 250}ms`,
                     }}
-                    class="animate-fade-in opacity-0"
+                    class="animate-fade-in snap-center snap-mandatory scroll-mx-10 opacity-0"
                   >
                     <article class="relative group w-[200px] h-[304px] overflow-clip">
                       <Image

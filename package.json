@@ -19,7 +19,9 @@
   },
   "dependencies": {
     "@astro-community/astro-embed-twitter": "^0.5.3",
+    "@astro-community/astro-embed-youtube": "^0.4.3",
     "@astrojs/mdx": "^2.0.2",
+    "@astrojs/partytown": "^2.0.3",
     "@astrojs/sitemap": "^3.0.3",
     "@astrojs/tailwind": "^5.0.4",
     "@fontsource/montserrat": "^5.0.16",

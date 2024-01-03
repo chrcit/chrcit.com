@@ -38,6 +38,8 @@ const toc = buildToc(headings);
 <nav
   class="not-prose text-black/20 transition-colors duration-100 hover:text-black/50"
 >
+  <h2 class="font-serif text-2xl mb-4">Table of Contents</h2>
+
   <ul
     id="table-of-contents"
     class="flex flex-col gap-1 overflow-y-auto list-none m-0 p-0"
@@ -59,14 +61,8 @@ const toc = buildToc(headings);
       const top = section?.getBoundingClientRect().top;
       const height = section?.getBoundingClientRect().height;
 
+      // console.log(top, height, fromTop, top <= fromTop, top + height > fromTop);
       if (section && top <= fromTop && top + height > fromTop) {
-        console.log(
-          top,
-          height,
-          fromTop,
-          top <= fromTop,
-          top + height > fromTop
-        );
         console.log("active", link);
         link.setAttribute("data-active", "true");
       } else {

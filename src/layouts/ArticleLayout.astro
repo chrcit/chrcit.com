@@ -11,8 +11,8 @@ interface Props {
   id: string;
   title: string;
   headings?: MarkdownHeading[];
-  activeTab: ActiveTabType;
-  type: "article" | "project";
+  activeTab?: ActiveTabType;
+  type: "article" | "project" | "page";
   image?: {
     src?: string;
     width?: number;
@@ -65,22 +65,22 @@ const { id, title, image, type, headings, activeTab } = Astro.props;
       </div>
     </article>
 
-    <script>
-      window.addEventListener("scroll", (e) => {
-        const title = document.getElementById(`${type}-title`);
+    <script define:vars={{ type }}>
+      // window.addEventListener("scroll", (e) => {
+      //   const title = document.getElementById(`${type}-title`);
 
-        if (title) {
-          const titleRect = title.getBoundingClientRect();
-          const delta = 600;
-          const passedTop = window.scrollY > delta;
+      //   if (title) {
+      //     const titleRect = title.getBoundingClientRect();
+      //     const delta = 600;
+      //     const passedTop = window.scrollY > delta;
 
-          if (passedTop) {
-            title.setAttribute("data-scrolled", "true");
-          } else {
-            title.setAttribute("data-scrolled", "false");
-          }
-        }
-      });
+      //     if (passedTop) {
+      //       title.setAttribute("data-scrolled", "true");
+      //     } else {
+      //       title.setAttribute("data-scrolled", "false");
+      //     }
+      //   }
+      // });
     </script>
   </main>
 </RootLayout>

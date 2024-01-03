@@ -2,7 +2,6 @@
 import { Image } from "astro:assets";
 import Particles from "astro-particles";
 import type { ISourceOptions } from "tsparticles-engine";
-import { socials } from "../data/socials";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SocialLinks from "../components/SocialLinks.astro";
 
@@ -13,7 +12,7 @@ const options: ISourceOptions = {
     color: "#fff",
   },
   fullScreen: {
-    zIndex: -1,
+    zIndex: 1,
   },
   particles: {
     number: {
@@ -124,9 +123,9 @@ const options: ISourceOptions = {
 };
 ---
 
-<BaseLayout title="chrcit.com">
+<BaseLayout title="">
   <div
-    class="flex-col md:flex-row backdrop-blur-sm flex gap-10 xl:gap-16 items-center bg-white/70 mx-auto px-10 py-20 max-w-4xl xl:max-w-6xl -translate-y-1/2 fixed top-1/2 left-1/2 -translate-x-1/2 w-full overflow-auto max-h-[100dvh]"
+    class="flex-col md:flex-row backdrop-blur-sm flex gap-10 xl:gap-16 items-center bg-white/70 mx-auto px-10 py-20 max-w-4xl xl:max-w-6xl -translate-y-1/2 fixed top-1/2 left-1/2 -translate-x-1/2 w-full overflow-auto max-h-[100dvh] z-20"
   >
     <Image
       class="mx-auto w-full max-w-[300px] sm:w-3/4 md:w-3/4 lg:w-auto md:max-w-full"
@@ -164,13 +163,6 @@ const options: ISourceOptions = {
     </article>
   </div>
 
-  <Particles
-    class="w-full h-full fixed inset-0"
-    id="tsparticles"
-    options={options}
-    init="particlesInit"
-  />
-
   <script>
     import {
       type Container,
@@ -203,4 +195,6 @@ const options: ISourceOptions = {
       z-index: -1;
     }
   </style>
+
+  <Particles id="tsparticles" options={options} init="particlesInit" />
 </BaseLayout>

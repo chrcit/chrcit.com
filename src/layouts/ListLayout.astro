@@ -32,7 +32,7 @@ const { title, activeTab, items } = Astro.props;
         items.map((item, index) => (
           <a
             style={{
-              animationDelay: `${(index + 1) * 250}ms`,
+              animationDelay: `${index * 150 + 250}ms`,
             }}
             class="group block break-words translate-y-[5rem] opacity-0 animate-fade-in-up hyphens-auto w-full"
             href={`/${item.type}s/${item.slug}`}
@@ -40,7 +40,6 @@ const { title, activeTab, items } = Astro.props;
             <article class="flex py-10 flex-col gap-10 md:flex-row lg:flex-col xl:flex-row md:items-end lg:items-start xl:items-end ">
               {item.image && (
                 <Image
-                  transition:animate="none"
                   transition:name={`${item.type}-${item.id}-image`}
                   class="max-w-full xl:w-[400px] aspect-video"
                   densities={[1, 2, 3]}
