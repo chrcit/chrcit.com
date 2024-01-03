@@ -2,6 +2,12 @@
 import { SocialType, socials } from "../data/socials";
 import SocialIcon from "../components/SocialIcon.astro";
 
+interface SocialLinks {
+  size?: string;
+}
+
+const { size } = Astro.props;
+
 const socialLinks: {
   type: SocialType;
   href: string;
@@ -27,16 +33,16 @@ const socialLinks: {
 ];
 ---
 
-<ul class="flex not-prose flex-row flex-wrap">
+<ul class="flex not-prose flex-row items-center gap-1 flex-wrap">
   {
     socialLinks.map((link) => (
-      <li class="px-2">
+      <li class="p-2">
         <a
           class="hover:underline cursor-pointer underline-offset-2"
           href={link.href}
           title={`Link to my ${link.type}`}
         >
-          <SocialIcon size="16" type={link.type} />
+          <SocialIcon size={size ?? "16"} type={link.type} />
         </a>
       </li>
     ))

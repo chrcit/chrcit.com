@@ -23,12 +23,25 @@ const { title } = Astro.props;
   </head>
   <body class="font-sans">
     <slot />
+    <script
+      defer
+      data-domain="chrcit.com"
+      data-api="/scripts/api/event"
+      src="/scripts/js/script.js"></script>
+
+    <script async src="https://platform.twitter.com/widgets.js"></script>
+
     <style is:global>
       html,
       body {
         scroll-behavior: smooth;
         height: 100%;
         width: 100%;
+      }
+
+      ::selection {
+        background-color: #8b1717;
+        color: #fff;
       }
 
       a {

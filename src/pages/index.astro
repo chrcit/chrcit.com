@@ -6,7 +6,7 @@ import { socials } from "../data/socials";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import SocialLinks from "../components/SocialLinks.astro";
 
-import ProfileImage from "../images/home-profile.jpg";
+import ProfileImage from "../images/cut-out.png";
 
 const options: ISourceOptions = {
   background: {
@@ -126,55 +126,40 @@ const options: ISourceOptions = {
 
 <BaseLayout title="chrcit.com">
   <div
-    class="flex-col md:flex-row backdrop-blur-sm flex gap-10 items-center bg-white/70 mx-auto p-10 max-w-4xl -translate-y-1/2 fixed top-1/2 left-1/2 -translate-x-1/2 w-full"
+    class="flex-col md:flex-row backdrop-blur-sm flex gap-10 xl:gap-16 items-center bg-white/70 mx-auto px-10 py-20 max-w-4xl xl:max-w-6xl -translate-y-1/2 fixed top-1/2 left-1/2 -translate-x-1/2 w-full overflow-auto max-h-[100dvh]"
   >
     <Image
-      class="mx-auto w-3/4 md:w-auto"
-      transition:animate="none"
+      class="mx-auto w-full max-w-[300px] sm:w-3/4 md:w-3/4 lg:w-auto md:max-w-full"
       transition:name="profile-image"
       style={{
-        clipPath: "polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)",
+        // clipPath: "polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)",
       }}
       densities={[1, 2, 3]}
-      width={300}
+      width={400}
       src={ProfileImage}
       alt="Image of Christian Cito, a 26 year old white man. I'm wearing a loose blue shirt and am looking to the side."
     />
-    <article class="prose">
-      <h1 transition:name="hi-im-christian" class="text-4xl font-bold">
-        Hi, I'm Christian.
-      </h1>
-      <SocialLinks />
+    <article class="prose xl:prose-lg">
+      <h1 class="font-bold !mb-2">Hi, I'm Christian.</h1>
+
+      <h2 class="!mt-0">I create things for the internet.</h2>
+
       <p>
-        I'm <strong>26 years</strong> old and I live in <strong>
-          Vienna, Austria</strong
-        >.
+        I'm a product engineer and in the last 11 years I've worked on
+        everything from basic websites to apps used by hundreds of thousands of
+        people per day.
       </p>
       <p>
-        I've been creating things on the internet for <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href={socials.linkedin}>over 10 years</a
-        >. Currently I'm a <a href="madebyarthouse.com">product engineer</a>.
-      </p>
-      <p>
-        I sometimes <a href="/articles">write</a> – <a href={socials.twitter}
-          >mostly tweets</a
-        >, do <a target="_blank" rel="noopener noreferrer" href={socials.github}
-          >some coding</a
-        >, <a target="_blank" rel="noopener noreferrer" href={socials.instagram}
-          >take photos</a
-        >.
-      </p>
-      <p>
-        Here is my <a href="/articles/2023-year-in-review"
+        Check out my <a href="/articles/2023-year-in-review"
           >2023 year in review</a
+        >, some <a href="/projects">recent projects</a> and my <a href="/books"
+          >favorite books</a
         >.
       </p>
-      <p>
-        <a href="/uses">/uses</a>
-        <a href="/articles">/articles</a>
-        <a href="/projects">/projects</a>
+
+      <p class="font-bold not-prose">
+        Find me on:
+        <SocialLinks size="20" />
       </p>
     </article>
   </div>

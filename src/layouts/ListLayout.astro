@@ -22,7 +22,9 @@ const { title, activeTab, items } = Astro.props;
 ---
 
 <RootLayout title={title} activeTab={activeTab}>
-  <section class="flex flex-col px-5 md:px-0 gap-5 py-10">
+  <section
+    class="flex flex-col max-w-5xl xl:max-w-6xl mx-auto px-5 gap-5 py-10"
+  >
     <ListHeader title={title} />
 
     <div>
@@ -32,13 +34,12 @@ const { title, activeTab, items } = Astro.props;
             class="group  block break-words hyphens-auto w-full"
             href={`/${item.type}s/${item.slug}`}
           >
-            <article class="flex py-10 flex-col md:flex-row items-end ">
+            <article class="flex py-10 flex-col gap-10 md:flex-row lg:flex-col xl:flex-row md:items-end lg:items-start xl:items-end ">
               {item.image && (
                 <Image
-                  width={450}
                   transition:animate="none"
                   transition:name={`${item.type}-${item.id}-image`}
-                  class="max-w-full lg:w-[400px] xl:w-[400px]"
+                  class="max-w-full xl:w-[400px] aspect-video"
                   densities={[1, 2, 3]}
                   src={item.image}
                   alt={item.title}

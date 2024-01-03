@@ -35,7 +35,7 @@ const categories = [allCategory].concat(
 ---
 
 <RootLayout activeTab="/books" title={"Books"}>
-  <main id="content" class="max-w-7xl py-10 px-5 md:px-0">
+  <main id="content" class="max-w-7xl mx-auto py-10 px-5 md:px-0">
     <div class="flex flex-col">
       <ListHeader title="Books" />
 
@@ -60,10 +60,13 @@ const categories = [allCategory].concat(
               >
                 {category}
               </h2>
-              <div class="flex flex-row gap-10 overflow-auto items-center scroll-mx-10">
+              <div class="flex flex-row gap-10 overflow-auto w-full items-center scroll-mx-10">
                 {books.map((book) => (
                   <a href={`/books/${book.slug}`}>
-                    <article class="relative overflow-clip group w-[200px]">
+                    <article
+                      transition:animate="slide"
+                      class="relative overflow-clip group w-[200px]"
+                    >
                       <Image
                         src={book.data.cover}
                         transition:animate="none"
@@ -71,7 +74,7 @@ const categories = [allCategory].concat(
                         densities={[1, 2, 3]}
                         transition:name={`book-${book.id}-cover`}
                       />
-                      <div class="absolute p-4 bottom-0 w-full flex h-fit flex-col justify-end h bg-black/60 text-white translate-y-full group-hover:translate-y-0 transition-all">
+                      <div class="absolute p-4 bottom-0 w-full flex h-fit flex-col justify-end h bg-black text-white translate-y-full group-hover:translate-y-0 transition-all">
                         Read more.
                       </div>
                     </article>

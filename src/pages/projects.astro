@@ -10,10 +10,10 @@ const projects = await getCollection("projects");
   activeTab="/projects"
   items={projects.map((project) => ({
     title: project.data.title,
-    id: project.id,
+    id: project.id as string,
     description: project.data.description,
     type: "project",
-    slug: project.slug,
+    slug: project.slug as string,
     image: project.data.image,
   }))}
 />

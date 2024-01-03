@@ -1,6 +1,6 @@
 ---
 import { Image } from "astro:assets";
-import ProfileImage from "../images/home-profile.jpg";
+import ProfileImage from "../images/cut-out.png";
 
 export type ActiveTabType = "/projects" | "/articles" | "/books";
 interface Props {
@@ -11,33 +11,34 @@ const { activeTab } = Astro.props;
 ---
 
 <header
-  class="flex flex-grow justify-between flex-col px-4 md:px-0 gap-5 items-center w-full py-5"
+  class="flex flex-grow justify-between flex-col sm:flex-row lg:flex-col px-4 lg:px-0 gap-5 lg:gap-10 items-center w-full py-5"
 >
-  <a href="/" class="w-full relative gap-3 px-3 flex flex-col">
-    <Image
-      transition:animate="none"
-      transition:name="profile-image"
-      class="w-full md:w-[150px] lg:w-[175px] xl:w-[200px] h-auto"
-      style={{
-        clipPath: "polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)",
-      }}
-      densities={[1, 2, 3]}
-      width={400}
-      src={ProfileImage}
-      alt="Image of Christian Cito, a 26 year old white man. I'm wearing a loose blue shirt and am looking to the side."
-    />
+  <a
+    transition:animate="none"
+    href="/"
+    class="w-full sm:w-fit lg:w-full relative group px-3 items-center gap-12 cursor-pointer lg:overflow-clip flex"
+  >
+    <div class="relative w-1/4 lg:w-full group">
+      <Image
+        transition:name="profile-image"
+        class="w-full h-auto z-20 relative"
+        style={{
+          // clipPath: "polygon(25% 0%, 100% 0%, 75% 100%, 0% 100%)",
+        }}
+        densities={[1, 2, 3]}
+        width={400}
+        src={ProfileImage}
+        alt="Image of Christian Cito, a 26 year old white man. I'm wearing a loose blue shirt and am looking to the side."
+      />
+      <!-- <div
+        class="w-full h-[50px] absolute bottom-0 left-0 bg-gradient-to-t bg-black group-hover:rounded-full group-hover:scale-[20] transition-all scale-105 z-10"
+      >
+      </div> -->
+    </div>
   </a>
 
-  <nav class="w-full italic md:flex-grow">
-    <a href="/">
-      <p
-        transition:name="hi-im-christian"
-        class="text-4xl font-serif font-bold"
-      >
-        Hi, I'm Christian.
-      </p>
-    </a>
-    <ul class="flex md:flex-col overflow-auto">
+  <nav class="w-full sm:w-fit lg:w-full italic space-y-5 lg:flex-grow">
+    <ul class="flex lg:flex-col overflow-auto">
       {
         [
           {
@@ -46,18 +47,18 @@ const { activeTab } = Astro.props;
           },
           { name: "projects", href: "/projects" },
           { name: "books", href: "/books" },
-          { name: "uses", href: "/uses" },
         ].map((link) => (
           <li class="">
             <a
               data-active={String(link.href === activeTab)}
-              class="block w-full px-3 md:px-5 underline-offset-2 cursor-pointer md:border-b data-[active=true]:text-brand hover:text-brand   group py-3"
+              class="block w-full px-3 lg:px-5 underline-offset-2 cursor-pointer lg:border-b data-[active=true]:text-brand hover:text-brand  break-keep group py-3"
               href={link.href}
             >
-              <span class="text-3xl group-data-[active=true]:text-brand group-hover:text-brand">
+              <span class="text-3xl xl:text-5xl group-data-[active=true]:text-brand group-hover:text-brand">
                 /
               </span>
-              <span class="group-hover:!text-black text-[#444] group-data-[active=true]:!text-black">
+              &nbsp;
+              <span class="group-hover:!text-brand font-medium xl:text-2xl text-[#444] group-data-[active=true]:!text-brand">
                 {link.name}
               </span>
             </a>
