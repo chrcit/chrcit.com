@@ -43,6 +43,7 @@ const booksCollection = defineCollection({
       description: z.string(),
       tags: z.array(z.string()),
       cover: image(),
+      year: z.number(),
     }),
 });
 

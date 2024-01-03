@@ -30,7 +30,10 @@ const { Content, headings } = await entry.render();
 ---
 
 <RootLayout activeTab="/books" title={entry.data.title}>
-  <main id="content" class="w-full max-w-5xl xl:max-w-6xl mx-auto px-5 py-10">
+  <main
+    id="content"
+    class="w-full max-w-5xl xl:max-w-6xl lg:h-full lg:flex lg:items-center lg:justify-center mx-auto px-5 py-10"
+  >
     <header
       class="flex sticky top-10 left-0 flex-col md:flex-row items-center py-10 gap-10"
     >
@@ -43,11 +46,21 @@ const { Content, headings } = await entry.render();
         transition:name={`book-${entry.id}-cover`}
         alt={`Book cover of ${entry.data.title}`}
       />
-      <div class="prose">
-        <h1>{entry.data.title}</h1>
-        <p class="italic">Author: {entry.data.author}</p>
-        <p class="italic">Rating: {entry.data.rating}/5</p>
-        <p class="italic">{entry.data.description}</p>
+      <div class="prose-lg">
+        <h1 class="text-4xl !mb-1 lg:text-5xl xl:text-6xl font-serif">
+          {entry.data.title}
+        </h1>
+        <p>
+          <strong>Author(s):</strong>
+          {entry.data.author}
+          <br />
+          <strong>Rating:</strong>
+          {entry.data.rating}/5
+          <br />
+          <strong>Release:</strong>
+          {entry.data.year}
+        </p>
+        <p>{entry.data.description}</p>
 
         <a target="_blank" rel="noreferrer noopener" href={entry.data.url}
           >Link to book</a

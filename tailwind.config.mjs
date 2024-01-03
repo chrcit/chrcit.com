@@ -63,7 +63,6 @@ export default {
 							fontSize: theme('fontSize.2xl'),
 						},
 						"strong": {
-							color: theme('colors.brand'),
 							fontWeight: '600',
 						}
 					},
