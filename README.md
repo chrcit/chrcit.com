@@ -19,6 +19,15 @@
   - [ ] index on google
   - [ ] add favicon
 
+Content
+
+- [ ] Add description + rating + metadata to every book
+- [ ] hasanhub project
+- [ ] mitentscheiden project
+- [ ] preismonitor project
+- [ ] hausgemacht project
+- [ ] 2023 year in review post
+
 ## Open Todos (probably won't do it for MVP)
 
 - [ ] Twitter embed without JS
