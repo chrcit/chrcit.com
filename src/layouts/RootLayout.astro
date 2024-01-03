@@ -17,18 +17,44 @@ const { title, activeTab } = Astro.props;
     class="flex flex-col lg:fixed lg:top-0 lg:left-0 lg:h-[100dvh] lg:flex-row w-full lg:z-10"
   >
     <aside
-      class="lg:w-[250px] border-r justify-between lg:px-5 flex flex-col xl:w-[350px] w-full flex-shrink-0 shadow-xl lg:shadow-none"
+      transition:persist
+      transition:name="sidebar"
+      aria-expanded="true"
+      class="lg:w-[50px] group/sidebar aria-expanded:lg:w-[200px] lg:border-r justify-between lg:px-5 flex flex-col aria-expanded:xl:w-[350px] aria-expanded:w-full flex-shrink-0 border-b lg:border-b-0 relative transition-all overflow-clip"
       aria-label="Sidebar with Header and Footer"
     >
-      <Header activeTab={activeTab} />
+      <button
+        type="button"
+        id="toggleSidebar"
+        class="lg:block hidden absolute right-3 top-3"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 text-gray-500 notouch:hover:text-gray-900"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          aria-label="Toggle Sidebar"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 6h16M4 12h8m-8 6h16"></path>
+        </svg>
+      </button>
+      <div class="group-aria-expanded/sidebar:block lg:hidden">
+        <Header activeTab={activeTab} />
+      </div>
 
-      <div class="hidden lg:block">
+      <div class="hidden group-aria-expanded/sidebar:lg:block">
         <Footer />
       </div>
     </aside>
 
     <div
-      class="flex-grow relative lg:z-20 lg:pl-10 xl:pl-14 xl:pl-18 lg:shadow-2xl overflow-auto min-h-[100dvh]"
+      id="scroll-area"
+      class="flex-grow relative lg:z-20 lg:pl-10 xl:pl-14 xl:pl-18 lg:shadow-2xl overflow-auto min-h-[100dvh] scroll-smooth"
     >
       <slot />
 
@@ -37,4 +63,25 @@ const { title, activeTab } = Astro.props;
       </div>
     </div>
   </div>
+
+  <script type="text/javascript" is:inline>
+    document.addEventListener(
+      "astro:page-load",
+      () => {
+        document
+          .querySelector("#toggleSidebar")
+          .addEventListener("click", (e) => {
+            const sidebar = e.target.closest("aside");
+
+            sidebar.setAttribute(
+              "aria-expanded",
+              sidebar.getAttribute("aria-expanded") === "true"
+                ? "false"
+                : "true"
+            );
+          });
+      },
+      { once: true }
+    );
+  </script>
 </BaseLayout>

@@ -36,10 +36,8 @@ const toc = buildToc(headings);
 ---
 
 <nav
-  class="not-prose text-black/20 transition-colors duration-100 hover:text-black/50"
+  class="not-prose text-black/20 transition-colors duration-100 notouch:hover:text-black/50"
 >
-  <h2 class="font-serif text-2xl mb-4">Table of Contents</h2>
-
   <ul
     id="table-of-contents"
     class="flex flex-col gap-1 overflow-y-auto list-none m-0 p-0"
@@ -48,26 +46,67 @@ const toc = buildToc(headings);
   </ul>
 </nav>
 
-<script>
-  window.addEventListener("scroll", () => {
-    const links = document.querySelectorAll("#table-of-contents a");
-    const fromTop = window.scrollY;
+<script is:inline>
+  // Function to calculate visibility percentage of an element
+  function getVisibilityPercentage(rect) {
+    const windowHeight = window.innerHeight;
+    const top = Math.max(rect.top, 0);
+    const bottom = Math.min(rect.bottom, windowHeight);
 
+    return ((bottom - top) / windowHeight) * 100;
+  }
+
+  const handleTocScroll = () => {
+    const links = document.querySelectorAll("#table-of-contents a");
+
+    // Initialize variables to store the most visible section and its visibility
+    let mostVisibleSection = null;
+    let maxVisibility = 0;
+
+    const waypoints = [...links].map((link) => {
+      const href = link.getAttribute("href");
+      const hash = href.substring(href.indexOf("#"));
+      const heading = document.querySelector(hash);
+      const rect = heading.getBoundingClientRect();
+
+      return rect.top;
+      return { hash, top: rect.top };
+    });
+
+    console.log(waypoints);
+
+    // Calculate visibility for each heading
     links.forEach((link) => {
       const href = link.getAttribute("href");
       const hash = href.substring(href.indexOf("#"));
-      const section = document.querySelector(hash);
+      const heading = document.querySelector(hash);
+      const rect = heading.getBoundingClientRect();
+      const visibility = getVisibilityPercentage(rect);
 
-      const top = section?.getBoundingClientRect().top;
-      const height = section?.getBoundingClientRect().height;
-
-      // console.log(top, height, fromTop, top <= fromTop, top + height > fromTop);
-      if (section && top <= fromTop && top + height > fromTop) {
-        console.log("active", link);
-        link.setAttribute("data-active", "true");
-      } else {
-        link.setAttribute("data-active", "false");
+      if (visibility > maxVisibility) {
+        maxVisibility = visibility;
+        mostVisibleSection = heading.id;
       }
     });
-  });
+
+    // Remove the 'active' class from all links
+    links.forEach((link) => {
+      link.setAttribute("data-active", "false");
+    });
+
+    // Add the 'active' class to the link corresponding to the closest section
+    document
+      .querySelector(`#table-of-contents a[href="#${mostVisibleSection}"]`)
+      ?.setAttribute("data-active", "true");
+  };
+
+  document.addEventListener(
+    "astro:page-load",
+    () => {
+      const scrollArea = document.querySelector("#scroll-area");
+      document.addEventListener("scroll", handleTocScroll);
+      scrollArea.addEventListener("scroll", handleTocScroll);
+    },
+    { once: true }
+  );
 </script>

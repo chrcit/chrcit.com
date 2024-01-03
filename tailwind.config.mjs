@@ -10,6 +10,9 @@ export default {
 				'fade-in-up': 'fade-in-up 0.3s ease-in forwards',
 				'fade-in': 'fade-in 0.3s ease-in forwards',
 			},
+			screens: {
+				'notouch': { 'raw': '(hover: hover)' },
+			},
 			keyframes: {
 				'fade-in-up': {
 					'0%': {
@@ -43,11 +46,11 @@ export default {
 						maxWidth: '100%',
 						width: '70ch',
 						"a": {
+
 							color: theme('colors.brand'),
 							'&:hover': {
 								textDecoration: 'underline',
 							},
-
 						},
 						"h1,h2,h3,h4": {
 							fontFamily: theme('fontFamily.serif').join(','),

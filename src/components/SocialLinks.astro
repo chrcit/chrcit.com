@@ -4,9 +4,10 @@ import SocialIcon from "../components/SocialIcon.astro";
 
 interface SocialLinks {
   size?: string;
+  align?: "left" | "center" | "right";
 }
 
-const { size } = Astro.props;
+const { size, align } = Astro.props;
 
 const socialLinks: {
   type: SocialType;
@@ -33,12 +34,17 @@ const socialLinks: {
 ];
 ---
 
-<ul class="flex not-prose flex-row items-center gap-1 flex-wrap">
+<ul
+  style={{
+    justifyContent: align ?? "center",
+  }}
+  class="flex not-prose flex-row items-center gap-1 flex-wrap"
+>
   {
     socialLinks.map((link) => (
       <li class="p-2">
         <a
-          class="hover:underline cursor-pointer underline-offset-2"
+          class="cursor-pointer"
           href={link.href}
           title={`Link to my ${link.type}`}
         >

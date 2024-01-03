@@ -39,14 +39,14 @@ const categories = [allCategory].concat(
     <div class="flex flex-col">
       <ListHeader title="Books" />
 
-      <div class="prose py-5">
+      <div class="prose lg:prose-lg xl:prose-xl py-5">
         <blockquote class="font-serif">
           <p class="my-3">
             Of all the things written, I love only what a person has written
             with his own blood. Write with blood, and you will experience that
             blood is spirit.
           </p>
-          <footer>Friedrich Nietzsche, <cite>The Gay Science</cite></footer>
+          <footer>– Friedrich Nietzsche, <cite>The Gay Science</cite></footer>
         </blockquote>
       </div>
 
@@ -78,7 +78,7 @@ const categories = [allCategory].concat(
                         width={200}
                         transition:name={`book-${book.id}-cover`}
                       />
-                      <div class="absolute p-4 bottom-0 w-full flex h-fit flex-col justify-end h bg-black text-white translate-y-full group-hover:translate-y-0 transition-all">
+                      <div class="absolute p-4 bottom-0 w-full flex h-fit flex-col justify-end h bg-black text-white translate-y-full notouch:group-hover:translate-y-0 transition-all">
                         Read more.
                       </div>
                     </article>

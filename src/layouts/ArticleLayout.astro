@@ -42,7 +42,7 @@ const { id, title, image, type, headings, activeTab } = Astro.props;
       <div class={clsx("bg-white flex flex-col gap-10 pb-20 relative z-20")}>
         <h1
           id={`${type}-title`}
-          class="font-serif transition-all bg-white data-[scrolled=true]:text-3xl block py-5 z-10 sticky top-0 text-4xl lg:text-5xl xl:text-6xl"
+          class="font-serif transition-all bg-white data-[scrolled=true]:text-3xl block py-5 z-10 sticky top-0 text-5xl xl:text-6xl"
           transition:name={`${type}-${id}-title`}
         >
           {title}
@@ -51,36 +51,49 @@ const { id, title, image, type, headings, activeTab } = Astro.props;
           transition:animate={fade({ duration: "0.4s" })}
           class="w-full flex justify-between flex-row md:gap-14 lg:gap-14 xl:gap-28"
         >
-          <div class="prose flex-grow break-keep hyphens-auto">
+          <div class="prose break-keep hyphens-auto">
             <slot />
           </div>
           {
             headings && (
-              <aside class="sticky hidden lg:block top-20 xl:top-24 md:w-[250px] lg:w-[300px] text-sm xl:text-base max-h-[100dvh] overflow-auto scroll-m-4">
-                <TableOfContents headings={headings} />
-              </aside>
+              <>
+                <button
+                  id="toggleToc"
+                  type="button"
+                  class="fixed bg-brand py-4 font-bold text-white bottom-10 right-10 px-3 w-fit rounded-sm z-40"
+                >
+                  Table of Contents
+                </button>
+                <aside
+                  data-open-on-mobile="false"
+                  id="table-of-contents-wrapper"
+                  class="lg:sticky left-0 pb-10 px-5 lg:px-0 lg:pb-0 flex flex-col justify-end lg:left-auto h-[100dvh] lg:h-auto w-full bg-white fixed bottom-0 translate-y-full data-[open-on-mobile='true']:translate-y-0 lg:block lg:top-20 xl:top-24 lg:w-[300px] text-lg lg:text-sm xl:text-base max-h-[100dvh] overflow-auto z-30"
+                >
+                  <TableOfContents headings={headings} />
+                </aside>
+              </>
             )
           }
         </section>
       </div>
     </article>
-
-    <script define:vars={{ type }}>
-      // window.addEventListener("scroll", (e) => {
-      //   const title = document.getElementById(`${type}-title`);
-
-      //   if (title) {
-      //     const titleRect = title.getBoundingClientRect();
-      //     const delta = 600;
-      //     const passedTop = window.scrollY > delta;
-
-      //     if (passedTop) {
-      //       title.setAttribute("data-scrolled", "true");
-      //     } else {
-      //       title.setAttribute("data-scrolled", "false");
-      //     }
-      //   }
-      // });
-    </script>
   </main>
+
+  <script>
+    document.addEventListener(
+      "astro:page-load",
+      () => {
+        const toggleToc = document.getElementById("toggleToc");
+        const tocWrapper = document.querySelector("#table-of-contents-wrapper");
+        toggleToc.addEventListener("click", () => {
+          const openOnMobile = tocWrapper.getAttribute("data-open-on-mobile");
+          tocWrapper.setAttribute(
+            "data-open-on-mobile",
+            openOnMobile === "true" ? "false" : "true"
+          );
+        });
+      },
+      { once: true }
+    );
+  </script>
 </RootLayout>

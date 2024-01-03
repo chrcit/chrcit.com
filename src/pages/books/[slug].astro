@@ -78,12 +78,11 @@ const { Content, headings } = await entry.render();
       </h1>
       <section class="w-full flex flex-row gap-10 xl:gap-20">
         <div class="prose flex-grow break-all hyphens-auto">
-          <Content />
+
         </div>
         {
           headings && (
             <aside class="sticky pt-[6em] hidden md:block top-5 w-[400px] text-sm max-h-[100dvh] overflow-auto scroll-m-4">
-              <TableOfContents headings={headings} />
             </aside>
           )
         }

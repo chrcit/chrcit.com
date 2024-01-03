@@ -3,19 +3,19 @@
 ## Open Todos
 
 - Layout
-  - [ ] Fix header on mobile
-  - [ ] Clean up header on desktop
-  - [ ] Clean up list page
+  - [x] Fix header on mobile
+  - [x] Clean up header on desktop
+  - [x] Clean up list page
 - Table of contents
-  - [ ] Make accessible via button below laptop
+  - [x] Make accessible via button below laptop
 - Books
-  - [ ] Crop book cover images
+  - [x] Crop book cover images
   - [ ] Sort books by rating
-  - [ ] remove highlights and create basic book page
+  - [x] remove highlights and create basic book page
 - Other stuff
   - [ ] Add `robots.txt`
-  - [ ] add domain
-  - [ ] add plausible
+  - [x] add domain
+  - [x] add plausible
   - [ ] index on google
   - [ ] add favicon
 

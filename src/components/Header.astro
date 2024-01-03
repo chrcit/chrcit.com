@@ -13,11 +13,7 @@ const { activeTab } = Astro.props;
 <header
   class="flex flex-col sm:flex-row flex-grow justify-between lg:flex-col px-4 lg:px-0 gap-5 lg:gap-10 items-center w-full py-5"
 >
-  <a
-    transition:animate="none"
-    href="/"
-    class="w-fit lg:w-full relative px-3 cursor-pointer"
-  >
+  <a href="/" class="w-fit relative px-3 cursor-pointer">
     <Image
       transition:persist
       transition:name="profile-image"
@@ -45,14 +41,13 @@ const { activeTab } = Astro.props;
         ].map((link) => (
           <li class="">
             <a
-              data-active={String(link.href === activeTab)}
-              class="block w-full px-3 lg:px-5 underline-offset-2 cursor-pointer lg:border-b data-[active=true]:text-brand hover:text-brand  break-keep group py-3 relative"
+              class="block w-full px-3 lg:px-5 underline-offset-2 cursor-pointer lg:border-b text-[#444] data-[active=true]:text-brand notouch:hover:text-brand  break-keep group py-3 relative"
               href={link.href}
             >
-              <span class="text-3xl absolute left-0 top-1/2 -translate-y-1/2 xl:text-5xl group-data-[active=true]:text-brand group-hover:text-brand">
+              <span class="text-3xl absolute left-0 top-1/2 -translate-y-1/2 xl:text-5xl group-data-[active=true]:text-brand notouch:group-hover:text-brand">
                 /
               </span>
-              <span class="group-hover:!text-brand ml-1 font-medium text-xl xl:text-2xl text-[#444] group-data-[active=true]:!text-brand">
+              <span class="notouch:group-hover:!text-brand ml-1 font-medium text-xl xl:text-2xl text-[#444] group-data-[active=true]:!text-brand">
                 {link.name}
               </span>
             </a>
@@ -62,18 +57,3 @@ const { activeTab } = Astro.props;
     </ul>
   </nav>
 </header>
-
-<!-- <script>
-  const navLinks = document.querySelectorAll("nav a");
-
-  navLinks.forEach((link) => {
-    // `slice` here to remove the first `/` in pathname
-    const currentPath = window.location.pathname.slice(1);
-
-    // `link.href` returns a whole url, such as: "https://somedomain.com/posts" and we only need the last part
-    const hrefArray = link.href.split("/");
-    const thisPath = hrefArray[hrefArray.length - 1];
-
-    link.setAttribute("data-active", String(currentPath === thisPath));
-  });
-</script> -->
