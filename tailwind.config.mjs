@@ -62,7 +62,9 @@ export default {
 							fontSize: theme('fontSize.4xl'),
 						},
 						"h2": {
-							fontSize: theme('fontSize.3xl'),
+							fontSize: theme('fontSize.4xl'),
+							marginTop: theme('spacing.10'),
+							marginBottom: theme('spacing.3'),
 						},
 						"h3": {
 							fontSize: theme('fontSize.2xl'),
@@ -72,7 +74,21 @@ export default {
 						}
 					},
 				},
-
+				'lg': {
+					css: {
+						"h1": {
+						},
+						"h2": {
+							fontSize: theme('fontSize.5xl'),
+							marginTop: theme('spacing.10'),
+							marginBottom: theme('spacing.3'),
+						},
+						"h3": {
+							marginTop: theme('spacing.6'),
+							marginBottom: theme('spacing.3'),
+						},
+					},
+				},
 			}),
 		},
 	},
