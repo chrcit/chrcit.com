@@ -1,11 +1,11 @@
 ---
 title: The Divide
 author: Jason Hickel
-description: An exploration of income inequality and its impact on society, exposing the stark divide between the rich and the poor.
+description: A brief history of global inequality and the injustices of the modern economic system.
 category: Politics, History, and Economics
 tags: [income inequality, society, wealth gap]
 cover: ./covers/the-divide-cover.jpg
-rating: 4.5
+rating: 9
 year: 2014
 url: https://www.goodreads.com/book/show/18774994-the-divide
 ---

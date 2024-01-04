@@ -1,13 +1,11 @@
 ---
 title: Vagabonding
 author: Rolf Potts
-description: A guide to long-term travel and embracing the vagabond lifestyle, encouraging readers to explore the world on their own terms.
+description: A guide to long-term travel, exploring the philosophy and practicalities of living a life of adventure.
 category: Self-Development
 tags: [travel, adventure, lifestyle]
 cover: ./covers/vagabonding-cover.jpg
-rating: 5
+rating: 8
 year: 2002
-url: https://goodreads.com
+url: https://www.goodreads.com/book/show/100247.Vagabonding
 ---
-
-A guide to long-term travel and embracing the vagabond lifestyle, encouraging readers to explore the world on their own terms. Rolf Potts shares practical insights and philosophical perspectives on the transformative power of travel. "Vagabonding" is a source of inspiration for those seeking to break free from conventional routines and embark on a journey of self-discovery.

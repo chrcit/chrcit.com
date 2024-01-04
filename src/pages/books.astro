@@ -19,6 +19,21 @@ const categoriesWithBooks: Record<string, typeof books> = books.reduce(
   {}
 );
 
+// Sort books by rating
+Object.keys(categoriesWithBooks).forEach((category) => {
+  categoriesWithBooks[category].sort((a, b) => {
+    if (a.data.rating > b.data.rating) {
+      return -1;
+    }
+
+    if (a.data.rating < b.data.rating) {
+      return 1;
+    }
+
+    return 0;
+  });
+});
+
 const allCategory = {
   title: "All",
   slug: "all",
@@ -80,6 +95,10 @@ const categories = [allCategory].concat(
                       />
                       <div class="absolute p-4 bottom-0 w-full flex h-fit flex-col justify-end h bg-black text-white translate-y-full notouch:group-hover:translate-y-0 transition-all">
                         Read more.
+                      </div>
+
+                      <div class="absolute p-2 top-2 right-2 bg-black text-white  font-bold rounded-full aspect-square text-sm flex justify-center items-center w-[2rem] h-[2rem] notouch:group-hover:opacity-100 opacity-0 transition-all">
+                        {book.data.rating}
                       </div>
                     </article>
                   </a>

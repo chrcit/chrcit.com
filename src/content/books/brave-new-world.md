@@ -5,9 +5,7 @@ description: A dystopian novel that explores a futuristic society where technolo
 category: Fiction
 tags: [dystopian, science fiction, societal critique]
 cover: ./covers/brave-new-world-cover.jpeg
-rating: 5
+rating: 9
 year: 1932
-url: https://goodreads.com
+url: https://www.goodreads.com/book/show/5129.Brave_New_World
 ---
-
-A dystopian novel that explores a futuristic society where technology, consumerism, and conformity dictate human existence. Aldous Huxley's "Brave New World" offers a chilling vision of a world controlled by scientific and technological advancements. The novel raises profound questions about the price of progress and the impact of societal conditioning on individual freedom.

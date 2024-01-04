@@ -5,9 +5,7 @@ description: A collection of insightful and humorous essays exploring the comple
 category: Entertainment
 tags: [essays, human relationships, humor]
 cover: ./covers/we-learn-nothing-cover.jpg
-rating: 5
+rating: 9
 year: 2012
-url: https://goodreads.com
+url: https://www.goodreads.com/book/show/13259887-we-learn-nothing
 ---
-
-A collection of insightful and humorous essays exploring the complexities of human relationships, society, and the human condition. Tim Kreider's "We Learn Nothing" offers a thought-provoking and entertaining reflection on life's absurdities and challenges. The essays touch on a range of topics, providing readers with both laughter and introspection.

@@ -46,7 +46,7 @@ const toc = buildToc(headings);
   </ul>
 </nav>
 
-<script is:inline>
+<script>
   // Function to calculate visibility percentage of an element
   function getVisibilityPercentage(rect) {
     const windowHeight = window.innerHeight;
@@ -56,38 +56,40 @@ const toc = buildToc(headings);
     return ((bottom - top) / windowHeight) * 100;
   }
 
-  const handleTocScroll = () => {
+  let handleTocScroll = () => {
     const links = document.querySelectorAll("#table-of-contents a");
 
     // Initialize variables to store the most visible section and its visibility
     let mostVisibleSection = null;
     let maxVisibility = 0;
 
-    const waypoints = [...links].map((link) => {
-      const href = link.getAttribute("href");
-      const hash = href.substring(href.indexOf("#"));
-      const heading = document.querySelector(hash);
-      const rect = heading.getBoundingClientRect();
-
-      return rect.top;
-      return { hash, top: rect.top };
-    });
-
-    console.log(waypoints);
-
     // Calculate visibility for each heading
     links.forEach((link) => {
       const href = link.getAttribute("href");
       const hash = href.substring(href.indexOf("#"));
       const heading = document.querySelector(hash);
-      const rect = heading.getBoundingClientRect();
+      const section = heading.closest("section");
+      const rect = section.getBoundingClientRect();
       const visibility = getVisibilityPercentage(rect);
 
-      if (visibility > maxVisibility) {
+      const mostVisibleSectionEl = document
+        .querySelector(`#${mostVisibleSection}`)
+        ?.closest("section");
+      const isInsideOfCurrentMostVisibleSection =
+        mostVisibleSectionEl?.contains(section) ?? false;
+      console.log({
+        mostVisibleSectionEl,
+        section,
+        isInsideOfCurrentMostVisibleSection,
+      });
+
+      if (visibility > maxVisibility || isInsideOfCurrentMostVisibleSection) {
         maxVisibility = visibility;
         mostVisibleSection = heading.id;
       }
     });
+
+    console.log({ mostVisibleSection });
 
     // Remove the 'active' class from all links
     links.forEach((link) => {
@@ -100,13 +102,10 @@ const toc = buildToc(headings);
       ?.setAttribute("data-active", "true");
   };
 
-  document.addEventListener(
-    "astro:page-load",
-    () => {
-      const scrollArea = document.querySelector("#scroll-area");
-      document.addEventListener("scroll", handleTocScroll);
-      scrollArea.addEventListener("scroll", handleTocScroll);
-    },
-    { once: true }
-  );
+  document.addEventListener("astro:page-load", () => {
+    const scrollArea = document.querySelector("#scroll-area");
+    document.addEventListener("scroll", handleTocScroll);
+    scrollArea.addEventListener("scroll", handleTocScroll);
+    handleTocScroll();
+  });
 </script>

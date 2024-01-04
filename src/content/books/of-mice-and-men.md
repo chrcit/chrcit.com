@@ -1,11 +1,11 @@
 ---
 title: Of Mice and Men
 author: John Steinbeck
-description: A poignant exploration of friendship, dreams, and the challenges faced by itinerant workers during the Great Depression.
+description: Two friends come to work at a farm during the Great Depression.
 category: Fiction
 tags: [classic literature, friendship, Great Depression]
 cover: ./covers/of-mice-and-men-cover.jpg
-rating: 5
+rating: 7.5
 year: 1937
 url: https://goodreads.com
 ---

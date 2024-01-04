@@ -12,6 +12,7 @@ export default {
 			},
 			screens: {
 				'notouch': { 'raw': '(hover: hover)' },
+				"2xl": "1440px",
 			},
 			keyframes: {
 				'fade-in-up': {
@@ -46,7 +47,8 @@ export default {
 						maxWidth: '100%',
 						width: '70ch',
 						"a": {
-
+							textDecoration: 'none',
+							underlineOffset: '0.5em',
 							color: theme('colors.brand'),
 							'&:hover': {
 								textDecoration: 'underline',

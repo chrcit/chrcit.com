@@ -1,15 +1,12 @@
 ---
 import { getCollection } from "astro:content";
-import {
+import type {
   InferGetStaticParamsType,
   InferGetStaticPropsType,
   GetStaticPaths,
 } from "astro";
 import { Image } from "astro:assets";
-import ArrowLeft from "../../components/icons/ArrowLeft.astro";
-import BackButton from "../../components/BackButton.astro";
 import RootLayout from "../../layouts/RootLayout.astro";
-import TableOfContents from "../../components/TableOfContents.astro";
 
 export const getStaticPaths = (async () => {
   const articles = await getCollection("books");
@@ -36,21 +33,20 @@ const { Content, headings } = await entry.render();
 >
   <main
     id="content"
-    class="w-full max-w-5xl xl:max-w-6xl lg:h-full lg:flex lg:items-center lg:justify-center mx-auto px-5 py-10"
+    class="w-full w-5xl xl:w-6xl lg:h-full lg:flex lg:items-center lg:justify-center mx-auto px-5 py-10"
   >
     <header
       class="flex sticky top-10 left-0 flex-col md:flex-row items-center py-10 gap-10"
     >
       <Image
         src={entry.data.cover}
-        transition:animate="none"
         width={300}
         class="h-auto w-full max-w-[300px]"
         densities={[1, 2, 3]}
         transition:name={`book-${entry.id}-cover`}
         alt={`Book cover of ${entry.data.title}`}
       />
-      <div class="prose-lg">
+      <div class="prose prose-lg">
         <h1 class="text-4xl !mb-1 lg:text-5xl xl:text-6xl font-serif">
           {entry.data.title}
         </h1>
@@ -58,39 +54,21 @@ const { Content, headings } = await entry.render();
           <strong>Author(s):</strong>
           {entry.data.author}
           <br />
-          <strong>Rating:</strong>
-          {entry.data.rating}/5
-          <br />
           <strong>Release:</strong>
           {entry.data.year}
+          <br />
+          <strong>Rating:</strong>
+          {entry.data.rating}/10
         </p>
         <p>{entry.data.description}</p>
 
-        <a target="_blank" rel="noreferrer noopener" href={entry.data.url}
-          >Link to book</a
+        <a
+          class="text-xl"
+          target="_blank"
+          rel="noreferrer noopener"
+          href={entry.data.url}>Link to book</a
         >
       </div>
     </header>
-
-    <!-- <div class={"bg-white relative z-20"}>
-      <h1
-        id={`article-title`}
-        class="bg-white font-serif transition-all data-[scrolled=true]:text-3xl block py-5 z-10 sticky top-0 text-5xl"
-        transition:name={`article-${entry.id}-title`}
-      >
-        {entry.data.title}
-      </h1>
-      <section class="w-full flex flex-row gap-10 xl:gap-20">
-        <div class="prose flex-grow break-all hyphens-auto">
-
-        </div>
-        {
-          headings && (
-            <aside class="sticky pt-[6em] hidden md:block top-5 w-[400px] text-sm max-h-[100dvh] overflow-auto scroll-m-4">
-            </aside>
-          )
-        }
-      </section>
-    </div> -->
   </main>
 </RootLayout>

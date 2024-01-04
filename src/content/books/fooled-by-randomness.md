@@ -1,11 +1,11 @@
 ---
 title: Fooled by Randomness
 author: Nassim Nicholas Taleb
-description: A exploration of the role of luck, randomness, and uncertainty in financial markets and decision-making.
+description: What role does luck, randomness, and uncertainty have in financial markets, decision-making and life.
 category: Politics, History, and Economics
 tags: [randomness, luck, decision-making, financial markets]
 cover: ./covers/fooled-by-randomness-cover.jpg
-rating: 4.1
+rating: 7
 year: 2001
 url: https://www.goodreads.com/book/show/38315.Fooled_by_Randomness
 ---
