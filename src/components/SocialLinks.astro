@@ -1,13 +1,14 @@
 ---
 import { SocialType, socials } from "../data/socials";
 import SocialIcon from "../components/SocialIcon.astro";
+import clsx from "clsx";
 
 interface SocialLinks {
   size?: string;
-  align?: "left" | "center" | "right";
+  className?: string;
 }
 
-const { size, align } = Astro.props;
+const { size, className } = Astro.props;
 
 const socialLinks: {
   type: SocialType;
@@ -35,10 +36,10 @@ const socialLinks: {
 ---
 
 <ul
-  style={{
-    justifyContent: align ?? "center",
-  }}
-  class="flex not-prose flex-row items-center gap-1 flex-wrap"
+  class={clsx(
+    "flex not-prose flex-row items-center gap-1 flex-wrap",
+    className ?? "justify-center"
+  )}
 >
   {
     socialLinks.map((link) => (

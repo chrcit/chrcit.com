@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import ProfileImage from "../images/cut-out.png";
+import SocialLinks from "./SocialLinks.astro";
 
 export type ActiveTabType = "/projects" | "/articles" | "/books";
 interface Props {
@@ -28,7 +29,11 @@ const { activeTab } = Astro.props;
     />
   </a>
 
-  <nav class="w-fit lg:w-full italic space-y-5 lg:flex-grow">
+  <nav class="w-fit lg:w-full italic gap-2 lg:flex-grow flex flex-col">
+    <SocialLinks
+      size="20"
+      className="justify-center sm:justify-end lg:hidden"
+    />
     <ul class="flex gap-2 lg:flex-col overflow-auto">
       {
         [
