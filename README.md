@@ -12,7 +12,6 @@
 
 - [ ] Work over typography
 - Table of contents
-  - [ ] Make it more usable and prettier on mobile
   - [ ] Get it to work with nested headings
 - Books
   - [ ] single page has resize jank when loading

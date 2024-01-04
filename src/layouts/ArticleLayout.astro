@@ -61,14 +61,27 @@ const { id, title, image, type, headings, description, activeTab } =
                 <button
                   id="toggleToc"
                   type="button"
-                  class="fixed bg-brand lg:hidden py-4 font-bold text-white bottom-10 right-10 px-3 w-fit rounded-sm z-40"
+                  class="fixed bg-brand md:hidden py-3 font-bold text-white bottom-10 right-10 px-3 w-fit rounded-full z-40"
                 >
-                  Table of Contents
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M4 6h16M4 12h16M4 18h16"
+                    />
+                  </svg>
                 </button>
                 <aside
                   data-open-on-mobile="false"
                   id="table-of-contents-wrapper"
-                  class="lg:sticky left-0 pb-10 px-5 lg:px-0 lg:pb-0 flex flex-col justify-end lg:justify-normal lg:left-auto h-[100dvh] lg:h-auto w-full bg-white fixed bottom-0 translate-y-full data-[open-on-mobile='true']:translate-y-0 lg:translate-y-0 lg:block lg:top-20 xl:top-24 lg:w-[300px] text-lg lg:text-sm xl:text-base max-h-[100dvh] overflow-auto z-30"
+                  class="md:sticky left-0 py-10 px-5 md:px-0 md:py-0 flex flex-col justify-end md:justify-normal md:left-auto h-[100dvh] md:h-auto w-full bg-white fixed bottom-0 translate-y-full data-[open-on-mobile='true']:translate-y-0 md:translate-y-0 md:block md:top-20 xl:top-24 md:w-[300px] text-lg md:text-sm xl:text-base max-h-[100dvh]  transition-all z-30"
                 >
                   <TableOfContents headings={headings} />
                 </aside>
@@ -86,12 +99,24 @@ const { id, title, image, type, headings, description, activeTab } =
       () => {
         const toggleToc = document.getElementById("toggleToc");
         const tocWrapper = document.querySelector("#table-of-contents-wrapper");
+
         toggleToc.addEventListener("click", () => {
-          const openOnMobile = tocWrapper.getAttribute("data-open-on-mobile");
+          const openOnMobile =
+            tocWrapper.getAttribute("data-open-on-mobile") === "true";
+
           tocWrapper.setAttribute(
             "data-open-on-mobile",
-            openOnMobile === "true" ? "false" : "true"
+            openOnMobile ? "false" : "true"
           );
+
+          document.querySelector("body").classList.toggle("overflow-hidden");
+        });
+
+        tocWrapper.querySelectorAll("a").forEach((link) => {
+          link.addEventListener("click", () => {
+            tocWrapper.setAttribute("data-open-on-mobile", "false");
+            document.querySelector("body").classList.remove("overflow-hidden");
+          });
         });
       },
       { once: true }

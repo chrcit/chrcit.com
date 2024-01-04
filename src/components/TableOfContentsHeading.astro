@@ -4,7 +4,7 @@ const { heading } = Astro.props;
 
 <li class="pl-2">
   <a
-    class="no-underline border-l-2 pl-3 border-transparent data-[active=true]:border-brand data-[active=true]:text-brand transition-colors notouch:hover:text-black py-2 block"
+    class="no-underline border-l-2 pl-3 border-transparent data-[active=true]:border-brand data-[active=true]:text-brand transition-colors notouch:hover:text-black text-black md:text-inherit py-2 block"
     href={"#" + heading.slug}
   >
     {heading.text}
