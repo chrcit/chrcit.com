@@ -5,13 +5,14 @@ import SkipToContent from "../components/SkipToContent.astro";
 import BaseLayout from "./BaseLayout.astro";
 interface Props {
   title: string;
+  description: string;
   activeTab: "/projects" | "/articles" | "/books";
 }
 
-const { title, activeTab } = Astro.props;
+const { title, description, activeTab } = Astro.props;
 ---
 
-<BaseLayout title={title}>
+<BaseLayout title={title} description={description}>
   <SkipToContent />
   <div
     class="flex flex-col lg:fixed lg:top-0 lg:left-0 lg:h-[100dvh] lg:flex-row w-full lg:z-10"
@@ -26,7 +27,7 @@ const { title, activeTab } = Astro.props;
       <button
         type="button"
         id="toggleSidebar"
-        class="lg:block hidden absolute right-3 top-3"
+        class="lg:block hidden absolute left-3 top-3"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

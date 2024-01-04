@@ -10,6 +10,7 @@ import type { ActiveTabType } from "../components/Header.astro";
 interface Props {
   id: string;
   title: string;
+  description: string;
   headings?: MarkdownHeading[];
   activeTab?: ActiveTabType;
   type: "article" | "project" | "page";
@@ -21,10 +22,11 @@ interface Props {
   }; // TODO: extract to a type or find astro type
 }
 
-const { id, title, image, type, headings, activeTab } = Astro.props;
+const { id, title, image, type, headings, description, activeTab } =
+  Astro.props;
 ---
 
-<RootLayout activeTab={activeTab} title={title}>
+<RootLayout activeTab={activeTab} title={title} description={description}>
   <main id="content" class="w-full max-w-5xl xl:max-w-6xl mx-auto px-5 py-10">
     <article class="flex flex-col">
       {

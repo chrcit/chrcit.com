@@ -27,6 +27,7 @@ const { Content, headings } = await entry.render();
 
 <ArticleLayout
   id={entry.id as string}
+  description={entry.data.description}
   headings={headings}
   type="page"
   title={entry.data.title as string}

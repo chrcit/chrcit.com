@@ -5,19 +5,53 @@ import "@fontsource/montserrat";
 
 interface Props {
   title: string;
+  description: string;
 }
 
-const { title } = Astro.props;
+const { title, description } = Astro.props;
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="Astro description" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="og:title" content={title} />
+    <meta name="og:description" content={description} />
+    <meta name="og:type" content="website" />
+    <meta name="og:url" content="https://chrcit.com" />
+    <meta name="og:image" content="https://chrcit.com/og-image.png" />
+    <meta name="og:image:width" content="1200" />
+    <meta name="og:image:height" content="630" />
+    <meta name="og:image:type" content="image/png" />
+    <meta
+      name="og:image:alt"
+      content="Hi, I'm Christian. I create things for the internet."
+    />
+    <meta name="og:video" content="https://chrcit.com/og-video.mp4" />
+    <meta name="og:video:width" content="1200" />
+    <meta name="og:video:height" content="630" />
+    <meta name="og:video:type" content="video/mp4" />
+    <meta
+      name="og:video:alt"
+      content="Hi, I'm Christian. I create things for the internet."
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@chrcit" />
+    <meta name="twitter:creator" content="@chrcit" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="https://chrcit.com/og-image.png" />
+    <meta name="og:video" content="https://chrcit.com/og-video.mp4" />
     <meta name="generator" content={Astro.generator} />
+    <meta
+      name="description"
+      content={description ?? "I create things for the internet"}
+    />
     <title>{title}{title ? " | chrcit.com" : "chrcit.com"}</title>
     <ViewTransitions />
   </head>

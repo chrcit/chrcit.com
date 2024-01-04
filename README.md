@@ -13,7 +13,7 @@
   - [ ] Sort books by rating
   - [x] remove highlights and create basic book page
 - Other stuff
-  - [ ] Add `robots.txt`
+  - [x] Add `robots.txt`
   - [x] add domain
   - [x] add plausible
   - [ ] index on google

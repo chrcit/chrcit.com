@@ -29,7 +29,11 @@ const { entry } = Astro.props as Props;
 const { Content, headings } = await entry.render();
 ---
 
-<RootLayout activeTab="/books" title={entry.data.title}>
+<RootLayout
+  activeTab="/books"
+  title={entry.data.title}
+  description={entry.data.description}
+>
   <main
     id="content"
     class="w-full max-w-5xl xl:max-w-6xl lg:h-full lg:flex lg:items-center lg:justify-center mx-auto px-5 py-10"

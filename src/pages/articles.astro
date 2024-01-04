@@ -11,6 +11,7 @@ const articles = await getCollection("articles");
 
 <ListLayout
   title="Articles"
+  description="I swear I will write more articles in the future."
   activeTab="/articles"
   items={articles.map((article) => ({
     title: article.data.title,

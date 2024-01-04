@@ -7,6 +7,7 @@ import ListHeader from "../components/ListHeader.astro";
 
 interface Props {
   title: string;
+  description: string;
   activeTab: ActiveTabType;
   items: {
     type: "project" | "article" | "book";
@@ -18,10 +19,10 @@ interface Props {
   }[];
 }
 
-const { title, activeTab, items } = Astro.props;
+const { title, activeTab, items, description } = Astro.props;
 ---
 
-<RootLayout title={title} activeTab={activeTab}>
+<RootLayout title={title} description={description} activeTab={activeTab}>
   <section
     class="flex flex-col max-w-5xl xl:max-w-7xl mx-auto px-5 gap-5 py-10"
   >
