@@ -77,19 +77,12 @@ const toc = buildToc(headings);
         ?.closest("section");
       const isInsideOfCurrentMostVisibleSection =
         mostVisibleSectionEl?.contains(section) ?? false;
-      console.log({
-        mostVisibleSectionEl,
-        section,
-        isInsideOfCurrentMostVisibleSection,
-      });
 
       if (visibility > maxVisibility || isInsideOfCurrentMostVisibleSection) {
         maxVisibility = visibility;
         mostVisibleSection = heading.id;
       }
     });
-
-    console.log({ mostVisibleSection });
 
     // Remove the 'active' class from all links
     links.forEach((link) => {

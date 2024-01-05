@@ -7,71 +7,108 @@ publishedAt: 2023-12-20
 ---
 
 import { Tweet } from "@astro-community/astro-embed-twitter";
+import AndererseitsInstagram from "../../components/embeds/AndererseitsInstagram.astro"
+import ExternalLink from "../../components/ExternalLink.astro"
+import { YouTube } from "@astro-community/astro-embed-youtube";
 
 2023 was a wild ride. I started the year with a new job, got fired after 3 weeks, got involved in politics, made apps for sex positive parties, got a new job, got invited to consult on a new law and much more.
 
 ## I launched my first project to 30.000 people
-[Hasanhub project page](/projects/hasanhub-com)
 
-In 2022 I launched my first side project. The political streamer Hasanabi allows his fans to clip his stream VODs, upload them to Youtube and monetize his content. <a href="https://hasanhub.com" target="_blank" rel="noreferrer noopener">hasanhub.com</a> is a web app which aggregates 70+ Youtube channels into one feed.
+
+In 2022 I launched my first side project. The political streamer Hasanabi allows his fans to clip his stream VODs, upload them to Youtube and monetize his content. <ExternalLink href="https://hasanhub.com" >hasanhub.com</ExternalLink> is a web app which aggregates 70+ Youtube channels into one feed.
 
 I launched the project in April 2022 and Hasan looked at it on his stream while live to roughly 30.000 people.
 
 <Tweet id="https://x.com/chrcit/status/1519797007904346115" />
 
+Check outh the [project page for Hasanhub](/projects/hasanhub-com).
+
 ## I got my dream job (and was fired after 3 weeks)
+In August/September 2022 I spent ~50 hours researching and ideating on a link-in-bio style microsite builder. The concept was that instead of just links to external sites the app would automatically fetch the latest content from Twitter, Instagram, YouTube, Spotify, RSS, etc.
 
-- Incubator
-- first Tweets
-- What is Bento
-- Hiring process
-  - link to repo https://github.com/chrcit/hackathon-visual-html-editor
-- Public hiring + Berlin
-  - Link to tweets about me
-- 1 . launch
-  - Link to launch tweets
-- 2. launch + 3. launch
-- Getting fired
-- Sold to Linktree (tweet)
-- Wish all the best
+I submitted the idea to an incubator but it was rejected. 
 
-<Tweet id="https://x.com/joinbento/status/1610738950292766728?s=20" />
+In January 2023 I talked about it on Twitter and got a reply from a company called Bento. They were building just that and were looking for a founding product engineer:
+<Tweet id="https://x.com/joinbento/status/1610738950292766728" />
 
+After a few rounds of interviews and a <ExternalLink href="https://github.com/chrcit/hackathon-visual-html-editor">1 day hackathon</ExternalLink> I received an offer and accepted it.
+
+For my first week I traveled to Berlin to meet the team:
 <Tweet id="https://twitter.com/chrcit/status/1630996521738010634" />
 
-<Tweet id="https://x.com/joinbento/status/1665837936607379456?s=20" />
+
+My first feature was a gorgeous settings UI + some auth related stuff. I shipped it after 3 days:
+<Tweet id="https://x.com/chrcit/status/1631688805915787265" />
+
+Besides the regular marketing Bento did I decided to post the feature on Reddit. The post got ~300.000 impressions, thousands of upvotes and hundreds of comments. It also drove a good bit of extra sign ups for the app.
 
 <blockquote
   class="reddit-embed-bq"
   style="height:500px"
   data-embed-height="689"
 >
-  <a href="https://www.reddit.com/r/webdev/comments/11hvwp9/i_started_a_new_job_this_week_and_shipped_this/">
+  <ExternalLink href="https://www.reddit.com/r/webdev/comments/11hvwp9/i_started_a_new_job_this_week_and_shipped_this/">
     I started a new job this week and shipped this gorgeous settings UI
     yesterday
-  </a>
-  <br /> by<a href="https://www.reddit.com/user/chrcit/">u/chrcit</a> in<a href="https://www.reddit.com/r/webdev/">webdev</a>
+  </ExternalLink>
+  <br /> by<ExternalLink href="https://www.reddit.com/user/chrcit/">u/chrcit</ExternalLink> in<ExternalLink href="https://www.reddit.com/r/webdev/">webdev</ExternalLink>
 </blockquote>
 
+After my second week I shipped new widgets for Figma, Dribbble and Behance:
+<Tweet id="https://x.com/chrcit/status/1636012896713883650" />
+
+In my third week I worked on interactive widgets for Spotify which act as mini jukeboxes with beautiful animations:
+<Tweet id="https://x.com/joinbento/status/1638206419194314755" /> 
+
+But before I could ship those I got fired. 
+
+Earlier in the same week I asked to get a few days more time to work on the next feature. I had been working 50-60 hours/week up until that point and wanted to take the weekend off to recharge.
+
+I told my CTO that I couldn't be happy long-term if I had a deadline to ship a big feature every week. He told me that that is startup life and that we'll talk more about it on Friday with the CEO. On Friday I got fired for not being a good fit.
+
+10 weeks later  Bento <ExternalLink href="https://x.com/joinbento/status/1665837936607379456">was sold to Linktree</ExternalLink> only 6 months after it was first launched. This is good for Bento and amazing for Linktree.
+
+I don't hold any ill will towards the people at Bento. In the few weeks I worked there I learned a lot and figured out what I want from a job as well as what I don't want.
+
 ## An app I made helped get a socialist elected
+In the weeks after getting fired I had a bit of a chip on my shoulder. 
 
-- Been political interested for a while
-- A friend of mine [georgwindhaber.com](https://georgwindhaber.com) is active at the youth wing of the SPÖ Vienna
-- Asked me if I wanted to do a project for them
-- Explain the internal election between Pam, Dosko und Babler
-- Explain [wahlkabine.at](wahlkabine.at) as concept
-- Show in progress screenshots (vercel deployments)
-- Results of mitentscheiden.at
-  - Use numbers
-  - National coverage
-- Political results
-- 2 months later I held my first dev talk about this project
-  - 2 months after that first YT video
-- Doskozil flip flop
-- Explain what happened with the election (including Excel mistake)
-- I joined the organisation and will
+A <ExternalLink href="https://georgwindhaber.com">good friend of mine</ExternalLink> is active in the youth wing of the SPÖ (the social democratic party of Austria).
+They were holding an internal election for the new party leader and the youth wing wanted to create an app to help people decide who to vote for. 
 
-## I make apps for 🌶️🔥 partys
+He asked me if I wanted to collaborate on this and I agreed. The concept was modelled after <ExternalLink href="https://wahlkabine.at">wahlkabine.at</ExternalLink> which is a political quiz which helps you find the party which best represents your views.
+
+In around 3 weeks we went from idea to launch of <ExternalLink href="https://mitentscheiden.at">mitentscheiden.at</ExternalLink>.
+
+![Screenshots of mitentscheiden.at](../projects/images/mitentscheiden-screenshots.jpg)
+
+The three candidates all answered 42 questions via the app and the users could then answer the same questions. After finishing the quiz the user is shown how much they match with the 3 candidates as well as multiple pages to compare their answers with the candidates.
+
+![Shareables of mitentscheiden.at](../projects/images/mitentscheiden-shareables.jpg)
+
+![~27.500 people filled out the questionnaire, ~3000 hours of usage, ~550 peak concurrent visitors, ~ 400.000 impressions on Twitter](../projects/images/mitentscheiden-results.png)
+
+The launch was a big success with around ~27.000 people filling out the 42 question quiz. The app also went viral on Twitter with over 400.000+ impressions and multiple high <ExternalLink href="https://twitter.com/NicolaWerdenigg/status/1650069601340858368">multiple</ExternalLink> <ExternalLink href="https://twitter.com/pablodiabolo/status/1650068482271182853">high</ExternalLink> <ExternalLink href="https://twitter.com/florianklenk/status/1650134987172200452">profile</ExternalLink> <ExternalLink href="https://x.com/Natascha_Strobl/status/1650056393100083201">people</ExternalLink> sharing it.
+
+It was covered by [multiple](https://www.puls24.at/news/politik/spoe-wahl-41-fragen-und-die-antworten-von-babler-doskozil-und-rendi-wagner/295388) [national](https://kurier.at/politik/inland/test-fuer-nicht-mitglieder-welcher-spoe-kandidat-wuerde-zu-ihnen-passen/402422507) [newspapers](https://www.derstandard.at/story/2000145782957/was-man-ueber-die-rote-vorsitzwahl-wissen-muss), TV stations and [meme](https://www.instagram.com/p/CrX6u3nMem0/) [pages](https://www.instagram.com/p/CrYPyLWsp7w).
+
+A question regarding removing abortion from the criminal code resulted in a controversy. The more conservative candidate (and front-runner) Doskozil at first answered with “no” but after a backlash on social media changed his answer to “yes”.
+The only female member of his team [took the blame for this on herself](https://x.com/JasminPuchwein/status/1650078502559916036).
+
+The incumbent candidate Rendi-Wagner dropped out of the race after she came in last in a party wide poll.
+
+The election was held in June and ~600 party officals voted. Initially it was announced that the more conservative candidate Doskozil won with 52% of the vote. 
+
+But a few days later it was discovered that there was a [mistake in the Excel sheet](https://www.theguardian.com/world/2023/jun/05/austrian-social-democrats-announce-wrong-leader-after-technical-error) used to calculate the results. The votes were flipped by accident and actually the more radical candidate Babler won.
+
+2 months after the launch I used the project as a case study for my first dev talk which I held at the Technical University of Vienna. I uploaded the recording to YouTube a bit later. It got over 1000 views in a few days and with that I got a first taste for content creation.
+
+<YouTube id="https://www.youtube.com/watch?v=LsgIRqjvit0&" />
+
+Check outh the [project page for mitentscheiden.at](/projects/mitentscheiden.at).
+
+## I make apps for sex positive partys
 
 April, Mai, June, September, October, November, December
 
@@ -81,11 +118,10 @@ Use some hausgemacht screenshot
 - techno, body neutrality, s\*x positive partys
 - application system (screenshots?)
 - passport scanner
-  - Link tweet about TS [https://x.com/chrcit/status/1699485759038714134](https://x.com/chrcit/status/1699485759038714134)
+  - Link tweet about TS
 - vibe checker app (w/ screenshots)
 - I was lead for 2 events + support for 2 others
 - Advanced User testing without room for errors + under special circumstances
-  - Last minute: [https://x.com/chrcit/status/1702771997296468365?s=20](https://x.com/chrcit/status/1702771997296468365?s=20)
 - Plans for 2024
 
 ## A (shitty) website I made might change the law
@@ -116,20 +152,11 @@ Mai + June + September
   - At some point build a consumer grocery list app which integrates this pricing data
 - Stack: Typescript, Next app dir, Node for the Crawler, Prisma for crawler, Kysely for fetching on the edge, Planetscale, Tailwind
 
-## Getting a real job
-
-- Explain RegionalMedien
-- 1.000.000+ unique daily visitors
-- Current platform completely managed by an external provider
-- Route by route transition
-- Got promoted in the first month to Lead Developer
-- Founding engineering team
-- First time involved in hiring
-- Stack: Typescript, Remix, Node Microservices, Google CloudRun, Directus as headless CMS, PandaCSS, Radix UI
-
 ## Starting an "agency"
 
-- arthouse launch tweet: https://x.com/chrcit/status/1639031871148535808?s=20
+
+<Tweet id="https://x.com/chrcit/status/1639031871148535808" />
+
 - Still in concept phase
 - Digital product studio
 - Book a free 30 minute consulting call (afterwards starting at 100€/hour)
@@ -144,111 +171,29 @@ Mai + June + September
   - Stack: Next app dir, Sanity, Framer Motion, Tailwind, Zod
 - Mindnode
 
-## Andererseits
 
-- Media startup about/for/with people with disabilities
-- I'm have a disability myself due to an accident 6 years ago
-- I automate internal processes for them via code
-- Newsletter release about my disability on 29.12
 
-<blockquote
-  class="instagram-media"
-  data-instgrm-permalink="https://www.instagram.com/p/C1cZlHJs7s0/?utm_source=ig_embed&amp;utm_campaign=loading"
-  data-instgrm-version="14"
-  style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"
->
-  <div style="padding:16px;">
-    {" "}
-    <a
-      href="https://www.instagram.com/p/C1cZlHJs7s0/?utm_source=ig_embed&amp;utm_campaign=loading"
-      style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;"
-      target="_blank"
-    >
-      {" "}
-      <div style=" display: flex; flex-direction: row; align-items: center;">
-        {" "}
-        <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div>{" "}
-        <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;">
-          {" "}
-          <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div>{" "}
-          <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div>
-        </div>
-      </div>
-      <div style="padding: 19% 0;"></div> <div style="display:block; height:50px; margin:0 auto 12px; width:50px;">
-        <svg
-          width="50px"
-          height="50px"
-          viewBox="0 0 60 60"
-          version="1.1"
-          xmlns="https://www.w3.org/2000/svg"
-          xmlns:xlink="https://www.w3.org/1999/xlink"
-        >
-          <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-            <g transform="translate(-511.000000, -20.000000)" fill="#000000">
-              <g>
-                <path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path>
-              </g>
-            </g>
-          </g>
-        </svg>
-      </div>
-      <div style="padding-top: 8px;">
-        {" "}
-        <div style=" color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">
-          View this post on Instagram
-        </div>
-      </div>
-      <div style="padding: 12.5% 0;"></div>{" "}
-      <div style="display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;">
-        <div>
-          {" "}
-          <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);"></div>{" "}
-          <div style="background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;"></div>{" "}
-          <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);"></div>
-        </div>
-        <div style="margin-left: 8px;">
-          {" "}
-          <div style=" background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;"></div>{" "}
-          <div style=" width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)"></div>
-        </div>
-        <div style="margin-left: auto;">
-          {" "}
-          <div style=" width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);"></div>{" "}
-          <div style=" background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);"></div>{" "}
-          <div style=" width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);"></div>
-        </div>
-      </div>{" "}
-      <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center; margin-bottom: 24px;">
-        {" "}
-        <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 224px;"></div>{" "}
-        <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 144px;"></div>
-      </div>
-    </a>
-    <p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;">
-      <a
-        href="https://www.instagram.com/p/C1cZlHJs7s0/?utm_source=ig_embed&amp;utm_campaign=loading"
-        style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;"
-        target="_blank"
-      >
-        A post shared by andererseits (@redaktionandererseits)
-      </a>
-    </p>
-  </div>
-</blockquote>{" "}
+## Getting a real job
 
-## Personal
+After getting fired by Bento I was looking for a new job. I applied to around 15 companies and got a few offers.
 
-- First year without major pain due to injury
-- Biking
+The one I accepted was from a company called RegionalMedien. They are a media company which publish 200+ regional print newspapers in Austria as well as <ExternalLink href="https://meinbezirk.at">meinbezirk.at</ExternalLink>
+
+- Explain RegionalMedien
+- 1.000.000+ unique daily visitors
+- Current platform completely managed by an external provider
+- Route by route transition
+- Got promoted in the first month to Lead Developer
+- Founding engineering team
+- First time involved in hiring
+- Stack: Typescript, Remix, Node Microservices, Google CloudRun, Directus as headless CMS, PandaCSS, Radix UI
+
+## andererseits
+andererseits (otherwise in English) is a media startup about/for/with people with disabilities. A good friend of mine told me about that early 2023 and suggested that I could offer my support in their IT systems.
+
+I was quite interested because I have a disability myself due to an accident 6 years ago.  
+
+<AndererseitsInstagram />
+
 
 [^1]: [https://www.bwb.gv.at/news/news-2022/detail-1/bundeswettbewerbsbehoerde-praesentiert-den-abschlussbericht-der-branchenuntersuchung-lebensmittel](https://www.bwb.gv.at/news/news-2022/detail-1/bundeswettbewerbsbehoerde-praesentiert-den-abschlussbericht-der-branchenuntersuchung-lebensmittel)
-
-<script async src="https://platform.twitter.com/widgets.js"></script>
-
-<script async src="//www.instagram.com/embed.js"></script>
-
-<script
-  async
-  src="https://embed.reddit.com/widgets.js"
-  charset="UTF-8"
-></script>

@@ -1,14 +1,10 @@
 ---
 import { getCollection } from "astro:content";
-import {
+import type {
   InferGetStaticParamsType,
   InferGetStaticPropsType,
   GetStaticPaths,
 } from "astro";
-import RootLayout from "../../layouts/RootLayout.astro";
-import { Image } from "astro:assets";
-import TableOfContents from "../../components/TableOfContents.astro";
-import BackButton from "../../components/BackButton.astro";
 import ArticleLayout from "../../layouts/ArticleLayout.astro";
 
 export const getStaticPaths = (async () => {

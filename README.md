@@ -8,14 +8,6 @@
 - [Font Source](https://fontsource.org/)
 - [TS Particles](https://particles.js.org/)
 
-## Open Todos
-
-- [ ] Work over typography
-- Table of contents
-  - [ ] Get it to work with nested headings
-- Books
-  - [ ] single page has resize jank when loading
-
 Content
 
 - [ ] hasanhub project

@@ -1,6 +1,5 @@
 ---
 import type { MarkdownHeading } from "astro";
-import { fade } from "astro:transitions";
 import RootLayout from "./RootLayout.astro";
 import TableOfContents from "../components/TableOfContents.astro";
 import { Image } from "astro:assets";
@@ -44,7 +43,7 @@ const { id, title, image, type, headings, description, activeTab } =
       <div class={clsx("bg-white flex flex-col gap-6 pb-20 relative z-20")}>
         <h1
           id={`${type}-title`}
-          class="font-serif transition-all bg-white data-[scrolled=true]:text-3xl block py-5 z-10 sticky top-0 text-5xl xl:text-6xl"
+          class="font-serif transition-all bg-white data-[scrolled=true]:text-3xl block py-5 z-10 md:sticky top-0 text-5xl xl:text-6xl"
           transition:name={`${type}-${id}-title`}
         >
           {title}
@@ -59,9 +58,12 @@ const { id, title, image, type, headings, description, activeTab } =
             headings && (
               <>
                 <button
+                  style={{
+                    display: "none", // hide button until JS loads
+                  }}
                   id="toggleToc"
                   type="button"
-                  class="fixed bg-brand md:hidden py-3 font-bold text-white bottom-10 right-10 px-3 w-fit rounded-full z-40"
+                  class="fixed bg-brand md:hidden py-3 font-bold text-white bottom-8 right-8 px-3 w-fit rounded-full z-40"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -93,12 +95,43 @@ const { id, title, image, type, headings, description, activeTab } =
     </article>
   </main>
 
+  <div id="embed-scripts">
+    <script async src="https://platform.twitter.com/widgets.js"></script>
+    <script async src="//www.instagram.com/embed.js"></script>
+    <script async src="https://embed.reddit.com/widgets.js" charset="UTF-8"
+    ></script>
+  </div>
+
+  <template id="embed-script-template">
+    <script async src="https://platform.twitter.com/widgets.js"></script>
+    <script async src="//www.instagram.com/embed.js"></script>
+    <script async src="https://embed.reddit.com/widgets.js" charset="UTF-8"
+    ></script>
+  </template>
+
   <script>
+    let loadEmbedScripts = () => {
+      console.log("loading embed scripts");
+      const embedScriptHtml = document
+        .querySelector("#embed-script-template")
+        .innerHTML.trim();
+
+      document.querySelector("#embed-scripts").innerHTML = embedScriptHtml;
+    };
+
+    document.addEventListener("astro:after-swap", () => {
+      loadEmbedScripts();
+    });
+
     document.addEventListener(
       "astro:page-load",
       () => {
         const toggleToc = document.getElementById("toggleToc");
         const tocWrapper = document.querySelector("#table-of-contents-wrapper");
+
+        if (window.matchMedia("(max-width: 767px)").matches) {
+          toggleToc.style.display = "block";
+        }
 
         toggleToc.addEventListener("click", () => {
           const openOnMobile =

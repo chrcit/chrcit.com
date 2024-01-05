@@ -21,28 +21,28 @@ const { title, description, activeTab } = Astro.props;
       transition:persist
       transition:name="sidebar"
       aria-expanded="true"
-      class="lg:w-[50px] group/sidebar aria-expanded:lg:w-[200px] lg:border-r justify-between lg:px-5 flex flex-col aria-expanded:xl:w-[350px] aria-expanded:w-full flex-shrink-0 border-b lg:border-b-0 relative transition-all overflow-clip"
+      class="lg:w-[60px] group/sidebar aria-expanded:lg:w-[200px] lg:border-r justify-between lg:px-5 flex flex-col aria-expanded:xl:w-[350px] aria-expanded:w-full flex-shrink-0 border-b lg:border-b-0 relative transition-all overflow-clip"
       aria-label="Sidebar with Header and Footer"
     >
       <button
         type="button"
         id="toggleSidebar"
-        class="lg:block hidden absolute left-3 top-3"
+        class="lg:block hidden text-gray-500 notouch:hover:text-gray-900 rounded-md left-3 notouch:hover:bg-slate-200 p-1 absolute top-3"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="h-6 w-6 text-gray-500 notouch:hover:text-gray-900"
-          fill="none"
+          width="24"
+          height="24"
           viewBox="0 0 24 24"
+          fill="none"
           stroke="currentColor"
-          aria-label="Toggle Sidebar"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          class="group-aria-expanded/sidebar:scale-x-[1] scale-x-[-1] transition-all duration-300"
+          ><path d="M3 19V5"></path><path d="m13 6-6 6 6 6"></path><path
+            d="M7 12h14"></path></svg
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M4 6h16M4 12h8m-8 6h16"></path>
-        </svg>
       </button>
       <div class="group-aria-expanded/sidebar:block lg:hidden">
         <Header activeTab={activeTab} />
@@ -55,7 +55,7 @@ const { title, description, activeTab } = Astro.props;
 
     <div
       id="scroll-area"
-      class="flex-grow relative lg:z-20 lg:pl-10 xl:pl-14 xl:pl-18 lg:shadow-2xl overflow-auto min-h-[100dvh] scroll-smooth"
+      class="flex-grow relative lg:z-20 lg:pl-10 xl:pl-14 xl:pl-18 lg:shadow-2xl lg:overflow-auto min-h-[100dvh] scroll-smooth"
     >
       <slot />
 

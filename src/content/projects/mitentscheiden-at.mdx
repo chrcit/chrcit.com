@@ -7,40 +7,38 @@ image: ./images/mitentscheiden-screenshot.png
 
 import { Tweet } from "@astro-community/astro-embed-twitter";
 import { YouTube } from "@astro-community/astro-embed-youtube";
+import ExternalLink from "../../components/ExternalLink.astro";
 
-- **Link:** <a href="https://mitentscheiden.at" target="_blank" rel="noreferrer noopener">mitentscheiden.at</a>
+- **Link:** <ExternalLink href="https://mitentscheiden.at">mitentscheiden.at</ExternalLink>
 - **Stack:** Typescript, Next.js, MySQL, Prisma, Tailwind, Vercel, Planetscale, Plausible.
+- **Timeline:**: April - August 2023
 - **Status:** done
 
 ## Idea to Launch
 
-[A good friend of mine](https://georgwindhaber.com) is a member of the youth wing of the social democratic party of Austria (SPÖ). I offered to help him out with any web related projects they might have.
+A <ExternalLink href="https://georgwindhaber.com">good friend of mine</ExternalLink> is active in the youth wing of the SPÖ (the social democratic party of Austria).
+They were holding an internal election for the new party leader and the youth wing wanted to create an app to help people decide who to vote for. 
 
-At the beginning of April he reached out to me and asked if I wanted to do a project with them.
+He asked me if I wanted to collaborate on this and I agreed. The concept was modelled after <ExternalLink href="https://wahlkabine.at">wahlkabine.at</ExternalLink> which is a political quiz which helps you find the party which best represents your views.
 
-There was an internal election coming up and they wanted to do a project similar to [wahlkabine.at](wahlkabine.at) (a political quiz) to help their members decide who to vote for.
+In around 3 weeks we went from idea to launch of <ExternalLink href="https://mitentscheiden.at">mitentscheiden.at</ExternalLink>.
 
-The election was between 3 candidates:
+The three candidates all answered 42 questions via the app and the users could then answer the same questions. After finishing the quiz the user is shown how much they match with the 3 candidates as well as multiple pages to compare their answers with the candidates.
 
-- [Pamela Rendi-Wagner](https://en.wikipedia.org/wiki/Pamela_Rendi-Wagner)
-  - The (then) current party leader and former health minister
-- [Hans Peter Doskozil](https://en.wikipedia.org/wiki/Hans_Peter_Doskozil)
-  - The governor of a small state and former minister of defense & sport
-- [Andreas Babler](https://en.wikipedia.org/wiki/Andreas_Babler)
-  - The mayor of a small town
+![Screenshots of mitentscheiden.at](../projects/images/mitentscheiden-screenshots.jpg)
+![Shareables of mitentscheiden.at](../projects/images/mitentscheiden-shareables.jpg)
 
-The whole project went from idea to launch in about 3 weeks.
+![~27.500 people filled out the questionnaire, ~3000 hours of usage, ~550 peak concurrent visitors, ~ 400.000 impressions on Twitter](./images/mitentscheiden-results.png)
 
-Here is how the project looked like:
+The launch was a big success with around ~27.000 people filling out the 42 question quiz. The app also went viral on Twitter with over 400.000+ impressions and multiple high <ExternalLink href="https://twitter.com/NicolaWerdenigg/status/1650069601340858368">multiple</ExternalLink> <ExternalLink href="https://twitter.com/pablodiabolo/status/1650068482271182853">high</ExternalLink> <ExternalLink href="https://twitter.com/florianklenk/status/1650134987172200452">profile</ExternalLink> <ExternalLink href="https://x.com/Natascha_Strobl/status/1650056393100083201">people</ExternalLink> sharing it.
 
-![Screenshots of mitentscheiden.at](./images/mitentscheiden-screenshots.png)
-![Screenshot of mitentscheiden.at](./images/mitentscheiden-shareables.png)
+It was covered by [multiple](https://www.puls24.at/news/politik/spoe-wahl-41-fragen-und-die-antworten-von-babler-doskozil-und-rendi-wagner/295388) [national](https://kurier.at/politik/inland/test-fuer-nicht-mitglieder-welcher-spoe-kandidat-wuerde-zu-ihnen-passen/402422507) [newspapers](https://www.derstandard.at/story/2000145782957/was-man-ueber-die-rote-vorsitzwahl-wissen-muss), TV stations and [meme](https://www.instagram.com/p/CrX6u3nMem0/) [pages](https://www.instagram.com/p/CrYPyLWsp7w).
 
-The launch was a big success with around ~27.000 people filling out the 42 question quiz. It was covered by [multiple](https://www.puls24.at/news/politik/spoe-wahl-41-fragen-und-die-antworten-von-babler-doskozil-und-rendi-wagner/295388) [national](https://kurier.at/politik/inland/test-fuer-nicht-mitglieder-welcher-spoe-kandidat-wuerde-zu-ihnen-passen/402422507) [newspapers](https://www.derstandard.at/story/2000145782957/was-man-ueber-die-rote-vorsitzwahl-wissen-muss), TV stations and [meme](https://www.instagram.com/p/CrX6u3nMem0/) [pages](https://www.instagram.com/p/CrYPyLWsp7w).
 
-Peak concurrent users was ~550 and it totalled ~45.000 unique visitors with ~200.000 pageviews.
 
-One question resulted in a bit of controversy because Hans-Peter Doskozil changed his answer after the quiz was launched. The question was about removing abortion from the criminal code. He initially answered with "no" but changed it to "yes" after there was a backlash on social media.
+A question regarding removing abortion from the criminal code resulted in a controversy. The more conservative candidate (and frontrunner) Doskozil at first answered with “no” but after a backlash on social media changed his answer to “yes”.
+The only female member of his team took the blame for this on herself.
+
 
 A member of his team [took the blame for this on herself](https://x.com/JasminPuchwein/status/1650078502559916036).
 
@@ -57,19 +55,15 @@ The results were quite close:
 After coming in last in the poll, Rendi-Wagner decided to not run for re-election.
 
 ## Election results
+The election was held in June and ~600 party officals voted. Initially it was announced that the more conservative candidate Doskozil won with 52% of the vote. 
 
-The internal election was held and ~600 officals from the party voted.
-Initially the results decided that Doskozil would be the new party leader.
-
-But after a few days it was discovered that there was a [mistake in the Excel sheet](https://www.theguardian.com/world/2023/jun/05/austrian-social-democrats-announce-wrong-leader-after-technical-error) that was used to calculate the results.
-
-The real result was flipped and the Andreas Babler became the new party leader.
+But a few days later it was discovered that there was a [mistake in the Excel sheet](https://www.theguardian.com/world/2023/jun/05/austrian-social-democrats-announce-wrong-leader-after-technical-error) used to calculate the results. The votes were flipped by accident and actually the more radical candidate Babler won with 52% of the vote.
 
 ## Dev Talk & Youtube Video
 
 In June I also held a talk about this project at the Technical University of Vienna. It went quite well and I decided on posting it on Youtube.
 
-<YouTube id="https://www.youtube.com/watch?v=LsgIRqjvit0&t=2s" />
+<YouTube id="https://www.youtube.com/watch?v=LsgIRqjvit0" />
 
 I also posted it on Reddit and Twitter and it got a good amount of traction.
 
@@ -89,6 +83,8 @@ I also posted it on Reddit and Twitter and it got a good amount of traction.
 ## Joining the organisation
 
 I joined the party and the youth wing and founded the Web Task Force together with [Georg Windhaber](https://georgwindhaber.com).
+
+We are currently working on multiple web projects to campaign for the upcoming national election in September 2024 as well as the EU elections in July.
 
 <Tweet id="https://x.com/chrcit/status/1707081180238012491" />
 
