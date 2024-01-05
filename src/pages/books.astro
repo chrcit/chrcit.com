@@ -16,7 +16,7 @@ const categoriesWithBooks: Record<string, typeof books> = books.reduce(
 
     return acc;
   },
-  {}
+  {},
 );
 
 // Sort books by rating
@@ -45,7 +45,7 @@ const categories = [allCategory].concat(
     title: category,
     slug: category.toLocaleLowerCase().replace(/\s/g, "-"),
     count: categoriesWithBooks[category].length,
-  }))
+  })),
 );
 ---
 

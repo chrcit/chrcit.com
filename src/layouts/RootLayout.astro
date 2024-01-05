@@ -78,11 +78,11 @@ const { title, description, activeTab } = Astro.props;
               "aria-expanded",
               sidebar.getAttribute("aria-expanded") === "true"
                 ? "false"
-                : "true"
+                : "true",
             );
           });
       },
-      { once: true }
+      { once: true },
     );
   </script>
 </BaseLayout>

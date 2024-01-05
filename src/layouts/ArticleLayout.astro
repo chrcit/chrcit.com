@@ -81,7 +81,7 @@ const { id, title, image, type, headings, description, activeTab } =
                 <aside
                   data-open-on-mobile="false"
                   id="table-of-contents-wrapper"
-                  class="md:sticky left-0 py-10 px-5 md:px-0 md:py-0 flex flex-col justify-end md:justify-normal md:left-auto h-[100dvh] md:h-auto w-full bg-white fixed bottom-0 translate-y-full data-[open-on-mobile='true']:translate-y-0 md:translate-y-0 md:block md:top-20 xl:top-24 md:w-[300px] text-lg md:text-sm xl:text-base max-h-[100dvh]  transition-all z-30"
+                  class="md:sticky left-0 px-5 py-10  md:px-0 md:py-0 flex flex-col justify-end md:justify-normal md:left-auto h-[100dvh] md:h-auto w-full bg-white fixed bottom-0 translate-y-full data-[open-on-mobile='true']:translate-y-0 md:translate-y-0 md:block md:top-20 xl:top-24 md:w-[300px] text-lg md:text-sm xl:text-base max-h-[100dvh]  transition-all z-30"
                 >
                   <TableOfContents headings={headings} />
                 </aside>
@@ -106,7 +106,7 @@ const { id, title, image, type, headings, description, activeTab } =
 
           tocWrapper.setAttribute(
             "data-open-on-mobile",
-            openOnMobile ? "false" : "true"
+            openOnMobile ? "false" : "true",
           );
 
           document.querySelector("body").classList.toggle("overflow-hidden");
@@ -119,7 +119,7 @@ const { id, title, image, type, headings, description, activeTab } =
           });
         });
       },
-      { once: true }
+      { once: true },
     );
   </script>
 </RootLayout>

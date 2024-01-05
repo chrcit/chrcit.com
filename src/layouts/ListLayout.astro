@@ -38,7 +38,7 @@ const { title, activeTab, items, description } = Astro.props;
             class="group block break-words translate-y-[5rem] opacity-0 animate-fade-in-up hyphens-auto w-full"
             href={`/${item.type}s/${item.slug}`}
           >
-            <article class="flex py-10 flex-col gap-10 md:flex-row lg:flex-col xl:flex-row md:items-end lg:items-start xl:items-end ">
+            <article class="py-10 flex-col flex  gap-10 md:flex-row lg:flex-col xl:flex-row md:items-end lg:items-start xl:items-end ">
               {item.image && (
                 <Image
                   transition:name={`${item.type}-${item.id}-image`}
