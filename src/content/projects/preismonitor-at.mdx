@@ -12,45 +12,57 @@ import ExternalLink from "../../components/ExternalLink.astro";
 - **Stack:** Typescript, Next.js, Node, Prisma, Kysely, Planetscale, Tailwind
 - **Status:** paused
 
+Preismonitor is a website that ~shows~ showed the development of grocery prices in Austria. I developed it in collaboration with <ExternalLink href="https://twitter.com/LeKaeferle">Lukas Käferle</ExternalLink>.
+
 ## Idea
+In 2022 and 2023 inflation was rising in Austria and all over the world. A big part of this was the rising price of groceries. 
 
-- Inflation + grocery prices rising
-- Minister for Labour and Economics proposed a state pricer tracker with selected products which might come in fall (add translated link to local newspaper)
-- Lukas had the idea to just do this ourselves
-- Crawler + FE
-- Show in progress screenshots
+In May 2023 Martin Kocher, the Austrian minister of Labour and Economy, announced a plan to build a state backed grocery price tracker for selected products.
 
-Preismonitor is a website that ~shows~ showed the development of grocery prices in Austria. I developed it in collaboration with <a href="">Lukas Käferle</a>.
+The details were vague and project would maybe launch in the fall of 2023.
+
+<ExternalLink href="https://twitter.com/LeKaeferle">Lukas Käferle</ExternalLink> a good friend of mine asked me if we should just build this ourselves. I agreed and we started working on it.
+
+The project took around 2 weeks from idea to launch.
 
 ## Launch
-- We were last after [heisse-preisse.io](heisse-preisse.io) (Mario), [teuerungsportal.at](teuerungsportal.at) Bernhard und [preisrunter.at](preisrunter.at) David
-- Link national news coverage
-- Screenshot with usage numbers
-- We stopped developing after the launch due to time constraints -> not really useful
-  - No UI for aggregate view + limited datax
-  - Crawler stopped working in October
+![Analytics for preismonitor.at showing 6.1k unique vistors over 2 months](./images/preismonitor-plausible-may-july.png)
+
+Even though we launched as fast as possible there were 3 other projects that launched before us.
+
+- <ExternalLink href="https://heisse-preise">heisse-preisse.io</ExternalLink> by <ExternalLink href="https://twitter.com/badlogicgames">Mario Zechner</ExternalLink>
+- <ExternalLink href="https://teuerungsportal.at">teuerungsportal.at</ExternalLink> by <ExternalLink href="https://twitter.com/_zumpel">Bernhard Ruckenstuhl</ExternalLink>
+- <ExternalLink href="https://preisrunter.at">preisrunter.at</ExternalLink> by <ExternalLink href="https://twitter.com/DerDavidus">David</ExternalLink>
+
+At first we were a bit disappointed that we weren't the first to launch but then realised that we can gain more from collaborating than competing. I then reached out to all of them and we started a group chat.
+
+Both Lukas and I were quite busy with different projects and didn't have too much time to develop the project further. Due to the other projects existing as well there wasn't too much need for us to continue developing.
+
+We still got a few mentions in both national and international newspapers:
+- <ExternalLink href="https://www.wired.com/story/heisse-preise-food-prices/">Wired</ExternalLink>
+- <ExternalLink href="https://www.derstandard.at/story/3000000176002/l">DerStandard</ExternalLink> 
+- <ExternalLink href="https://kurier.at/politik/inland/kocher-lebensmittelpreise-muessen-gemeldet-werden-aber-kein-rechner/402595130">Kurier</ExternalLink>
+- <ExternalLink href="https://www.puls24.at/news/wirtschaft/lebensmittel-nach-dem-rabatt-kommt-die-preiserhoehung/300734">Puls24</ExternalLink>
 
 
-## Meeting an Austrian minister
-- Answered questions for the Bundeswettbewerbsbehörde[^1]
-- They proposed to create a law which would compel large supermarkets to publicise their price data via an API (link to article)
-- Got invited with the others to meet the minister and consult him on exact law implementation (link Tweet)
-- Why this is cool
-- (Hopefully) will come in 2024
+## Shaping a new law
+The Austrian <ExternalLink href="https://www.bwb.gv.at/en/">Federal Competition Authority</ExternalLink> was investigating the supermarket industry in Austria and asked us and the other price tracking projects to answer a few questions.
 
-We got invited to meet the minister for Labour and Economics to consult him on the exact implementation of the law. We were invited together with [heisse-preisse.io](heisse-preisse.io) (Mario), [teuerungsportal.at](teuerungsportal.at) (Bernhard) and [preisrunter.at](preisrunter.at) (David).
+The answers were then used in <ExternalLink href="https://www.bwb.gv.at/fileadmin/user_upload/Fokuspapier_Preisvergleichsplattformen_Sept_2023_barrierefrei_14.09.2023.pdf"> a final report</ExternalLink> which was handed over to Martin Kocher, the minister of Labour and Economy.
+
+The report recommended to create a law which would force supermarkets to report their price data to the ministry which then would make it available via an API.
+
+This would make it much easier for developers, researchers and journalist to work with the data.
+
+We got invited to meet the minister for Labour and Economics to consult him on the exact implementation of the law. We were invited together with our friends from <ExternalLink href="https://heisse-preise">heisse-preisse.io</ExternalLink>, <ExternalLink href="https://teuerungsportal.at">teuerungsportal.at</ExternalLink> and <ExternalLink href="https://preisrunter.at">preisrunter.at</ExternalLink>.
 
 <Tweet id="https://x.com/chrcit/status/1706731529022378346?s=20" />
 
+<Tweet id="https://x.com/badlogicgames/status/1706692838539325789?s=20" />
+
 ## What's coming?
-- Kill our crawler and replace with heisse-preisse data (or maybe government API)
-- At some point build a consumer grocery list app which integrates this pricing data
+In mid October our crawler stopped working and both Lukas and I were too busy to fix it. We decided to pause development until we have more time.
 
+We are planning on dumping our crawler and instead use the data from <ExternalLink href="https://heisse-preise.io">heisse-preisse.io</ExternalLink> or the government API (if it actually comes).
 
-<script async src="https://platform.twitter.com/widgets.js"></script>
-
-<script
-  async
-  src="https://embed.reddit.com/widgets.js"
-  charset="UTF-8"
-></script>
+A long-term idea is to create a grocery list app which is enhanced by this pricing data. This would allow users to see which supermarket is the cheapest for their current grocery list.
