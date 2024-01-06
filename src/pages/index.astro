@@ -125,7 +125,7 @@ const options: ISourceOptions = {
 
 <BaseLayout title="">
   <div
-    class="flex-col md:flex-row backdrop-blur-sm flex gap-10 xl:gap-16 items-center bg-white/70 mx-auto px-10 py-20 max-w-4xl xl:max-w-6xl -translate-y-1/2 fixed top-1/2 left-1/2 -translate-x-1/2 w-full overflow-auto max-h-[100dvh] z-20"
+    class="flex-col md:flex-row flex gap-10 xl:gap-16 items-center mx-auto px-10 py-20 max-w-5xl xl:max-w-7xl -translate-y-1/2 fixed top-1/2 left-1/2 -translate-x-1/2 w-full overflow-auto max-h-[100dvh] z-20"
   >
     <Image
       class="mx-auto w-full aspect-[200/243] max-w-[300px] sm:w-3/4 md:w-3/4 lg:w-auto md:max-w-full"
@@ -138,17 +138,18 @@ const options: ISourceOptions = {
       src={ProfileImage}
       alt="Image of Christian Cito, a 26 year old white man. I'm wearing a loose blue shirt and am looking to the side."
     />
-    <article class="prose xl:prose-lg">
+    <article class="prose xl:prose-lg bg-white/70 p-5 backdrop-blur-sm">
       <h1 class="font-bold !mb-2">Hi, I'm Christian.</h1>
 
-      <h2 class="!mt-0">I create things for the internet.</h2>
+      <h2 class="!mt-0 !text-4xl">I create things for the internet.</h2>
 
       <p>
-        I'm a product engineer and in the last 11 years I've worked on
-        everything from basic websites to apps used by hundreds of thousands of
-        people per day.
+        Over the last 11 years I've worked on everything from basic websites to
+        web apps used by hundreds of thousands of people every day.
       </p>
-      <p>
+
+      <p class="font-bold not-prose">More info:</p>
+      <p class="!mt-0">
         Check out my <a href="/articles/2023-year-in-review"
           >2023 year in review</a
         >, some <a href="/projects">recent projects</a> and my <a href="/books"
@@ -156,10 +157,8 @@ const options: ISourceOptions = {
         >.
       </p>
 
-      <p class="font-bold not-prose">
-        Find me on:
-        <SocialLinks className="justify-start" size="20" />
-      </p>
+      <p class="font-bold not-prose">Find me on:</p>
+      <SocialLinks className="justify-start" size="20" />
     </article>
   </div>
 
