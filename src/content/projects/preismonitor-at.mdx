@@ -1,14 +1,15 @@
 ---
-title: Preismonitor
+title: preismonitor.at
 tags: [politics, austria]
 description: Preismonitor is a website that shows the price development of groceries in Austria.
 image: ./images/preismonitor-screenshot.png
+order: 2
 ---
 
 import { Tweet } from "@astro-community/astro-embed-twitter";
 import ExternalLink from "../../components/ExternalLink.astro";
 
-- **Link:** <ExternalLink href="https://mitentscheiden.at">mitentscheiden.at</ExternalLink>
+- **Link:** <ExternalLink href="https://preismonitor.at">preismonitor.at</ExternalLink>
 - **Collaborators:** <ExternalLink href="https://twitter.com/LeKaeferle">Lukas Käferle</ExternalLink>
 - **Timeline:** May - October 2023
 - **Status:** paused
@@ -17,20 +18,20 @@ import ExternalLink from "../../components/ExternalLink.astro";
 Preismonitor is a website that ~shows~ showed the development of grocery prices in Austria. I developed it in collaboration with <ExternalLink href="https://twitter.com/LeKaeferle">Lukas Käferle</ExternalLink>.
 
 ## Idea
-In 2022 and 2023 inflation was rising in Austria and all over the world. A big part of this was the rising price of groceries. 
+In 2022 and 2023 inflation was rising in Austria and all over the world. A big driver was the increase in grocery prices.
 
 In May 2023 Martin Kocher, the Austrian minister of Labour and Economy, announced a plan to build a state backed grocery price tracker for selected products.
 
 The details were vague and project would maybe launch in the fall of 2023.
 
-<ExternalLink href="https://twitter.com/LeKaeferle">Lukas Käferle</ExternalLink>, a good friend of mine, asked me if we should just build this ourselves. I agreed and we started working on it.
+A good friend of mine, <ExternalLink href="https://twitter.com/LeKaeferle">Lukas Käferle</ExternalLink>, suggested that we should just build this ourselves.
 
-The project took around 2 weeks from idea to launch.
+We went from idea to launch in 2 weeks. The site is called <ExternalLink href="https://preismonitor.at">preismonitor.at</ExternalLink> and it's a simple website which shows the price development of ~300 products in 3 supermarkets.
 
 ## Launch
 ![Analytics for preismonitor.at showing 6.1k unique vistors over 2 months](./images/preismonitor-plausible-may-july.png)
 
-Even though we launched as fast as possible there were 3 other projects that launched before us.
+Even though we launched as fast as possible there were 3 other price trackers that launched before us:
 
 - <ExternalLink href="https://heisse-preise">heisse-preisse.io</ExternalLink> by <ExternalLink href="https://twitter.com/badlogicgames">Mario Zechner</ExternalLink>
 - <ExternalLink href="https://teuerungsportal.at">teuerungsportal.at</ExternalLink> by <ExternalLink href="https://twitter.com/_zumpel">Bernhard Ruckenstuhl</ExternalLink>
@@ -40,7 +41,7 @@ At first we were a bit disappointed that we weren't the first to launch but then
 
 Both Lukas and I were quite busy with different projects and didn't have too much time to develop the project further. Due to the other projects existing as well there wasn't too much need for us to continue developing.
 
-We still got a few mentions in both national and international newspapers:
+We still got a few mentions in both national and international media:
 - <ExternalLink href="https://www.wired.com/story/heisse-preise-food-prices/">Wired</ExternalLink>
 - <ExternalLink href="https://www.derstandard.at/story/3000000176002/l">DerStandard</ExternalLink> 
 - <ExternalLink href="https://kurier.at/politik/inland/kocher-lebensmittelpreise-muessen-gemeldet-werden-aber-kein-rechner/402595130">Kurier</ExternalLink>
@@ -54,11 +55,12 @@ The answers were then used in <ExternalLink href="https://www.bwb.gv.at/fileadmi
 
 The report recommended to create a law which would force supermarkets to report their price data to the ministry which then would make it available via an API.
 
-This would make it much easier for developers, researchers and journalists to work with the data.
-
-We got invited to meet the minister for Labour and Economics to consult him on the exact implementation of the law. We were invited together with our friends from <ExternalLink href="https://heisse-preise">heisse-preisse.io</ExternalLink>, <ExternalLink href="https://teuerungsportal.at">teuerungsportal.at</ExternalLink> and <ExternalLink href="https://preisrunter.at">preisrunter.at</ExternalLink>.
+This would enable developers, researchers and journalists to utilize the data for many different use cases.
 
 <Tweet id="https://x.com/chrcit/status/1706731529022378346?s=20" />
+
+In September the minister for Labour and Economics invited us to consult him on the exact implementation of the law. We were invited together with our friends from <ExternalLink href="https://heisse-preise">heisse-preisse.io</ExternalLink>, <ExternalLink href="https://teuerungsportal.at">teuerungsportal.at</ExternalLink> and <ExternalLink href="https://preisrunter.at">preisrunter.at</ExternalLink>.
+
 
 <Tweet id="https://x.com/badlogicgames/status/1706692838539325789?s=20" />
 

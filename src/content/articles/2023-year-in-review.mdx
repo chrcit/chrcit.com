@@ -117,52 +117,89 @@ But a few days later it was discovered that there was a [mistake in the Excel sh
 Check outh the [project page for mitentscheiden.at](/projects/mitentscheiden.at).
 
 ## A (shitty) website I made might change the law
+In 2022 and 2023 inflation was rising in Austria and all over the world. A big driver was the increase in grocery prices.
 
-https://www.bwb.gv.at/news/news-2022/detail-1/bundeswettbewerbsbehoerde-praesentiert-den-abschlussbericht-der-branchenuntersuchung-lebensmittel
+In May 2023 the Austrian minister for labour and economics announced plans for a state grocery price tracker for a few selected products. The plan was quite vague and it wouldn't launch anytime before fall 2023.
 
-Mai + June + September
+A good friend of mine, <ExternalLink href="https://twitter.com/LeKaeferle">Lukas Käferle</ExternalLink>, suggested that we should just build this ourselves.
 
-- Idea / Building
-  - Inflation + grocery prices rising
-  - Minister for Labour and Economics proposed a state pricer tracker with selected products which might come in fall (add translated link to local newspaper)
-  - Lukas had the idea to just do this ourselves
-  - Crawler + FE
-  - Show in progress screenshots
-- Launch
-  - We were last after [heisse-preisse.io](heisse-preisse.io) (Mario), [teuerungsportal.at](teuerungsportal.at) Bernhard und [preisrunter.at](preisrunter.at)
-  - Link national news coverage
-  - Screenshot with usage numbers
-  - We stopped developing after the launch due to time constraints -> not really useful
-    - No UI for aggregate view + limited datax
-    - Crawler stopped working in October
-- Changing the law
-  - Answered questions for the Bundeswettbewerbsbehörde
+We went from idea to launch in 2 weeks. The site is called <ExternalLink href="https://preismonitor.at">preismonitor.at</ExternalLink> and it's a simple website which shows the price development of ~300 products in 3 supermarkets.
+
+![Analytics for preismonitor.at showing 6.1k unique vistors over 2 months](../projects/images/preismonitor-plausible-may-july.png)
+
+Even though we launched as fast as possible there were 3 other price trackers that launched before us:
+
+- <ExternalLink href="https://heisse-preise">heisse-preisse.io</ExternalLink> by <ExternalLink href="https://twitter.com/badlogicgames">Mario Zechner</ExternalLink>
+- <ExternalLink href="https://teuerungsportal.at">teuerungsportal.at</ExternalLink> by <ExternalLink href="https://twitter.com/_zumpel">Bernhard Ruckenstuhl</ExternalLink>
+- <ExternalLink href="https://preisrunter.at">preisrunter.at</ExternalLink> by <ExternalLink href="https://twitter.com/DerDavidus">David Wurm</ExternalLink>
+
+I reached out to all of them and we started a group chat.
+
+Both Lukas and I didn't have much time to work on the project after launch. Due to the other projects existing as well there wasn't too much need for us to continue developing.
+
+We still got a few  mentions in both <ExternalLink href="https://www.derstandard.at/story/3000000176002/l">national</ExternalLink> and <ExternalLink href="https://www.wired.com/story/heisse-preise-food-prices/">international</ExternalLink> media.
+
+In July the Austrian <ExternalLink href="https://www.bwb.gv.at/en/">Federal Competition Authority</ExternalLink> reached out to us and the other price tracker creators to ask us a few questions about the projects. They have been investigating the supermarket industry since fall 2022.
+
+
+Our answers were then used in <ExternalLink href="https://www.bwb.gv.at/fileadmin/user_upload/Fokuspapier_Preisvergleichsplattformen_Sept_2023_barrierefrei_14.09.2023.pdf"> a final report</ExternalLink> which was handed over to Martin Kocher, the minister of Labour and Economy.
+
+The report recommended to create a law which would force supermarkets to report their price data to the ministry which then would make it available via an API.
+
+This would enable developers, researchers and journalists to utilize the data for many different use cases.
   
-  - They proposed to create a law which would compel large supermarkets to publicise their price data via an API (link to article)
-  - Got invited with the others to meet the minister and consult him on exact law implementation (link Tweet)
-  - Why this is cool
-  - (Hopefully) will come in 2024
-- Future
-  - Kill our crawler and replace with heisse-preisse data (or maybe government API)
-  - At some point build a consumer grocery list app which integrates this pricing data
-- Stack: Typescript, Next app dir, Node for the Crawler, Prisma for crawler, Kysely for fetching on the edge, Planetscale, Tailwind
+<Tweet id="https://x.com/badlogicgames/status/1706692838539325789?s=20" />
 
+In September the minister for Labour and Economics invited us to consult him on the exact implementation of the law. We were invited together with our friends from <ExternalLink href="https://heisse-preise">heisse-preisse.io</ExternalLink>, <ExternalLink href="https://teuerungsportal.at">teuerungsportal.at</ExternalLink> and <ExternalLink href="https://preisrunter.at">preisrunter.at</ExternalLink>.
+
+<Tweet id="https://x.com/chrcit/status/1706731529022378346?s=20" />
+
+In mid October our crawler stopped working and both Lukas and I were too busy to fix it. We decided to pause development until we have more time.
+
+We are planning on dumping our crawler and instead use the data from <ExternalLink href="https://heisse-preise.io">heisse-preisse.io</ExternalLink> or the government API (if it actually comes).
+
+A long-term idea is to create a grocery list app which is enhanced by this pricing data. This would allow users to see which supermarket is the cheapest for their current grocery list.
+
+Check out the [project page for Preismonitor](/projects/preismonitor-at).
 
 ## I make apps for sex positive partys
+<ExternalLink href="https://hausgemacht.org">__hausgemacht__</ExternalLink> ("homemade" in German) is the biggest techno collective in Vienna. They organize events in various clubs in the city. Besides regular techno clubbings they also host sex positive events.
 
-April, Mai, June, September, October, November, December
+The people behind it are focussed on creating a safe space for their guests, especially FLINTA* people. They make this possible via an online application process before the events and a large awareness team looking after the safety and well-being of the guests during the event.
 
-Use some hausgemacht screenshot
+After attending my first event in February 2023 I decided I wanted to join the collective. I reached out to them and offered to support them with their custom made application process.
 
-- what is hausgemacht
-- techno, body neutrality, s\*x positive partys
-- application system (screenshots?)
-- passport scanner
-  - Link tweet about TS
-- vibe checker app (w/ screenshots)
-- I was lead for 2 events + support for 2 others
-- Advanced User testing without room for errors + under special circumstances
-- Plans for 2024
+After meeting up with the internet team and getting to know each other they invited me to join the collective.
+
+The application process is done via a custom made web app built by members of the collective. Because of the sensitive nature of the data the app is built with a strong focus on data protection and privacy.
+
+<ExternalLink href="http://beyondbureaucracy.org/">Alois Paulin</ExternalLink> (one of our members) built the backend which is architected to minimize data stored and disclosed to members of the organisation. There is also great care to ensure that all personal data is encrypted and stored securely. Once the need for the data is gone it is deleted.
+
+This year I focussed on improving and extending the way we check-in our guests. 
+
+The team built a web app which allows guests to anonymously check-in via a passport scanner. The app connects to the scanner and matches the name against the ticketing system. The person selecting the guest will only see the image read from the passport but will not see the name.
+
+The data from the passport (i.e. the image) is only processed and transported in a secure local network. It never leaves the local network and is deleted immediatley after the event.
+
+<Tweet id="https://x.com/chrcit/status/1699485759038714134" />
+
+Together with Alois I refactored the app to stabilize the integration of the passport scanner and simplify the UI for the end user. We also trialed processing other IDs via OCR.
+
+A few hours before an event in September our backend server went down and we didn't have time to port over the backend.
+
+I quickly built a new web app for scanning the ticket QR code and enriching it with our guest data. Our team was then able to use the app to check in or reject guests at the door.
+
+<Tweet id="https://x.com/chrcit/status/1702771997296468365" />
+
+I kept iterating on this app for 2 other events and added many new features. The app is now used at all our events and is the main tool for checking in guests.
+
+![Screenshots of the ticket scanner web app](../projects/images/hausgemacht-vibechecker-screenshots.png)
+
+The plan is to eventually merge the passport scanner and the ticket scanner app into one application so both methods can be used interchangeably.
+
+Our focus for 2024 is to unify all our different applications into one unified web applicaton. Over the next 2 years this will evolve into a bespoke event management system for the collective integrating many different tools and services.
+
+Check out the [project page for hausgemacht](/projects/hausgemacht).
 
 ## Scaling a media site to millions of users
 After getting fired I applied to around 15 companies and got a few offers.

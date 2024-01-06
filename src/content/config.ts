@@ -25,6 +25,7 @@ const projectsCollection = defineCollection({
   schema: ({ image }) =>
     z.object({
       title: z.string(),
+      order: z.number(),
       tags: z.array(z.string()),
       description: z.string(),
       image: image().optional(),
