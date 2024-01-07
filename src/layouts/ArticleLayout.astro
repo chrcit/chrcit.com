@@ -28,13 +28,13 @@ const { id, title, image, type, headings, description, activeTab } =
 <RootLayout activeTab={activeTab} title={title} description={description}>
   <main id="content" class="w-full max-w-5xl xl:max-w-6xl mx-auto px-5 py-10">
     <article class="flex flex-col">
-      <div>
+      <div class="sticky top-10 left-0 z-10">
         {
           image && (
             <Image
               transition:animate="none"
               densities={[1, 2, 3]}
-              class="w-full sticky top-10 left-0 z-10"
+              class="w-full aspect-video"
               transition:name={`${type}-${id}-image`}
               src={image}
               alt={``}
