@@ -10,17 +10,20 @@ import { Tweet } from "@astro-community/astro-embed-twitter";
 import ExternalLink from "../../components/ExternalLink.astro";
 
 - **Link:** <ExternalLink href="https://hausgemacht.org">hausgemacht.org</ExternalLink>
-- **Collaborators:** <ExternalLink href="https://twitter.com/Maybach">Patrick Ludewig</ExternalLink>, <ExternalLink href="http://beyondbureaucracy.org/">Alois Paulin</ExternalLink>, Vlad
+- **Collaborators:** <ExternalLink href="http://apaulin.com">Alois Paulin</ExternalLink>, <ExternalLink href="https://twitter.com/Maybach">Patrick Ludewig</ExternalLink>, Vlad I.
 - **Timeline:** April 2023 - 
 - **Status:** active
 - **Stack:** Typescript, Vite, Remix, Tailwind, C#, SQLite.
 
 ## What is hausgemacht?
-hausgemacht ("homemade" in German) is the biggest techno collective in Vienna. They organize events in various clubs in the city.
+<ExternalLink href="https://hausgemacht.org">hausgemacht</ExternalLink> ("homemade" in German) is the biggest techno collective in Vienna. They organize events in various clubs in the city.
 
 Besides regular techno clubbings they also host sex positive events. For those partys guests are selected via an application process before the event as well as a strict door policy where the guests are asked questions about the rules of the event.
 
 A big focus of hausgemacht is creating a safeR space for FLINTA\* people. There are awareness teams at the events looking after the safety and well-being of the guests.
+
+![Screenshot of hausgemacht.org](../projects/images/hausgemacht-screenshot.png)
+
 
 ## Joining the collective
 After attending my first event in February 2023 I decided I wanted to join the collective. I reached out to the team and asked if they needed coding support. 
@@ -29,9 +32,11 @@ I met up with the Internet team to get to know each other and talk about the pro
 
 ## The application process
 
-The application process is done via a custom made web app built by members of the collective. Because of the sensitive nature of the data the app is built with a strong focus on data protection and privacy. 
+The application process is handled via a custom made web app built by members of the collective. Because of the sensitive nature of the data the app is built with a strong focus on data protection and privacy.
 
-<ExternalLink href="http://beyondbureaucracy.org/">Alois Paulin</ExternalLink> (one of our members) built the backend which is architected to minimize data stored and disclosed to members of the organisation. There is also great care to ensure that all personal data is encrypted and stored securely. Once the need for the data is gone it is deleted.
+<ExternalLink href="http://apaulin.com">Alois Paulin</ExternalLink> (one of our members) built the backend which is architected to minimize data stored and disclosed to members of the organisation. There is also great care to ensure that all personal data is encrypted and stored securely. Once the need for the data is gone it is deleted.
+
+<ExternalLink href="https://twitter.com/Maybach">Patrick Ludewig</ExternalLink> designed and built the frontend. Vlad I. acted as a product owner/manager for this and many other projects.
 
 In my first year I focused on refactoring and extending their custom web app for checking in guests.
 
@@ -46,6 +51,8 @@ The passport scanner web app was built to offer the guests a private check-in ex
 The app connects to the passport scanner and reads out the name and the image stored on the passport chip. The name is matched against the ticket data to confirm the person has a valid ticket. The image is used to verify the person is the same as on the passport.
 
 The data from the passport (i.e. the image) is only processed and transported in a secure local network. It never leaves the local network and is deleted immediatley after the event.
+
+This approach is quite innovative and Alois even wrote <ExternalLink href="https://dl.acm.org/doi/10.1145/3603304.3604067">a paper</ExternalLink> about it.
 
 <Tweet id="https://x.com/chrcit/status/1699485759038714134" />
 
