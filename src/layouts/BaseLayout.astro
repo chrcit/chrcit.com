@@ -1,7 +1,7 @@
 ---
 import { ViewTransitions } from "astro:transitions";
 import "@fontsource/playfair-display";
-import "@fontsource/montserrat";
+import "@fontsource/schibsted-grotesk";
 
 interface Props {
   title: string;
@@ -54,7 +54,7 @@ const { title, description } = Astro.props;
       content={description ?? "I create things for the internet"}
     />
     <title>{title}{title ? " | chrcit.com" : "Hi, I'm Christian"}</title>
-    <ViewTransitions fallback="none" />
+    <ViewTransitions fallback="swap" />
   </head>
   <body class="font-sans">
     <slot />

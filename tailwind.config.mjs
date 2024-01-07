@@ -35,7 +35,7 @@ export default {
         },
       },
       fontFamily: {
-        sans: ["Monterrat", "sans-serif"],
+        sans: ["Schibsted Grotesk", "sans-serif"],
         serif: ["Playfair Display", "serif"],
       },
       typography: (theme) => ({
@@ -70,7 +70,7 @@ export default {
               fontSize: theme("fontSize.2xl"),
             },
             strong: {
-              fontWeight: "600",
+              fontWeight: "800",
             },
           },
         },

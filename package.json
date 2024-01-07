@@ -27,6 +27,7 @@
     "@astrojs/tailwind": "^5.0.4",
     "@fontsource/montserrat": "^5.0.16",
     "@fontsource/playfair-display": "^5.0.18",
+    "@fontsource/schibsted-grotesk": "^5.0.18",
     "astro": "^4",
     "astro-particles": "^2.10.0",
     "astro-robots-txt": "^1.0.0",

@@ -41,15 +41,15 @@ const { activeTab } = Astro.props;
           { name: "projects", href: "/projects" },
           { name: "books", href: "/books" },
         ].map((link) => (
-          <li class="">
+          <li class="group-first:lg:border-t lg:border-b pt-4 pb-6">
             <a
-              class="block w-full px-3 lg:px-5 underline-offset-2 cursor-pointer lg:border-b text-[#444] data-[active=true]:text-brand notouch:hover:text-brand  break-keep group py-3 relative"
+              class="block w-full px-3 lg:px-5 underline-offset-2 cursor-pointer text-[#444] data-[active=true]:text-brand notouch:hover:text-brand  break-keep group relative"
               href={link.href}
             >
-              <span class="text-3xl absolute left-0 top-1/2 -translate-y-1/2 xl:text-5xl group-data-[active=true]:text-brand notouch:group-hover:text-brand">
+              <span class="text-3xl absolute left-0 top-1/2 -translate-y-[calc(50%+0.2rem)] xl:text-5xl group-data-[active=true]:text-brand notouch:group-hover:text-brand">
                 /
               </span>
-              <span class="notouch:group-hover:!text-brand ml-1 font-medium text-xl xl:text-2xl text-[#444] group-data-[active=true]:!text-brand">
+              <span class="notouch:group-hover:!text-brand ml-2 font-medium text-xl xl:text-2xl text-[#444] group-data-[active=true]:!text-brand">
                 {link.name}
               </span>
             </a>

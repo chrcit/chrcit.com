@@ -9,14 +9,12 @@ import SocialLinks from "./SocialLinks.astro";
       <ul class="flex flex-row gap-1 text-sm justify-evenly flex-wrap">
         {
           [
+            { name: "Colophon", href: "/colophon" },
             { name: "Privacy Policy", href: "/privacy-policy" },
             { name: "Imprint", href: "/imprint" },
-            { name: "Colophon", href: "/colophon" },
           ].map((link) => (
             <li class="px-2">
               <a
-                target="_blank"
-                rel="noopener noreferrer"
                 class="notouch:hover:underline underline-offset-2 cursor-pointer"
                 href={link.href}
               >

@@ -63,9 +63,14 @@ const categories = [allCategory].concat(
           </p>
           <footer>– Friedrich Nietzsche, <cite>The Gay Science</cite></footer>
         </blockquote>
+
+        <p class="pt-5">
+          Here are some of my favorite books, I've read most of them multiple
+          times and have learned something new each time.
+        </p>
       </div>
 
-      <section class="flex flex-col mt-10 gap-20">
+      <section class="flex flex-col mt-6 gap-20">
         {
           Object.entries(categoriesWithBooks).map(([category, books]) => (
             <section>
@@ -82,7 +87,7 @@ const categories = [allCategory].concat(
                     style={{
                       animationDelay: `${index * 150 + 250}ms`,
                     }}
-                    class="animate-fade-in snap-center snap-mandatory scroll-mx-10 opacity-0"
+                    class="animate-fade-in snap-start snap-mandatory scroll-mx-10 opacity-0"
                   >
                     <article class="relative group w-[200px] h-[304px] overflow-clip">
                       <Image

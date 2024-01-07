@@ -1,5 +1,9 @@
 # chrcit.com
 
+This is the repository for my personal website.
+
+It's still a work in progress, so please excuse the mess. In the future I want to replace the Twitter, Reddit, Youtube, and Instagram embeds with custom components that don't require JavaScript.
+
 ## Stack
 
 - [Astro](https://astro.build/)
@@ -7,11 +11,3 @@
 - [MDX](https://mdxjs.com/)
 - [Font Source](https://fontsource.org/)
 - [TS Particles](https://particles.js.org/)
-
-Content
-
-- [ ] hasanhub project
-- [ ] mitentscheiden project
-- [ ] preismonitor project
-- [ ] hausgemacht project
-- [ ] 2023 year in review post

@@ -28,32 +28,34 @@ const { id, title, image, type, headings, description, activeTab } =
 <RootLayout activeTab={activeTab} title={title} description={description}>
   <main id="content" class="w-full max-w-5xl xl:max-w-6xl mx-auto px-5 py-10">
     <article class="flex flex-col">
-      {
-        image && (
-          <Image
-            transition:animate="none"
-            densities={[1, 2, 3]}
-            class="w-full sticky top-10 left-0 z-10"
-            transition:name={`${type}-${id}-image`}
-            src={image}
-            alt={``}
-          />
-        )
-      }
+      <div>
+        {
+          image && (
+            <Image
+              transition:animate="none"
+              densities={[1, 2, 3]}
+              class="w-full sticky top-10 left-0 z-10"
+              transition:name={`${type}-${id}-image`}
+              src={image}
+              alt={``}
+            />
+          )
+        }
+      </div>
       <div
-        class={clsx("bg-white flex flex-col gap-6 pb-5 lg:pb-10 relative z-20")}
+        class={clsx("bg-white flex flex-col gap-6 pb-5 lg:pb-10 relative z-30")}
       >
         <h1
           id={`${type}-title`}
-          class="font-serif transition-all bg-white data-[scrolled=true]:text-3xl block py-5 z-30 md:sticky top-0 text-5xl xl:text-6xl"
+          class="font-serif transition-all bg-white data-[scrolled=true]:text-3xl block py-5 z-40 md:sticky top-0 text-5xl xl:text-6xl"
           transition:name={`${type}-${id}-title`}
         >
           {title}
         </h1>
         <section
-          class="w-full flex justify-between flex-row md:gap-14 lg:gap-14 xl:gap-28"
+          class="w-full flex justify-between flex-row md:gap-14 z-30 relative lg:gap-14 xl:gap-28"
         >
-          <div class="prose 2xl:prose-lg break-keep hyphens-auto">
+          <div class="prose 2xl:prose-lg break-keep hyphens-auto z-30 relative">
             <slot />
           </div>
           {

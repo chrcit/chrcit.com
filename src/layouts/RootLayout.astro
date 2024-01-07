@@ -21,7 +21,7 @@ const { title, description, activeTab } = Astro.props;
       transition:persist
       transition:name="sidebar"
       aria-expanded="true"
-      class="lg:w-[60px] group/sidebar aria-expanded:lg:w-[200px] lg:border-r justify-between lg:px-5 flex flex-col aria-expanded:xl:w-[350px] aria-expanded:w-full flex-shrink-0 border-b lg:border-b-0 relative transition-all overflow-clip"
+      class="lg:w-[60px] group/sidebar aria-expanded:lg:w-[200px] lg:border-r justify-between lg:px-5 flex flex-col aria-expanded:xl:w-[350px] aria-expanded:w-full max-h-[100dvh] overflow-y-auto flex-shrink-0 border-b lg:border-b-0 relative transition-all overflow-clip"
       aria-label="Sidebar with Header and Footer"
     >
       <button
