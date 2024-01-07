@@ -65,14 +65,20 @@ const categories = [allCategory].concat(
         </blockquote>
 
         <p class="pt-5">
-          Here are some of my favorite books, I've read most of them multiple
+          Here are some of my favorite books, I've read many of them multiple
           times and have learned something new each time.
         </p>
       </div>
 
       <section class="flex flex-col mt-6 gap-20">
         {
-          Object.entries(categoriesWithBooks).map(([category, books]) => (
+          [
+            "Politics, History, and Economics",
+            "Self-Development",
+            "Meditation",
+            "Entertainment",
+            "Fiction",
+          ].map((category) => (
             <section>
               <h2
                 class="text-4xl font-serif w-full block py-2 border-b mb-5"
@@ -81,7 +87,7 @@ const categories = [allCategory].concat(
                 {category}
               </h2>
               <div class="flex flex-row gap-10 overflow-auto w-full items-center  snap-x py-7">
-                {books.map((book, index) => (
+                {categoriesWithBooks[category].map((book, index) => (
                   <a
                     href={`/books/${book.slug}`}
                     style={{

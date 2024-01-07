@@ -38,17 +38,17 @@ const { title, activeTab, items, description } = Astro.props;
             class="group block break-words translate-y-[5rem] opacity-0 animate-fade-in-up hyphens-auto w-full"
             href={`/${item.type}s/${item.slug}`}
           >
-            <article class="py-10 flex-col flex  gap-10 md:flex-row lg:flex-col xl:flex-row md:items-end lg:items-start xl:items-end ">
+            <article class="py-10 flex-col flex  gap-10 md:flex-row lg:flex-col xl:flex-row md:items-end lg:items-start xl:items-end lg:max-w-[750px] md:max-w-full xl:max-w-full">
               {item.image && (
                 <Image
                   transition:name={`${item.type}-${item.id}-image`}
-                  class="w-full max-w-[750px] xl:w-[400px] aspect-video"
+                  class="w-full xl:w-[400px] aspect-video"
                   densities={[1, 2, 3]}
                   src={item.image}
                   alt={item.title}
                 />
               )}
-              <div class="lg:px-4 space-y-3">
+              <div class="lg:px-4 space-y-3 w-full">
                 <h2
                   transition:name={`${item.type}-${item.id}-title`}
                   class="text-5xl font-serif"
