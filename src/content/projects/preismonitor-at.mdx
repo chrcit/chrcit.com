@@ -13,16 +13,14 @@ import ExternalLink from "../../components/ExternalLink.astro";
 - **Collaborators:** <ExternalLink href="https://twitter.com/LeKaeferle">Lukas Käferle</ExternalLink>
 - **Timeline:** May - October 2023
 - **Status:** paused
-- **Stack:** Typescript, Next.js, Node, Prisma, Kysely, Planetscale, Tailwind
+- **Stack:** Typescript, Next.js, Node, MySQL, Prisma, Kysely, Tailwind, Plausible, Vercel, Planetscale
 
 Preismonitor is a website that ~shows~ showed the development of grocery prices in Austria. I developed it in collaboration with <ExternalLink href="https://twitter.com/LeKaeferle">Lukas Käferle</ExternalLink>.
 
 ## Idea
 In 2022 and 2023 inflation was rising in Austria and all over the world. A big driver was the increase in grocery prices.
 
-In May 2023 Martin Kocher, the Austrian minister of Labour and Economy, announced a plan to build a state backed grocery price tracker for selected products.
-
-The details were vague and project would maybe launch in the fall of 2023.
+In May 2023 Martin Kocher, the Austrian Minister for Labour and Economy announced plans for a state grocery price tracker for a few selected products. The plan was quite vague and it wouldn't launch anytime before fall 2023.
 
 A good friend of mine, <ExternalLink href="https://twitter.com/LeKaeferle">Lukas Käferle</ExternalLink>, suggested that we should just build this ourselves.
 
@@ -39,7 +37,7 @@ Even though we launched as fast as possible there were 3 other price trackers th
 
 At first we were a bit disappointed that we weren't the first to launch but then realised that we can gain more from collaborating than competing. I then reached out to all of them and we started a group chat.
 
-Both Lukas and I were quite busy with different projects and didn't have too much time to develop the project further. Due to the other projects existing as well there wasn't too much need for us to continue developing.
+Both Lukas and I didn't have much time to work on the project after launch. Due to the other projects existing we didn't see a strong need to continue developing it further for the moment.
 
 We still got a few mentions in both national and international media:
 - <ExternalLink href="https://www.wired.com/story/heisse-preise-food-prices/">Wired</ExternalLink>
@@ -47,22 +45,20 @@ We still got a few mentions in both national and international media:
 - <ExternalLink href="https://kurier.at/politik/inland/kocher-lebensmittelpreise-muessen-gemeldet-werden-aber-kein-rechner/402595130">Kurier</ExternalLink>
 - <ExternalLink href="https://www.puls24.at/news/wirtschaft/lebensmittel-nach-dem-rabatt-kommt-die-preiserhoehung/300734">Puls24</ExternalLink>
 
-
 ## Shaping a new law
-The Austrian <ExternalLink href="https://www.bwb.gv.at/en/">Federal Competition Authority</ExternalLink> was investigating the supermarket industry in Austria and asked us and the other price tracking projects to answer a few questions.
+In July 2023 the Austrian <ExternalLink href="https://www.bwb.gv.at/en/">Federal Competition Authority</ExternalLink> reached out to us and the other grocery price providers to ask us a few questions about our projects. They have been investigating the supermarket industry since fall 2022.
 
-The answers were then used in <ExternalLink href="https://www.bwb.gv.at/fileadmin/user_upload/Fokuspapier_Preisvergleichsplattformen_Sept_2023_barrierefrei_14.09.2023.pdf"> a final report</ExternalLink> which was handed over to Martin Kocher, the minister of Labour and Economy.
+The answers were then used in <ExternalLink href="https://www.bwb.gv.at/fileadmin/user_upload/Fokuspapier_Preisvergleichsplattformen_Sept_2023_barrierefrei_14.09.2023.pdf"> a final report</ExternalLink> which was handed over to Martin Kocher, the Minister of Labour and Economy.
 
 The report recommended to create a law which would force supermarkets to report their price data to the ministry which then would make it available via an API.
 
 This would enable developers, researchers and journalists to utilize the data for many different use cases.
 
-<Tweet id="https://x.com/chrcit/status/1706731529022378346?s=20" />
+<Tweet id="https://x.com/chrcit/status/1706731529022378346" />
 
-In September the minister for Labour and Economics invited us to consult him on the exact implementation of the law. We were invited together with our friends from <ExternalLink href="https://heisse-preise">heisse-preisse.io</ExternalLink>, <ExternalLink href="https://teuerungsportal.at">teuerungsportal.at</ExternalLink> and <ExternalLink href="https://preisrunter.at">preisrunter.at</ExternalLink>.
+In September the Minister for Labour and Economy invited us to consult him on the exact implementation of the law. We were invited together with our friends from <ExternalLink href="https://heisse-preise">heisse-preisse.io</ExternalLink>, <ExternalLink href="https://teuerungsportal.at">teuerungsportal.at</ExternalLink> and <ExternalLink href="https://preisrunter.at">preisrunter.at</ExternalLink>.
 
-
-<Tweet id="https://x.com/badlogicgames/status/1706692838539325789?s=20" />
+<Tweet id="https://x.com/badlogicgames/status/1706692838539325789" />
 
 ## What's coming?
 In mid October our crawler stopped working and both Lukas and I were too busy to fix it. We decided to pause development until we have more time.

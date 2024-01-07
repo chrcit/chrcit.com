@@ -42,7 +42,7 @@ const { title, activeTab, items, description } = Astro.props;
               {item.image && (
                 <Image
                   transition:name={`${item.type}-${item.id}-image`}
-                  class="max-w-full xl:w-[400px] aspect-video"
+                  class="w-full max-w-[750px] xl:w-[400px] aspect-video"
                   densities={[1, 2, 3]}
                   src={item.image}
                   alt={item.title}
