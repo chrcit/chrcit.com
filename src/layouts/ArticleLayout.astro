@@ -33,7 +33,7 @@ const { id, title, image, type, headings, description, activeTab } =
           <Image
             transition:animate="none"
             densities={[1, 2, 3]}
-            class="w-full aspect-video sticky top-10 left-0 z-10"
+            class="w-full aspect-video lg:sticky top-10 left-0 z-10"
             transition:name={`${type}-${id}-image`}
             src={image}
             alt={``}
@@ -45,7 +45,7 @@ const { id, title, image, type, headings, description, activeTab } =
       >
         <h1
           id={`${type}-title`}
-          class="font-serif transition-all bg-white data-[scrolled=true]:text-3xl block py-5 z-40 md:sticky top-0 text-5xl xl:text-6xl"
+          class="font-serif transition-all bg-white data-[scrolled=true]:text-3xl block py-5 md:z-40 md:sticky top-0 text-5xl xl:text-6xl"
           transition:name={`${type}-${id}-title`}
         >
           {title}
@@ -116,7 +116,7 @@ const { id, title, image, type, headings, description, activeTab } =
       console.log("loading embed scripts");
       const embedScriptHtml = document
         .querySelector("#embed-script-template")
-        .innerHTML.trim();
+        ?.innerHTML.trim();
 
       document.querySelector("#embed-scripts").innerHTML = embedScriptHtml;
     };
