@@ -47,8 +47,8 @@ export default {
             maxWidth: "100%",
             width: "70ch",
             a: {
-              textDecoration: "none",
-              underlineOffset: "0.5em",
+              textDecoration: "underline",
+              textUnderlineOffset: "3px",
               color: theme("colors.brand"),
               "&:hover": {
                 textDecoration: "underline",
