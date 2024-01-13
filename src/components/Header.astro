@@ -14,10 +14,13 @@ const { activeTab } = Astro.props;
 <header
   class="flex flex-col sm:flex-row flex-grow justify-between lg:flex-col px-4 lg:px-0 gap-5 lg:gap-10 items-center w-full py-5"
 >
-  <a href="/" class="relative lg:mt-10 block cursor-pointer">
+  <a
+    transition:persist
+    transition:name="profile-image"
+    href="/"
+    class="relative aspect-square border-brand border-4 overflow-clip rounded-full lg:mt-10 block cursor-pointer"
+  >
     <Image
-      transition:persist
-      transition:name="profile-image"
       class="aspect-[200/243] h-auto z-20 relative max-w-[100px] lg:max-w-[175px] xl:max-w-[200px]"
       densities={[1, 2, 3]}
       width={200}
