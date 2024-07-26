@@ -12,6 +12,9 @@ export default {
       },
       screens: {
         notouch: { raw: "(hover: hover)" },
+        'xxxs': "300px",
+        'xxs': "350px",
+        'xs': '480px',
         "2xl": "1440px",
       },
       keyframes: {

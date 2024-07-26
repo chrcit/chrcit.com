@@ -80,7 +80,12 @@ const { title, description } = Astro.props;
       a {
         cursor: pointer;
         /* word-break: break-all; */
-        hyphens: auto;
+      }
+
+      @media (max-width: 450px) {
+        a {
+          hyphens: auto;
+        }
       }
 
       .twitter-tweet {
