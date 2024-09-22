@@ -68,6 +68,7 @@ const { title, description } = Astro.props;
       html,
       body {
         scroll-behavior: smooth;
+        scroll-margin-top: 100px;
         height: 100%;
         width: 100%;
       }
@@ -80,7 +81,12 @@ const { title, description } = Astro.props;
       a {
         cursor: pointer;
         /* word-break: break-all; */
-        hyphens: auto;
+      }
+
+      @media (max-width: 450px) {
+        a {
+          hyphens: auto;
+        }
       }
 
       .twitter-tweet {
