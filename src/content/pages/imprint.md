@@ -6,5 +6,5 @@ description: Imprint
 Kontakt: citochris@gmail.com
 
 Christian Cito<br />
-Johann-Strauß-Gasse 6/3a,<br />
+Favoritenstraße 44/10,<br />
 1040 Wien

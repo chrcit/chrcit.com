@@ -28,7 +28,7 @@ This website contains links to other websites for information purposes. These we
 Responsible person according to Art 4 Z 7 GDPR is:
 
 Christian Cito
-Johann-Strauß-Gasse 6/3a
+Favoritenstraße 44/10
 1040 Vienna
 
 E-Mail: [citochris@gmail.com](mailto:citochris@gmail.com)
