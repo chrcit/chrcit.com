@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/scripts/js/script.js",
-      "destination": "https://plausible.io/js/script.outbound-links.js"
+      "destination": "https://plausible.io/js/script.outbound-links.pageleave.js"
     },
     {
       "source": "/scripts/api/event",
