@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useLocation } from "react-router";
 import { AudioLines } from "lucide-react";
 import { ScrollProgress } from "~/components/layout/ScrollProgress";
 import { SocialLinks } from "~/components/SocialLinks";
@@ -11,11 +11,14 @@ const navItems = [
   { label: "Articles", to: "/articles" },
   { label: "Books", to: "/books" },
   { label: "Music", to: "/music" },
+  { label: "Films", to: "/films" },
   { label: "Games", to: "/games" },
 ];
 
 export function SiteShell({ children }: { children: React.ReactNode }) {
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  const location = useLocation();
+  const isFilmsRoute = location.pathname.startsWith("/films");
   const { currentTrack, isPlaying, openMini, showMini, showFull } =
     useMusicPlayer();
 
@@ -92,23 +95,31 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
       </header>
 
       <div ref={scrollRef} className="flex-1 overflow-y-auto">
-        <main className="mx-auto w-full max-w-6xl px-5 py-8 pb-[calc(var(--player-offset)+2rem)]">
+        <main
+          className={
+            isFilmsRoute
+              ? "w-full px-3 py-4"
+              : "mx-auto w-full max-w-6xl px-5 py-8 pb-[calc(var(--player-offset)+2rem)]"
+          }
+        >
           {children}
         </main>
 
-        <footer className="border-t border-white/10 bg-black/60">
-          <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-5 py-8 md:flex-row md:items-center md:justify-between">
-            <div className="space-y-2">
-              <p className="text-xs uppercase tracking-[0.3em] text-white/50">
-                Vienna · Remote
-              </p>
-              <p className="text-sm text-white/65">
-                Calm systems, bold visuals, direct writing.
-              </p>
+        {!isFilmsRoute && (
+          <footer className="border-t border-white/10 bg-black/60">
+            <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-5 py-8 md:flex-row md:items-center md:justify-between">
+              <div className="space-y-2">
+                <p className="text-xs uppercase tracking-[0.3em] text-white/50">
+                  Vienna · Remote
+                </p>
+                <p className="text-sm text-white/65">
+                  Calm systems, bold visuals, direct writing.
+                </p>
+              </div>
+              <SocialLinks className="justify-start md:justify-end" />
             </div>
-            <SocialLinks className="justify-start md:justify-end" />
-          </div>
-        </footer>
+          </footer>
+        )}
       </div>
     </div>
   );
