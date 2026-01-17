@@ -23,6 +23,17 @@
   --shadow-soft: 0 20px 60px -30px oklch(0.2 0.02 15 / 0.2);
 }
 
+@layer base {
+  :root {
+    --player-offset: 0px;
+  }
+}
+
+html,
+body {
+  height: 100%;
+}
+
 * {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -31,6 +42,7 @@
 body {
   @apply bg-[color:var(--color-paper)] text-[color:var(--color-ink)] font-sans;
   min-height: 100dvh;
+  overflow: hidden;
   background-image:
     radial-gradient(circle at 14% 12%, oklch(0.58 0.26 12 / 0.45), transparent 48%),
     radial-gradient(circle at 82% 8%, oklch(0.46 0.2 330 / 0.35), transparent 44%),
@@ -117,4 +129,124 @@ img {
   opacity: 0.2;
   pointer-events: none;
   mix-blend-mode: multiply;
+}
+
+@keyframes note-float {
+  0% {
+    opacity: 0;
+    transform: translate(0, 6px) scale(0.7) rotate(0deg);
+  }
+  15% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--note-x, 20px), -48px) scale(1.2)
+      rotate(var(--note-rot, 12deg));
+  }
+}
+
+@keyframes player-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 1px color-mix(in oklch, var(--color-brand) 28%, transparent),
+      0 20px 70px -30px color-mix(in oklch, var(--color-brand) 38%, black);
+  }
+  50% {
+    box-shadow:
+      0 0 0 1px color-mix(in oklch, var(--color-brand) 45%, transparent),
+      0 26px 90px -32px color-mix(in oklch, var(--color-brand) 55%, black);
+  }
+}
+
+.music-player {
+  position: relative;
+  animation: player-glow 10s ease-in-out infinite;
+}
+
+.music-player::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background: radial-gradient(
+    circle at 20% 30%,
+    color-mix(in oklch, var(--color-brand) 35%, transparent),
+    transparent 60%
+  );
+  opacity: 0.5;
+  filter: blur(32px);
+  z-index: -1;
+  animation: player-breathe 12s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.music-note-burst {
+  position: absolute;
+  right: 1.5rem;
+  top: -0.5rem;
+  height: 2.5rem;
+  width: 6rem;
+  pointer-events: none;
+}
+
+@keyframes player-breathe {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translate3d(10px, -8px, 0) scale(1.05);
+    opacity: 0.7;
+  }
+}
+
+.music-note {
+  position: absolute;
+  font-size: 1rem;
+  color: color-mix(in oklch, var(--color-brand) 70%, white 30%);
+  text-shadow: 0 0 16px color-mix(in oklch, var(--color-brand) 55%, black);
+  animation: note-float 1.6s ease-out both;
+}
+
+.music-note:nth-child(1) {
+  --note-x: -16px;
+  --note-rot: -8deg;
+  animation-delay: 0ms;
+}
+
+.music-note:nth-child(2) {
+  --note-x: 8px;
+  --note-rot: 12deg;
+  animation-delay: 120ms;
+}
+
+.music-note:nth-child(3) {
+  --note-x: 24px;
+  --note-rot: -16deg;
+  animation-delay: 220ms;
+}
+
+.music-note:nth-child(4) {
+  --note-x: 38px;
+  --note-rot: 18deg;
+  animation-delay: 320ms;
+}
+
+.music-tile {
+  content-visibility: auto;
+  contain-intrinsic-size: 340px 420px;
+  contain: layout paint style;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .music-player {
+    animation: none;
+  }
+
+  .music-note {
+    animation: none;
+    opacity: 0;
+  }
 }

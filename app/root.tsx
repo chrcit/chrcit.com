@@ -11,6 +11,7 @@ import type { Route } from "./+types/root";
 import "./app.css";
 import { SiteShell } from "~/components/layout/SiteShell";
 import { ConsentProvider } from "~/components/consent/ConsentProvider";
+import { MusicPlayerProvider } from "~/components/music/MusicPlayerProvider";
 
 export const links: Route.LinksFunction = () => [
   { rel: "icon", href: "/favicon.ico" },
@@ -47,9 +48,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 export default function App() {
   return (
-    <SiteShell>
-      <Outlet />
-    </SiteShell>
+    <MusicPlayerProvider>
+      <SiteShell>
+        <Outlet />
+      </SiteShell>
+    </MusicPlayerProvider>
   );
 }
 

@@ -6,6 +6,8 @@
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
+    "music:sync": "bun scripts/fetch-spotify-tracks.mjs",
+    "music:cli": "bun scripts/music-cli.mjs",
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
@@ -21,11 +23,14 @@
     "@react-router/serve": "7.12.0",
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/typography": "^0.5.19",
+    "chalk": "^5.6.2",
     "clsx": "^2.1.1",
     "gray-matter": "^4.0.3",
     "isbot": "^5.1.31",
     "lucide-react": "^0.562.0",
     "motion": "^12.26.2",
+    "ora": "^8.2.0",
+    "prompts": "^2.4.2",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-router": "7.12.0",

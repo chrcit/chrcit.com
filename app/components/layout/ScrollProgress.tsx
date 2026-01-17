@@ -1,7 +1,14 @@
 import { motion, useScroll, useTransform } from "motion/react";
+import type { RefObject } from "react";
 
-export function ScrollProgress() {
-  const { scrollYProgress, scrollY } = useScroll();
+export function ScrollProgress({
+  containerRef,
+}: {
+  containerRef?: RefObject<HTMLElement | null>;
+}) {
+  const { scrollYProgress, scrollY } = useScroll(
+    containerRef ? { container: containerRef } : undefined,
+  );
   const opacity = useTransform(scrollY, [0, 300], [0, 1]);
 
   return (
