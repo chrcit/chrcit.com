@@ -28,10 +28,6 @@
   text-rendering: optimizeLegibility;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
   @apply bg-[color:var(--color-paper)] text-[color:var(--color-ink)] font-sans;
   min-height: 100dvh;

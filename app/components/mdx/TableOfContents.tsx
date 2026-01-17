@@ -57,7 +57,7 @@ function TocList({
       `[data-toc-item="${activeId}"]`,
     );
     if (el) {
-      el.scrollIntoView({ block: "center", behavior: "smooth" });
+      el.scrollIntoView({ block: "center", behavior: "auto" });
     }
   }, [activeId]);
 
