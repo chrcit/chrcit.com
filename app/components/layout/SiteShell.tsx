@@ -11,6 +11,7 @@ const navItems = [
   { label: "Articles", to: "/articles" },
   { label: "Books", to: "/books" },
   { label: "Music", to: "/music" },
+  { label: "Games", to: "/games" },
 ];
 
 export function SiteShell({ children }: { children: React.ReactNode }) {
