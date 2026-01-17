@@ -1,0 +1,124 @@
+@import "@fontsource/syne";
+@import "@fontsource/ibm-plex-sans";
+@import "@fontsource/ibm-plex-mono";
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+@plugin "@tailwindcss/forms";
+
+@theme {
+  --font-display: "Syne", "Helvetica Neue", sans-serif;
+  --font-sans: "IBM Plex Sans", "Helvetica Neue", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+
+  --color-ink: oklch(0.95 0.01 90);
+  --color-paper: oklch(0.08 0.03 320);
+  --color-brand: oklch(0.72 0.25 8);
+  --color-brand-strong: oklch(0.68 0.27 8);
+  --color-mist: oklch(0.3 0.04 320);
+  --color-clay: oklch(0.8 0.12 18);
+  --color-shadow: oklch(0.02 0.02 310 / 0.7);
+
+  --radius-xl: 1.25rem;
+  --shadow-glow: 0 30px 80px -50px oklch(0.52 0.18 29 / 0.45);
+  --shadow-soft: 0 20px 60px -30px oklch(0.2 0.02 15 / 0.2);
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-[color:var(--color-paper)] text-[color:var(--color-ink)] font-sans;
+  min-height: 100dvh;
+  background-image:
+    radial-gradient(circle at 14% 12%, oklch(0.58 0.26 12 / 0.45), transparent 48%),
+    radial-gradient(circle at 82% 8%, oklch(0.46 0.2 330 / 0.35), transparent 44%),
+    radial-gradient(circle at 50% 88%, oklch(0.42 0.18 12 / 0.35), transparent 55%),
+    linear-gradient(160deg, oklch(0.14 0.06 335), oklch(0.07 0.04 310));
+  -webkit-tap-highlight-color: transparent;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+  z-index: 0;
+}
+
+::selection {
+  background-color: color-mix(in oklch, var(--color-brand) 90%, black 10%);
+  color: black;
+}
+
+a {
+  color: inherit;
+}
+
+a:hover {
+  color: var(--color-brand-strong);
+}
+
+img {
+  max-width: 100%;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-brand) 60%, black 40%);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.reveal {
+  animation: rise 600ms ease-out both;
+}
+
+@starting-style {
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    animation: none;
+  }
+}
+
+@media (hover: hover) {
+  .pressable:active {
+    transform: scale(0.98);
+  }
+}
+
+[data-noise] {
+  position: relative;
+}
+
+[data-noise]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.12'/%3E%3C/svg%3E");
+  opacity: 0.2;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
