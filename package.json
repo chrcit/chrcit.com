@@ -6,7 +6,8 @@
     "build": "react-router build",
     "dev": "react-router dev",
     "start": "react-router-serve ./build/server/index.js",
-    "typecheck": "react-router typegen && tsc"
+    "typecheck": "react-router typegen && tsc",
+    "media:games": "bun scripts/fetch-rawg.mjs"
   },
   "dependencies": {
     "@c15t/react": "^1.8.2",
