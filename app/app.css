@@ -118,3 +118,18 @@ img {
   pointer-events: none;
   mix-blend-mode: multiply;
 }
+
+.scroll-minimal {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklch, var(--color-ink) 30%, transparent) transparent;
+}
+
+.scroll-minimal::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scroll-minimal::-webkit-scrollbar-thumb {
+  background: color-mix(in oklch, var(--color-ink) 30%, transparent);
+  border-radius: 999px;
+}
