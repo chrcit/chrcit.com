@@ -1,4 +1,4 @@
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useLocation } from "react-router";
 import { ScrollProgress } from "~/components/layout/ScrollProgress";
 import { SocialLinks } from "~/components/SocialLinks";
 
@@ -7,10 +7,14 @@ const navItems = [
   { label: "Projects", to: "/projects" },
   { label: "Articles", to: "/articles" },
   { label: "Books", to: "/books" },
+  { label: "Films", to: "/films" },
   { label: "Games", to: "/games" },
 ];
 
 export function SiteShell({ children }: { children: React.ReactNode }) {
+  const location = useLocation();
+  const isFilmsRoute = location.pathname.startsWith("/films");
+
   return (
     <div className="relative z-10 min-h-screen">
       <ScrollProgress />
@@ -62,23 +66,31 @@ export function SiteShell({ children }: { children: React.ReactNode }) {
         </div>
       </header>
 
-      <main className="mx-auto w-full max-w-6xl px-5 py-8">
+      <main
+        className={
+          isFilmsRoute
+            ? "w-full px-3 py-4"
+            : "mx-auto w-full max-w-6xl px-5 py-8"
+        }
+      >
         {children}
       </main>
 
-      <footer className="border-t border-white/10 bg-black/60">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-5 py-8 md:flex-row md:items-center md:justify-between">
-          <div className="space-y-2">
-            <p className="text-xs uppercase tracking-[0.3em] text-white/50">
-              Vienna · Remote
-            </p>
-            <p className="text-sm text-white/65">
-              Calm systems, bold visuals, direct writing.
-            </p>
+      {!isFilmsRoute && (
+        <footer className="border-t border-white/10 bg-black/60">
+          <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-5 py-8 md:flex-row md:items-center md:justify-between">
+            <div className="space-y-2">
+              <p className="text-xs uppercase tracking-[0.3em] text-white/50">
+                Vienna · Remote
+              </p>
+              <p className="text-sm text-white/65">
+                Calm systems, bold visuals, direct writing.
+              </p>
+            </div>
+            <SocialLinks className="justify-start md:justify-end" />
           </div>
-          <SocialLinks className="justify-start md:justify-end" />
-        </div>
-      </footer>
+        </footer>
+      )}
     </div>
   );
 }
