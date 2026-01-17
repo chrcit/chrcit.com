@@ -8,6 +8,7 @@
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc",
     "films:sync": "tsx ./scripts/films-cli.ts",
+    "media:games": "bun scripts/fetch-rawg.mjs",
     "postinstall": "node ./scripts/ensure-prettier.mjs"
   },
   "dependencies": {

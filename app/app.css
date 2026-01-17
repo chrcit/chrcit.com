@@ -119,22 +119,17 @@ img {
   mix-blend-mode: multiply;
 }
 
-.scrollbar-min {
+.scroll-minimal {
   scrollbar-width: thin;
-  scrollbar-color: color-mix(in oklch, var(--color-ink) 40%, transparent)
-    transparent;
+  scrollbar-color: color-mix(in oklch, var(--color-ink) 30%, transparent) transparent;
 }
 
-.scrollbar-min::-webkit-scrollbar {
+.scroll-minimal::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
-.scrollbar-min::-webkit-scrollbar-thumb {
-  background-color: color-mix(in oklch, var(--color-ink) 30%, transparent);
+.scroll-minimal::-webkit-scrollbar-thumb {
+  background: color-mix(in oklch, var(--color-ink) 30%, transparent);
   border-radius: 999px;
-}
-
-.scrollbar-min::-webkit-scrollbar-track {
-  background: transparent;
 }

@@ -9,6 +9,7 @@ export default [
   route("books", "routes/books.tsx"),
   route("books/:slug", "routes/books.$slug.tsx"),
   route("films", "routes/films.tsx"),
+  route("games", "routes/games.tsx"),
   route("content/*", "routes/content.tsx"),
   route(":slug", "routes/page.tsx"),
 ] satisfies RouteConfig;
