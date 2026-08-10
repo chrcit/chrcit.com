@@ -1,0 +1,60 @@
+@import '@fontsource-variable/geologica';
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+
+@theme {
+  --font-sans: 'Geologica Variable', sans-serif;
+  --font-mono: 'Geologica Variable', sans-serif;
+  --font-display: 'Geologica Variable', sans-serif;
+
+  /* Semantic colors (defaults). Overridden at runtime via themeSettings. */
+  --color-background: #f3f3ef;
+  --color-foreground: #181a17;
+  --color-muted: #e5e5df;
+  --color-border: #c9cac3;
+  --color-brand: #d44b2f;
+  --radius-site: 0.25rem;
+  --content-width: 72rem;
+  --reading-width: 46rem;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-brand);
+  color: var(--color-background);
+}
+
+a,
+button,
+input {
+  outline-offset: 0.2rem;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #151714;
+    --color-foreground: #eff0e9;
+    --color-muted: #22251f;
+    --color-border: #42463d;
+    --color-brand: #f17656;
+  }
+}

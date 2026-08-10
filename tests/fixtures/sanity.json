@@ -1,0 +1,67 @@
+{
+  "homepage": {
+    "_id": "homepage",
+    "_type": "page",
+    "title": "CI Sample Dataset Homepage",
+    "slug": {
+      "current": ""
+    },
+    "meta": {
+      "title": "CI Sample Dataset Homepage",
+      "description": "Homepage content from the CI sample dataset.",
+      "keywords": ["ci", "sample-dataset"],
+      "ogImage": null,
+      "visibility": "public"
+    },
+    "contentMode": "richText",
+    "richText": [
+      {
+        "_key": "sample-copy",
+        "_type": "block",
+        "style": "normal",
+        "markDefs": [],
+        "children": [
+          {
+            "_key": "sample-copy-span",
+            "_type": "span",
+            "marks": [],
+            "text": "Rendered from the CI sample dataset."
+          }
+        ]
+      }
+    ],
+    "components": null
+  },
+  "header": {
+    "_id": "header",
+    "_type": "header",
+    "logo": null,
+    "nav": []
+  },
+  "footer": {
+    "_id": "footer",
+    "_type": "footer",
+    "logo": null,
+    "mainNav": [],
+    "secondaryNav": [],
+    "socials": []
+  },
+  "siteSettings": {
+    "_id": "siteSettings",
+    "_type": "siteSettings",
+    "metaSettings": null,
+    "favicon": null,
+    "ogVisual": null,
+    "socials": [],
+    "privacyPolicy": null,
+    "imprint": null,
+    "analytics": null
+  },
+  "themeSettings": {
+    "_id": "themeSettings",
+    "_type": "themeSettings",
+    "brandColor": "#f0a",
+    "textColor": "#111",
+    "backgroundColor": "#fff"
+  }
+}

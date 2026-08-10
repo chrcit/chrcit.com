@@ -1,0 +1,14 @@
+# Local Worker secrets (copy to .dev.vars — not committed)
+# Non-secret Sanity/site vars live in wrangler.jsonc.
+
+SANITY_API_READ_TOKEN=
+# Back-compat name accepted by the starter:
+SANITY_READ_TOKEN=
+SANITY_SESSION_SECRET=please-change-me
+
+# Reserved for a cache revalidation adapter; no purge implementation is
+# included in this starter yet.
+CACHE_PURGE_SECRET=
+
+# Server-only MailerLite token. The group ID and form copy live in Sanity.
+MAILERLITE_API_TOKEN=

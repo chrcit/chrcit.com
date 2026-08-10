@@ -1,0 +1,46 @@
+# Architecture
+
+## Runtime
+
+```text
+Sanity production dataset (pqdr91mr)
+        │ published GROQ + previewDrafts
+        ▼
+React Router 8 app and Sanity Visual Editing
+        │
+        ├── public routes: /, /books, legal pages, /projects/:slug, /writing/:slug
+        ├── embedded Studio: /studio/*
+        ├── newsletter action: /api/newsletter → MailerLite
+        └── Cloudflare Worker adapter (deployment intentionally deferred)
+```
+
+The public dataset is queried through the Sanity CDN for published requests. Preview mode uses a server-side read token, `previewDrafts`, stega encoding, and the embedded Presentation tool.
+
+## Content model
+
+- `page`: editorial pages and the `homepage` singleton. Pages choose rich text or an ordered array of blocks and can enable a generated table of contents.
+- `thing`: one reusable record for anything Christian likes or uses. Its `kind` distinguishes books, articles, films, music, albums, tools, games, websites, and other items.
+- `project`: a detailed project story with a public detail route. `historical` prevents old work from silently appearing in current-work filters.
+- `article`: authored long-form writing with a public detail route or optional external canonical URL.
+- `topic`: shared taxonomy referenced by things, projects, and articles.
+- `siteSettings`, `themeSettings`, `header`, `footer`: fixed-ID singleton documents.
+
+Page blocks are `heroBlock`, `richTextBlock`, `referenceCollection`, `newsletterBlock`, `linkListBlock`, `complexImage`, and `separator`. `referenceCollection` is also available inside Portable Text and supports list, media list, grid, carousel, single, and filterable presentations.
+
+The public header is intentionally not a section navigation. It renders one linked `chrcit.com` root followed by unlinked route breadcrumbs. About, Writing, Things, and Projects overview routes do not exist; discovery starts on the homepage.
+
+## Reference resolution
+
+A page query returns its ordered blocks plus the small public content library. Manual collections use dereferenced selections from the block. Filtered collections resolve client-side against the library by document type, thing kind, topic, featured state, historic state, sort order, and limit. This keeps one master collection configuration usable in page-builder and rich-text contexts. If the library grows enough to affect payload size, move filtered resolution to parameterized server queries without changing the schema.
+
+## Newsletter
+
+The browser posts an email and optional block-specific group ID to `/api/newsletter`. The server falls back to `siteSettings.newsletter.groupId`, reads `MAILERLITE_API_TOKEN` only at runtime, and calls MailerLite's subscriber endpoint. The token is never sent to the browser.
+
+## Import
+
+`scripts/import-legacy-content.ts` reads `origin/main` directly with Git, so the old Astro tree does not need to exist in this branch. It parses frontmatter, converts Markdown/cleaned MDX to Portable Text, uploads referenced images, imports historic records with stable IDs, and seeds the singletons and initial editorial pages. `createOrReplace` makes reruns deterministic.
+
+## Cloudflare
+
+`wrangler.jsonc`, the Worker entry point, React Router server build, environment typing, and deployment script come from the current Arthouse Sanity starter. Production deployment, domains, secrets, and CI push-deploy remain intentionally unconfigured until the follow-up deployment task.

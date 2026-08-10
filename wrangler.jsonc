@@ -1,0 +1,28 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "chrcit-com",
+  "account_id": "2c9fb1653ddb6954dedcb6ece9f5affe",
+  "compatibility_date": "2026-08-04",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "./workers/app.ts",
+
+  // Workers Cache: MISS → HIT for responses that opt into public caching.
+  "cache": {
+    "enabled": true
+  },
+  "observability": {
+    "enabled": true
+  },
+
+  // Non-secret runtime and build variables belong here. Put tokens and
+  // session secrets in .dev.vars locally or in Cloudflare Variables & Secrets.
+  "vars": {
+    "VITE_SANITY_PROJECT_ID": "pqdr91mr",
+    "VITE_SANITY_DATASET": "production",
+    "VITE_SANITY_API_VERSION": "2024-02-13",
+    "VITE_SANITY_STUDIO_URL": "https://chrcit.com/studio",
+    "VITE_SANITY_STUDIO_PREVIEW_ORIGIN": "https://chrcit.com",
+    "SITE_URL": "https://chrcit.com",
+    "PRODUCTION_URL": "https://chrcit.com"
+  }
+}
