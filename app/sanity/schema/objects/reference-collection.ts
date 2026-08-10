@@ -48,6 +48,8 @@ export const referenceCollection = defineType({
     defineField({
       name: 'items',
       title: 'Items',
+      description:
+        'Hand-picked quote references count as explicit page placements. Filtered collections never pull from the quote archive.',
       type: 'array',
       of: [{ type: 'reference', to: referenceTypes }],
       hidden: ({ parent }) => parent?.source === 'filter',

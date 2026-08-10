@@ -24,7 +24,7 @@ export const quote = defineType({
       name: 'sourceItem',
       title: 'Reading item',
       description:
-        'The book or article this quote belongs to. The item remains reusable independently.',
+        'The book or article this quote belongs to. Book-linked quotes may surface with that book; unlinked quotes only appear where a page references them explicitly.',
       type: 'reference',
       to: [{ type: 'thing' }],
       options: {

@@ -83,7 +83,12 @@ function Item({
 }) {
   if (item._type === 'quote') {
     return (
-      <QuoteReference quote={item} showSource showCommentary={showNotes} />
+      <QuoteReference
+        quote={item}
+        placement={{ type: 'page-reference' }}
+        showSource
+        showCommentary={showNotes}
+      />
     );
   }
   const href = hrefFor(item);

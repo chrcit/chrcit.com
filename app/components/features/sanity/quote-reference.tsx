@@ -1,4 +1,8 @@
 import { toPlainText } from '@portabletext/react';
+import {
+  isQuoteVisible,
+  type QuotePlacement,
+} from '@/components/features/sanity/quote-visibility';
 
 export type QuoteValue = {
   _id?: string | null;
@@ -9,6 +13,9 @@ export type QuoteValue = {
   sourceUrl?: string | null;
   commentary?: Parameters<typeof toPlainText>[0] | null;
   sourceItem?: {
+    _id?: string | null;
+    _type?: string | null;
+    kind?: string | null;
     title?: string | null;
     creator?: string | null;
     url?: string | null;
@@ -17,16 +24,18 @@ export type QuoteValue = {
 
 export function QuoteReference({
   quote,
+  placement,
   context,
   showSource = true,
   showCommentary = false,
 }: {
   quote?: QuoteValue | null;
+  placement: QuotePlacement;
   context?: string | null;
   showSource?: boolean | null;
   showCommentary?: boolean | null;
 }) {
-  if (!quote?.text) return null;
+  if (!quote?.text || !isQuoteVisible(quote, placement)) return null;
   const sourceTitle = quote.sourceItem?.title || quote.attribution;
   const sourceUrl = quote.sourceItem?.url || quote.sourceUrl;
   const location = quote.location

@@ -187,6 +187,7 @@ export function PageBuilder({
               <QuoteReference
                 key={key}
                 quote={section.quote}
+                placement={{ type: 'page-reference' }}
                 context={section.context}
                 showSource={section.showSource}
                 showCommentary={section.showCommentary}

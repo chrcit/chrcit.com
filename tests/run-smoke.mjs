@@ -21,9 +21,18 @@ if (build.status !== 0) {
   process.exit(build.status ?? 1);
 }
 
-const tests = spawnSync(process.execPath, ['--test', 'tests/worker.smoke.test.mjs'], {
-  env,
-  stdio: 'inherit',
-});
+const tests = spawnSync(
+  process.execPath,
+  [
+    '--experimental-strip-types',
+    '--test',
+    'tests/quote-visibility.test.mjs',
+    'tests/worker.smoke.test.mjs',
+  ],
+  {
+    env,
+    stdio: 'inherit',
+  }
+);
 
 process.exit(tests.status ?? 1);

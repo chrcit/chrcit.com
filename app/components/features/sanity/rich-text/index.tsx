@@ -183,6 +183,7 @@ export function RichText({ value, library }: Props) {
       }: PortableTextTypeComponentProps<QuoteBlockValue>) => (
         <QuoteReference
           quote={value.quote}
+          placement={{ type: 'page-reference' }}
           context={value.context}
           showSource={value.showSource}
           showCommentary={value.showCommentary}

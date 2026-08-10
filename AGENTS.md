@@ -7,7 +7,7 @@ This repository is the clean Sanity-backed rebuild of Christian Cito's personal 
 - The homepage is a hand-authored singleton assembled from Sanity blocks.
 - Pages should feel editorial. A page decides which library records to expose and in what order.
 - `thing` is the reusable library record for books, articles, films, music, albums, tools, games, websites, and uncategorized references. Things do not get public detail routes by default.
-- Books and read articles form the `Reading` subset. A `quote` is its own reusable document linked to one reading item; never embed a canonical quote as anonymous page data.
+- Books and read articles form the `Reading` subset. A `quote` is its own reusable document linked to one reading item; never embed a canonical quote as anonymous page data. Public quote rendering must declare its placement: an explicit page reference, a connected book, or the exact referenced book page. Never expose the quote archive as a global collection.
 - `project` and `article` may have detail routes. Historic projects stay in Sanity but must not become an automatic project index.
 - Do not add About, Writing, Things, or Projects overview routes. The homepage is the index; `/reading` is the single intentional collection page.
 - Keep the header to a linked `chrcit.com` root and contextual, unlinked breadcrumbs.

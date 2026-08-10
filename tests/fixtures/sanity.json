@@ -60,6 +60,19 @@
         ]
       },
       {
+        "_key": "explicit-quote",
+        "_type": "quoteBlock",
+        "quote": {
+          "_id": "quote-explicit-page-reference",
+          "_type": "quote",
+          "text": "Explicit page references remain editorially visible.",
+          "attribution": "CI fixture",
+          "sourceItem": null
+        },
+        "showSource": true,
+        "showCommentary": false
+      },
+      {
         "_key": "stale-work",
         "_type": "referenceCollection",
         "title": "Stale project grid",
@@ -67,7 +80,14 @@
         "items": []
       }
     ],
-    "library": []
+    "library": [
+      {
+        "_id": "quote-unreferenced-library-item",
+        "_type": "quote",
+        "text": "Unreferenced archive quotes must stay hidden.",
+        "sourceItem": null
+      }
+    ]
   },
   "header": {
     "_id": "header",

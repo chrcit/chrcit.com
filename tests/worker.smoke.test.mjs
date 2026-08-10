@@ -56,11 +56,17 @@ function assertNoRenderError(html) {
 test('homepage renders the CI sample-dataset fixture through the Worker', async () => {
   const response = await worker.fetch(new Request('https://ci.example.test/'));
   const html = await response.text();
+  const renderedDocument = html.split('<script>')[0];
 
   assert.equal(response.status, 200);
   assertNoRenderError(html);
   assert.match(html, />Christian Cito<\/h1>/);
   assert.match(html, /Rendered from the CI sample dataset\./);
+  assert.match(html, /Explicit page references remain editorially visible\./);
+  assert.doesNotMatch(
+    renderedDocument,
+    /Unreferenced archive quotes must stay hidden\./
+  );
   assert.doesNotMatch(html, />Stale project grid</);
   assert.match(
     html,

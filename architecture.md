@@ -36,7 +36,7 @@ The live archive is mirrored from the authenticated Readwise MCP directly into S
 
 ## Reference resolution
 
-A page query returns its ordered blocks plus the public thing, project, and article library. Manual collections and quote blocks are dereferenced directly from the page. Readwise quotes are not added to the global library payload; a page receives only quotes it explicitly references. Filtered collections resolve client-side by document type, thing kind, topic, featured state, historic state, sort order, and limit.
+A page query returns its ordered blocks plus the public thing, project, and article library. Manual collections and quote blocks are dereferenced directly from the page. Readwise quotes are not added to the global library payload; a page receives only quotes it explicitly references. Quote renderers require an explicit placement context: a page reference is always editorially valid, a connected-book placement requires a referenced `thing` with `kind == "book"`, and a book-page placement must match that exact book ID. This prevents orphaned or unrelated highlights from leaking into general views. Filtered collections resolve client-side by document type, thing kind, topic, featured state, historic state, sort order, and limit.
 
 ## Newsletter
 
