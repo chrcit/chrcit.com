@@ -10,6 +10,7 @@ import {
 import { NewsletterForm } from '@/components/features/newsletter-form';
 import { cleanString } from '@/components/features/sanity/helpers/stega';
 import { resolveHref } from '@/components/features/sanity/helpers/resolve-href';
+import { QuoteReference } from '@/components/features/sanity/quote-reference';
 
 type PageComponents = NonNullable<
   NonNullable<HOMEPAGE_QUERYResult>['components']
@@ -20,6 +21,7 @@ type Props = {
   value: PageBuilderValue | null | undefined;
   library?: ContentItem[] | null;
   newsletterPrivacyNote?: string | null;
+  variant?: 'default' | 'homepage';
 };
 
 type BuilderLink = NonNullable<
@@ -40,15 +42,27 @@ function hrefForLink(link: BuilderLink) {
     );
 }
 
-function Links({ links }: { links?: BuilderLink[] | null }) {
+function Links({
+  links,
+  compact = false,
+}: {
+  links?: BuilderLink[] | null;
+  compact?: boolean;
+}) {
   if (!links?.length) return null;
   return (
-    <div className="mt-7 flex flex-wrap gap-x-5 gap-y-3">
+    <div
+      className={
+        compact
+          ? 'flex flex-wrap gap-x-5 gap-y-2 text-sm'
+          : 'mt-7 flex flex-wrap gap-x-5 gap-y-3'
+      }
+    >
       {links.map((link, index) => {
         const href = hrefForLink(link);
         if (!href) return null;
         const className =
-          'border-foreground hover:border-brand inline-flex border-b pb-0.5 text-sm font-semibold transition-colors';
+          'border-foreground/35 hover:border-brand hover:text-brand inline-flex border-b pb-0.5 font-medium transition-colors active:translate-y-px';
         return href.startsWith('/') ? (
           <Link className={className} to={href} key={`${href}-${index}`}>
             {link.title}
@@ -69,14 +83,48 @@ function Links({ links }: { links?: BuilderLink[] | null }) {
   );
 }
 
-export function PageBuilder({ value, library, newsletterPrivacyNote }: Props) {
+export function PageBuilder({
+  value,
+  library,
+  newsletterPrivacyNote,
+  variant = 'default',
+}: Props) {
   if (!value?.length) return null;
+  const isHomepage = variant === 'homepage';
   return (
-    <div>
+    <div className={isHomepage ? 'homepage-index' : undefined}>
       {value.map((section, idx) => {
         const key = section._key || `${section._type}-${idx}`;
         switch (section._type) {
           case 'heroBlock':
+            if (isHomepage) {
+              return (
+                <section
+                  key={key}
+                  className="border-border grid min-h-[68dvh] content-center gap-10 border-b py-12 md:grid-cols-[minmax(0,1fr)_minmax(12rem,18rem)] md:items-end md:py-16"
+                >
+                  <div className="max-w-4xl">
+                    <h1 className="text-[clamp(2.75rem,7vw,6.5rem)] font-semibold leading-[0.9] tracking-[-0.065em]">
+                      {section.heading}
+                    </h1>
+                    <div className="homepage-lead mt-8 max-w-3xl">
+                      <RichText value={section.richBody} library={library} />
+                    </div>
+                    <Links links={section.links} />
+                  </div>
+                  {section.image ? (
+                    <ComplexImage
+                      value={section.image}
+                      sizes="(min-width: 768px) 18rem, 55vw"
+                      widths={[360, 560, 720]}
+                      className="homepage-portrait w-[min(55vw,18rem)] justify-self-end"
+                      figureClassName="aspect-[4/5] overflow-hidden"
+                      imgClassName="h-full w-full object-cover object-top grayscale"
+                    />
+                  ) : null}
+                </section>
+              );
+            }
             return (
               <section
                 key={key}
@@ -116,17 +164,32 @@ export function PageBuilder({ value, library, newsletterPrivacyNote }: Props) {
             return (
               <section
                 key={key}
-                className="mx-auto max-w-[var(--reading-width)] py-10"
+                className={
+                  isHomepage
+                    ? 'homepage-copy border-border max-w-5xl border-b py-12 md:py-16'
+                    : 'mx-auto max-w-[var(--reading-width)] py-10'
+                }
               >
                 <RichText value={section.richBody} library={library} />
               </section>
             );
           case 'referenceCollection':
+            if (isHomepage) return null;
             return (
               <ContentCollection
                 key={key}
                 value={section as CollectionValue}
                 library={library}
+              />
+            );
+          case 'quoteBlock':
+            return (
+              <QuoteReference
+                key={key}
+                quote={section.quote}
+                context={section.context}
+                showSource={section.showSource}
+                showCommentary={section.showCommentary}
               />
             );
           case 'newsletterBlock':
@@ -139,9 +202,17 @@ export function PageBuilder({ value, library, newsletterPrivacyNote }: Props) {
                 successMessage={section.successMessage}
                 groupId={section.groupId}
                 privacyNote={newsletterPrivacyNote}
+                compact={isHomepage}
               />
             );
           case 'linkListBlock':
+            if (isHomepage) {
+              return (
+                <section key={key} className="border-border border-b py-7">
+                  <Links links={section.links} compact />
+                </section>
+              );
+            }
             return (
               <section key={key} className="py-10">
                 <div className="mb-6 max-w-2xl">

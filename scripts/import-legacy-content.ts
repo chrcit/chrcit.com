@@ -227,6 +227,13 @@ async function portableText(markdown: string, sourceFile: string) {
               _key: item._key,
               link: ref(`legacy-article-${articleMatch[1]}`),
             };
+          const pageMatch = href.match(/^\/([^/?#]+)$/);
+          if (pageMatch)
+            return {
+              _type: 'markInternalLink',
+              _key: item._key,
+              link: ref(`page-${pageMatch[1]}`),
+            };
           if (href.startsWith('/'))
             return {
               _type: 'markExternalLink',
@@ -277,8 +284,6 @@ function emailLink(title: string, email: string, suffix: string) {
 
 async function buildDocuments() {
   const documents: DocumentInput[] = [];
-  const projectIds: string[] = [];
-  const articleIds: string[] = [];
 
   for (const file of listFiles('src/content/books')) {
     const { data, body } = parseFile(gitText(file));
@@ -313,7 +318,6 @@ async function buildDocuments() {
     ['src/content/films', 'film'],
     ['src/content/shows', 'film'],
     ['src/content/musicians', 'music'],
-    ['src/content/quotes', 'other'],
   ] as const;
   for (const [directory, kind] of extraKinds)
     for (const file of listFiles(directory)) {
@@ -333,11 +337,24 @@ async function buildDocuments() {
       });
     }
 
+  for (const file of listFiles('src/content/quotes')) {
+    const { data, body } = parseFile(gitText(file));
+    const slug = slugFrom(file);
+    documents.push({
+      _id: `legacy-quote-${slug}`,
+      _type: 'quote',
+      text: String(data.text || body || slug),
+      attribution: data.author,
+      origin: 'manual',
+      sourceState: 'active',
+      featured: false,
+    });
+  }
+
   for (const file of listFiles('src/content/projects')) {
     const { data, body } = parseFile(gitText(file));
     const slug = slugFrom(file);
     const id = `legacy-project-${slug}`;
-    projectIds.push(id);
     const imagePath =
       typeof data.image === 'string'
         ? posix.normalize(posix.join(posix.dirname(file), data.image))
@@ -364,7 +381,6 @@ async function buildDocuments() {
     const { data, body } = parseFile(gitText(file));
     const slug = slugFrom(file);
     const id = `legacy-article-${slug}`;
-    articleIds.push(id);
     const imagePath =
       typeof data.image === 'string'
         ? posix.normalize(posix.join(posix.dirname(file), data.image))
@@ -403,40 +419,43 @@ async function buildDocuments() {
   }
 
   documents.push({
-    _id: 'page-books',
+    _id: 'page-reading',
     _type: 'page',
-    title: 'Books I keep around',
-    slug: { _type: 'slug', current: 'books' },
+    title: 'Reading',
+    slug: { _type: 'slug', current: 'reading' },
     contentMode: 'pageBuilder',
     showTableOfContents: true,
     components: [
       {
         _type: 'richTextBlock',
         _key: 'intro',
-        label: 'Introduction',
+        label: 'Reading',
         body: await portableText(
-          '## On reading\n\nThis is not a ranked reading log. It is a working shelf of books that changed how I understand systems, people, power, attention, or the work itself.',
+          '## Books and articles\n\nA working shelf of material I return to. Highlights live separately, linked to their source, and can be pulled into pages when they add something.',
           'seed.md'
         ),
       },
       {
         _type: 'referenceCollection',
         _key: 'books',
-        title: 'The shelf',
-        introduction:
-          'Open a book to find it elsewhere. Covers, titles, context, and personal notes remain editable as reusable Sanity records.',
+        title: 'Shelf',
         source: 'filter',
         filter: {
           contentTypes: ['thing'],
-          kinds: ['book'],
-          limit: 100,
+          kinds: ['book', 'article'],
+          limit: 250,
           order: 'title',
         },
         presentation: 'mediaList',
         showNotes: false,
       },
     ],
-    meta: meta('A working shelf of books Christian Cito keeps returning to.'),
+    meta: {
+      ...meta(
+        "Books, articles, and referenceable highlights from Christian Cito's working library."
+      ),
+      title: 'Reading',
+    },
   });
 
   const nowItems = [
@@ -446,7 +465,7 @@ async function buildDocuments() {
       creator: 'Digital product studio',
       url: 'https://madebyarthouse.com',
       summary:
-        'I direct Arthouse, a digital product studio building sharp, resilient products for teams that care about craft.',
+        'I direct a creative engineering studio working across strategy, software engineering, design, and creative production from Creative Cluster in Vienna.',
     },
     {
       _id: 'profile-hausgemacht',
@@ -489,62 +508,31 @@ async function buildDocuments() {
       {
         _type: 'heroBlock',
         _key: 'hero',
-        eyebrow: 'Christian Cito · Product engineer and designer · Vienna',
-        heading: 'I build digital products and the systems around them.',
+        heading: 'Christian Cito',
         body: await portableText(
-          'I work end to end across product, engineering, and design. Most of my time goes into Arthouse, the software behind hausgemacht, and rebased.wtf. This site is a direct map to that work, a few older projects, and occasional writing.',
+          'I work where software, design, culture, and self-organised systems overlap.',
           'seed.md'
         ),
         image: profile,
-        links: [
-          emailLink('Email', 'christian.cito@arthouse.is', 'hero'),
-          externalLink('GitHub', 'https://github.com/chrcit', 'hero'),
-        ],
       },
       {
-        _type: 'referenceCollection',
-        _key: 'now',
-        title: 'Where I spend my time',
-        introduction:
-          'Three connected practices: client work, cultural infrastructure, and a place for technologists to meet without the corporate theatre.',
-        source: 'manual',
-        items: [
-          'profile-arthouse',
-          'profile-hausgemacht',
-          'profile-rebased',
-        ].map((id, index) => ref(id, String(index))),
-        presentation: 'grid',
-        showNotes: false,
-      },
-      {
-        _type: 'referenceCollection',
-        _key: 'writing',
-        title: 'Writing',
-        introduction:
-          'I publish when there is something specific worth keeping. For now, there is one long retrospective.',
-        source: 'manual',
-        items: articleIds.map((id, index) => ref(id, String(index))),
-        presentation: 'single',
-        showNotes: false,
-      },
-      {
-        _type: 'referenceCollection',
-        _key: 'selected-work',
-        title: 'Older project notes',
-        introduction:
-          'A selective archive of systems I put into the world. They stay here as context, not as a portfolio grid.',
-        source: 'manual',
-        items: projectIds.map((id, index) => ref(id, String(index))),
-        presentation: 'list',
-        showNotes: false,
+        _type: 'richTextBlock',
+        _key: 'bio',
+        label: 'Linked biography',
+        body: await portableText(
+          `At [Arthouse](https://www.madebyarthouse.com), I direct a creative engineering studio based at [Creative Cluster](https://creativecluster.cc/) in Vienna. We work across strategy, software engineering, design, and creative production.
+
+I also build the digital systems behind [hausgemacht](https://hausgemacht.org), a feminist art and culture collective that creates safer spaces around techno, and co-organise [rebased.wtf](https://rebased.wtf), a meetup for developers, tinkerers, and people crossing into technology from other fields. My work combines rigorous product engineering, collective cultural infrastructure, and independent experiments.
+
+The [2023 year in review](/writing/2023-year-in-review) is the clearest account of how those threads came together. [Reading](/reading) holds books, articles, and quotes I keep returning to. Older side projects stay linked from the article when they add context.`,
+          'seed.md'
+        ),
       },
       {
         _type: 'linkListBlock',
         _key: 'elsewhere',
-        title: 'Other routes',
-        body: 'The reading shelf and a few places where I am active.',
         links: [
-          internalLink('Books I keep around', 'page-books', 'home'),
+          emailLink('Email', 'christian.cito@arthouse.is', 'home'),
           externalLink('GitHub', 'https://github.com/chrcit', 'home'),
           externalLink(
             'LinkedIn',
@@ -557,18 +545,17 @@ async function buildDocuments() {
       {
         _type: 'newsletterBlock',
         _key: 'newsletter',
-        eyebrow: 'Newsletter',
-        heading: 'Notes from the workbench',
-        body: 'Occasional writing about building software, culture, and whatever I cannot stop thinking about.',
+        heading: 'Newsletter',
+        body: 'Occasional notes on software, design, culture, and current experiments.',
         buttonLabel: 'Subscribe',
         successMessage: 'You are on the list. Thank you.',
       },
     ],
     meta: {
       ...meta(
-        'Christian Cito is a product engineer and designer directing Arthouse, supporting hausgemacht, and organizing rebased.wtf in Vienna.'
+        'Christian Cito works across software, design, and cultural infrastructure through Arthouse, hausgemacht, and rebased.wtf in Vienna.'
       ),
-      title: 'Christian Cito · Product engineer and designer',
+      title: 'Christian Cito · Software, design, and culture',
     },
   });
 
@@ -576,9 +563,9 @@ async function buildDocuments() {
     {
       _id: 'themeSettings',
       _type: 'themeSettings',
-      brandColor: '#d44b2f',
-      textColor: '#181a17',
-      backgroundColor: '#f3f3ef',
+      brandColor: '#1843d8',
+      textColor: '#101211',
+      backgroundColor: '#eef0f0',
     },
     {
       _id: 'siteSettings',
@@ -587,7 +574,8 @@ async function buildDocuments() {
         _type: 'metaSettings',
         siteTitle: 'Christian Cito',
         titleTemplate: '%s · Christian Cito',
-        defaultDescription: 'Christian Cito makes things for the internet.',
+        defaultDescription:
+          'Christian Cito works across software, design, and cultural infrastructure.',
       },
       socials: [
         {
@@ -619,7 +607,7 @@ async function buildDocuments() {
       imprint: ref('page-imprint'),
       newsletter: {
         enabled: true,
-        privacyNote: 'No spam. Unsubscribe whenever you like.',
+        privacyNote: 'Unsubscribe at any time.',
       },
     },
     {
@@ -665,7 +653,7 @@ if (dryRun) {
 } else {
   let transaction = client.transaction();
   for (const document of documents)
-    transaction = transaction.createOrReplace(document);
+    transaction = transaction.createIfNotExists(document);
   await transaction.commit({ autoGenerateArrayKeys: true });
   console.log(
     `Imported ${documents.length} documents and ${imageCache.size} image assets into ${client.config().projectId}/${client.config().dataset}.`

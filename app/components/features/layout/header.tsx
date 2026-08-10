@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router';
 import { Container } from '@/components/ui';
 
 const routeLabels: Record<string, string> = {
-  books: 'books',
+  reading: 'reading',
   writing: 'writing',
   projects: 'projects',
   imprint: 'imprint',

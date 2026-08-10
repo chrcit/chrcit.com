@@ -7,6 +7,8 @@ import {
   ComposeIcon,
   MenuIcon,
   StackCompactIcon,
+  BookIcon,
+  BlockquoteIcon,
 } from '@sanity/icons';
 import { labels } from '@/sanity/i18n';
 
@@ -24,6 +26,7 @@ export const structure: StructureResolver = (S) => {
     'topic',
     'project',
     'article',
+    'quote',
   ];
 
   const singletonIds = {
@@ -52,7 +55,30 @@ export const structure: StructureResolver = (S) => {
 
       S.documentTypeListItem('article').title('Writing'),
       S.documentTypeListItem('project').title('Projects'),
-      S.documentTypeListItem('thing').title('Things library'),
+      S.listItem()
+        .id('reading')
+        .title('Reading')
+        .icon(BookIcon)
+        .child(
+          S.list()
+            .title('Reading')
+            .items([
+              S.listItem()
+                .id('reading-items')
+                .title('Books & articles')
+                .icon(BookIcon)
+                .child(
+                  S.documentList()
+                    .title('Books & articles')
+                    .schemaType('thing')
+                    .filter(`_type == "thing" && kind in ["book", "article"]`)
+                ),
+              S.documentTypeListItem('quote')
+                .title('Quotes')
+                .icon(BlockquoteIcon),
+            ])
+        ),
+      S.documentTypeListItem('thing').title('Full library'),
       S.documentTypeListItem('topic').title('Topics'),
 
       S.divider(),

@@ -7,11 +7,20 @@ const fixture = JSON.parse(
 );
 const sanityRequests = [];
 
-globalThis.fetch = async (input) => {
+globalThis.fetch = async (input, init) => {
   const url = new URL(
     typeof input === 'string' ? input : input instanceof URL ? input.href : input.url
   );
-  const query = url.searchParams.get('query') ?? '';
+  let query = url.searchParams.get('query') ?? '';
+
+  if (!query) {
+    const body =
+      init?.body ?? (input instanceof Request ? await input.clone().text() : null);
+    if (typeof body === 'string' && body) {
+      query = JSON.parse(body).query ?? '';
+    }
+  }
+
   sanityRequests.push(query);
 
   assert.equal(
@@ -50,9 +59,13 @@ test('homepage renders the CI sample-dataset fixture through the Worker', async 
 
   assert.equal(response.status, 200);
   assertNoRenderError(html);
-  assert.match(html, />CI Sample Dataset Homepage<\/h1>/);
+  assert.match(html, />Christian Cito<\/h1>/);
   assert.match(html, /Rendered from the CI sample dataset\./);
-  assert.match(html, /<title>CI Sample Dataset Homepage<\/title>/);
+  assert.doesNotMatch(html, />Stale project grid</);
+  assert.match(
+    html,
+    /<title>Christian Cito · Software, design, and culture<\/title>/
+  );
   assert.ok(
     sanityRequests.some((query) =>
       query.includes('_type == "page" && _id == "homepage"')

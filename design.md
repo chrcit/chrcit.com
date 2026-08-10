@@ -6,9 +6,9 @@ The current direction is a restrained editorial interface with a technical, slig
 
 - Audience: curious people following Christian's work, writing, references, and side experiments.
 - Voice: direct, self-aware, specific, and not overly promotional.
-- Shape: title-led layouts, strong typographic scale shifts, hairline separators, small metadata labels, and a single rust-orange accent.
+- Shape: one clear typographic hierarchy, compressed editorial rhythm, sharp edges, and a single cobalt accent. Metadata labels are functional, not decorative.
 - Temporary typeface: Geologica Variable from Fontsource. It has some of the engineered personality of ABC Dynamo Whyte Inktrap without introducing a second family.
-- Color: warm near-white and near-black with `#d44b2f` as the only accent. System dark mode is supported by default.
+- Color: cool near-white and near-black with `#1843d8` as the only accent. System dark mode is supported by default.
 
 ## Interaction
 
@@ -22,6 +22,7 @@ The current direction is a restrained editorial interface with a technical, slig
 
 - Maximum shell width: 72rem.
 - Reading width: 46rem.
+- The homepage uses one name, one linked biography, a route line, and the newsletter. It does not split work into promotional card collections.
 - Editorial pages use one dominant title and then let their blocks set rhythm.
 - Navigation is a quiet `chrcit.com / current context` breadcrumb, not a global section menu.
 - Book cards use a cover thumbnail on the left and compact title/author context on the right.

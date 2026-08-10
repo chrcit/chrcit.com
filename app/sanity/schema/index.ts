@@ -14,6 +14,7 @@ import { linkListBlock } from '@/sanity/schema/objects/link-list-block';
 import { richText } from '@/sanity/schema/objects/rich-text';
 import { separator } from '@/sanity/schema/objects/separator';
 import { socialLink } from '@/sanity/schema/objects/social-link';
+import { quoteBlock } from '@/sanity/schema/objects/quote-block';
 
 import { footer } from '@/sanity/schema/documents/footer';
 import { header } from '@/sanity/schema/documents/header';
@@ -24,6 +25,7 @@ import { topic } from '@/sanity/schema/documents/topic';
 import { thing } from '@/sanity/schema/documents/thing';
 import { project } from '@/sanity/schema/documents/project';
 import { article } from '@/sanity/schema/documents/article';
+import { quote } from '@/sanity/schema/documents/quote';
 
 export const schemaTypes = [
   // Objects
@@ -43,6 +45,7 @@ export const schemaTypes = [
   referenceCollection,
   newsletterBlock,
   linkListBlock,
+  quoteBlock,
 
   // Documents
   siteSettings,
@@ -54,4 +57,5 @@ export const schemaTypes = [
   thing,
   project,
   article,
+  quote,
 ];

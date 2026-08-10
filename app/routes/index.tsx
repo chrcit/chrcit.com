@@ -72,15 +72,12 @@ export default function Index({ loaderData }: Route.ComponentProps) {
     <div>
       {!homepage ? (
         <section className="grid min-h-[64dvh] content-center py-16">
-          <p className="text-brand mb-5 text-xs font-semibold uppercase tracking-[0.18em]">
-            Christian Cito
-          </p>
           <h1 className="max-w-5xl text-[clamp(3.4rem,10vw,8.5rem)] font-semibold leading-[.87] tracking-[-.075em]">
-            I make things for the internet and write down what I notice.
+            Christian Cito
           </h1>
-          <p className="text-foreground/65 mt-8 max-w-xl text-lg">
-            A new Sanity-backed home is being assembled here. The studio is
-            ready for the interesting parts.
+          <p className="text-foreground/65 mt-8 max-w-2xl text-xl">
+            I work where software, design, culture, and self-organised systems
+            overlap.
           </p>
         </section>
       ) : (
@@ -90,6 +87,7 @@ export default function Index({ loaderData }: Route.ComponentProps) {
               <PageBuilder
                 value={homepage.components}
                 library={homepage.library}
+                variant="homepage"
               />
             </div>
           ) : (

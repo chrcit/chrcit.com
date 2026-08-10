@@ -9,12 +9,15 @@
   --font-display: 'Geologica Variable', sans-serif;
 
   /* Semantic colors (defaults). Overridden at runtime via themeSettings. */
-  --color-background: #f3f3ef;
-  --color-foreground: #181a17;
-  --color-muted: #e5e5df;
-  --color-border: #c9cac3;
-  --color-brand: #d44b2f;
-  --radius-site: 0.25rem;
+  --color-background-light: #eef0f0;
+  --color-foreground-light: #101211;
+  --color-brand-light: #1843d8;
+  --color-background: light-dark(var(--color-background-light), #0d0f0e);
+  --color-foreground: light-dark(var(--color-foreground-light), #eef1ef);
+  --color-muted: #dde1e0;
+  --color-border: #b9c0be;
+  --color-brand: light-dark(var(--color-brand-light), #6d89ff);
+  --radius-site: 0;
   --content-width: 72rem;
   --reading-width: 46rem;
 }
@@ -32,6 +35,7 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  color-scheme: light dark;
 }
 
 ::selection {
@@ -49,12 +53,65 @@ input {
   outline: 2px solid var(--color-brand);
 }
 
+.homepage-lead p {
+  margin: 0;
+  color: color-mix(in srgb, var(--color-foreground) 82%, transparent);
+  font-size: clamp(1.35rem, 2.8vw, 2.45rem);
+  font-weight: 440;
+  letter-spacing: -0.035em;
+  line-height: 1.17;
+}
+
+.homepage-copy p {
+  margin-block: 0 2rem;
+  max-width: 40ch;
+  color: color-mix(in srgb, var(--color-foreground) 86%, transparent);
+  font-size: clamp(1.25rem, 2.6vw, 2.2rem);
+  font-weight: 430;
+  letter-spacing: -0.03em;
+  line-height: 1.3;
+}
+
+.homepage-copy p:last-child {
+  margin-bottom: 0;
+}
+
+.homepage-copy a {
+  border-bottom: 0.075em solid color-mix(in srgb, currentColor 45%, transparent);
+  text-decoration: none;
+  transition:
+    border-color 140ms ease,
+    color 140ms ease;
+}
+
+.homepage-copy a:hover {
+  border-color: var(--color-brand);
+  color: var(--color-brand);
+}
+
+.homepage-portrait {
+  background: var(--color-muted);
+}
+
+.homepage-portrait img {
+  filter: grayscale(1) contrast(1.12);
+  mix-blend-mode: multiply;
+}
+
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-background: #151714;
-    --color-foreground: #eff0e9;
-    --color-muted: #22251f;
-    --color-border: #42463d;
-    --color-brand: #f17656;
+    --color-muted: #181c1a;
+    --color-border: #3a403d;
+  }
+
+  .homepage-portrait img {
+    mix-blend-mode: screen;
+    opacity: 0.88;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .homepage-copy a {
+    transition: none;
   }
 }

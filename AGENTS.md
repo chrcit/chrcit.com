@@ -7,8 +7,9 @@ This repository is the clean Sanity-backed rebuild of Christian Cito's personal 
 - The homepage is a hand-authored singleton assembled from Sanity blocks.
 - Pages should feel editorial. A page decides which library records to expose and in what order.
 - `thing` is the reusable library record for books, articles, films, music, albums, tools, games, websites, and uncategorized references. Things do not get public detail routes by default.
+- Books and read articles form the `Reading` subset. A `quote` is its own reusable document linked to one reading item; never embed a canonical quote as anonymous page data.
 - `project` and `article` may have detail routes. Historic projects stay in Sanity but must not become an automatic project index.
-- Do not add About, Writing, Things, or Projects overview routes. The homepage is the index; `/books` is the single intentional collection page.
+- Do not add About, Writing, Things, or Projects overview routes. The homepage is the index; `/reading` is the single intentional collection page.
 - Keep the header to a linked `chrcit.com` root and contextual, unlinked breadcrumbs.
 - Prefer references over duplicated content. A record should exist once and be sampled into multiple pages.
 - Legal, contact, imprint, privacy, navigation, SEO, theme, and newsletter copy belong in Sanity.
@@ -21,6 +22,7 @@ This repository is the clean Sanity-backed rebuild of Christian Cito's personal 
 - After changing schemas or GROQ, run `pnpm sanity:types` and use the generated types from `@gen/sanity`.
 - Keep preview mode and Visual Editing working for every Sanity-backed public route.
 - Keep `scripts/import-legacy-content.ts` idempotent. Its stable document IDs make it safe to rerun against the empty project.
+- Keep source integrations code-defined. Readwise/MCP syncs must upsert the existing `thing` and `quote` entities and must not generate new Sanity schema types or overwrite editorial commentary.
 - Never commit tokens. `MAILERLITE_API_TOKEN`, Sanity read tokens, and the session secret are runtime secrets.
 - New page-builder blocks need four parts: schema, GROQ projection, typed renderer, and a useful Studio preview.
 - Render explicit loading, success, empty, and error states for network-backed UI.
@@ -30,7 +32,7 @@ This repository is the clean Sanity-backed rebuild of Christian Cito's personal 
 ## Visual guardrails
 
 - Use Geologica as the only font until the licensed ABC Dynamo Whyte Inktrap assets are intentionally restored.
-- Keep the system compact, technical, and artsy: strong type, hairline rules, one warm accent, generous but purposeful whitespace.
+- Keep the system compact, technical, and artsy: strong type, hairline rules, one cobalt accent, and purposeful whitespace.
 - Avoid generic dashboard cards, excessive rounded containers, decorative gradients, floating pills, and motion without a product reason.
 - The core pages must work in both light and dark system modes. Sanity theme values can override the defaults.
 

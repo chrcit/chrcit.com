@@ -92,6 +92,9 @@ web_modules/
 *.local
 .dev.vars
 
+# Private content archives used by local import scripts
+/imports/
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache

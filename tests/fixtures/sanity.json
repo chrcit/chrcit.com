@@ -2,35 +2,72 @@
   "homepage": {
     "_id": "homepage",
     "_type": "page",
-    "title": "CI Sample Dataset Homepage",
+    "title": "Home",
     "slug": {
       "current": ""
     },
     "meta": {
-      "title": "CI Sample Dataset Homepage",
+      "title": "Christian Cito · Software, design, and culture",
       "description": "Homepage content from the CI sample dataset.",
       "keywords": ["ci", "sample-dataset"],
       "ogImage": null,
       "visibility": "public"
     },
-    "contentMode": "richText",
-    "richText": [
+    "contentMode": "pageBuilder",
+    "richText": null,
+    "components": [
       {
-        "_key": "sample-copy",
-        "_type": "block",
-        "style": "normal",
-        "markDefs": [],
-        "children": [
+        "_key": "hero",
+        "_type": "heroBlock",
+        "heading": "Christian Cito",
+        "image": null,
+        "links": [],
+        "richBody": [
           {
-            "_key": "sample-copy-span",
-            "_type": "span",
-            "marks": [],
-            "text": "Rendered from the CI sample dataset."
+            "_key": "sample-lead",
+            "_type": "block",
+            "style": "normal",
+            "markDefs": [],
+            "children": [
+              {
+                "_key": "sample-lead-span",
+                "_type": "span",
+                "marks": [],
+                "text": "Software, design, culture, and self-organised systems."
+              }
+            ]
           }
         ]
+      },
+      {
+        "_key": "bio",
+        "_type": "richTextBlock",
+        "richBody": [
+          {
+            "_key": "sample-copy",
+            "_type": "block",
+            "style": "normal",
+            "markDefs": [],
+            "children": [
+              {
+                "_key": "sample-copy-span",
+                "_type": "span",
+                "marks": [],
+                "text": "Rendered from the CI sample dataset."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "_key": "stale-work",
+        "_type": "referenceCollection",
+        "title": "Stale project grid",
+        "source": "manual",
+        "items": []
       }
     ],
-    "components": null
+    "library": []
   },
   "header": {
     "_id": "header",

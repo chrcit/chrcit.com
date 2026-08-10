@@ -5,6 +5,7 @@ const referenceTypes = [
   { type: 'project' },
   { type: 'article' },
   { type: 'page' },
+  { type: 'quote' },
 ];
 
 export const referenceCollection = defineType({
@@ -114,7 +115,7 @@ export const referenceCollection = defineType({
           title: 'Maximum items',
           type: 'number',
           initialValue: 12,
-          validation: (Rule) => Rule.min(1).max(100),
+          validation: (Rule) => Rule.min(1).max(500),
         }),
         defineField({
           name: 'order',

@@ -23,6 +23,8 @@
     "sanity:types": "pnpm sanity:extract && pnpm sanity:typegen",
     "sanity:import": "sanity exec scripts/import-legacy-content.ts --with-user-token",
     "sanity:import:dry": "sanity exec scripts/import-legacy-content.ts --with-user-token -- --dry-run",
+    "sanity:readwise": "sanity exec scripts/sync-readwise.ts --with-user-token",
+    "sanity:readwise:dry": "sanity exec scripts/sync-readwise.ts --with-user-token -- --dry-run",
     "format": "biome format --write .",
     "format:check": "biome format .",
     "lint": "biome lint .",

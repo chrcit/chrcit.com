@@ -22,11 +22,24 @@ pnpm sanity:import:dry
 pnpm sanity:import
 ```
 
-The import is safe to rerun. It replaces the imported documents and reuses uploaded assets during one run.
+The import is safe to rerun: stable IDs and `createIfNotExists` keep later Studio edits and Readwise metadata intact. It is a baseline import, not a mechanism for overwriting editorial work.
 
 ## Newsletter
 
 Set `MAILERLITE_API_TOKEN` as a server/Worker secret and set the default MailerLite group ID in Studio under Site settings → MailerLite. A newsletter block may override that group.
+
+## Readwise
+
+Reading sources are stored once as `thing` documents. Each Readwise highlight is a separately referenceable `quote` linked to its source, so it can be selected in rich text, page blocks, and filtered collections without copying the passage.
+
+The live archive is mirrored directly from the authenticated Readwise MCP into the Sanity dataset through Sanity MCP. For later offline maintenance, the repository also includes an idempotent token/export sync:
+
+```sh
+pnpm sanity:readwise:dry
+pnpm sanity:readwise
+```
+
+The fallback command accepts the Readwise API token from the environment or an archive placed under `imports/`; neither credential nor archive is committed.
 
 ## Verification
 

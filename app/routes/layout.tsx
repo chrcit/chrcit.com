@@ -23,9 +23,9 @@ import { AnalyticsProvider } from '@/components/features/analytics';
 import { getDocumentCacheHeaders, publicPageCacheControl } from '@/lib/cache';
 
 type ThemeCssVars =
-  | '--color-background'
-  | '--color-foreground'
-  | '--color-brand';
+  | '--color-background-light'
+  | '--color-foreground-light'
+  | '--color-brand-light';
 
 export async function loader({ request }: Route.LoaderArgs) {
   const { preview, options } = await previewContext(request.headers);
@@ -106,13 +106,13 @@ export default function SiteLayout({ loaderData }: Route.ComponentProps) {
 
   const themeStyle: CSSProperties & Partial<Record<ThemeCssVars, string>> = {};
   if (themeSettings?.backgroundColor) {
-    themeStyle['--color-background'] = themeSettings.backgroundColor;
+    themeStyle['--color-background-light'] = themeSettings.backgroundColor;
   }
   if (themeSettings?.textColor) {
-    themeStyle['--color-foreground'] = themeSettings.textColor;
+    themeStyle['--color-foreground-light'] = themeSettings.textColor;
   }
   if (themeSettings?.brandColor) {
-    themeStyle['--color-brand'] = themeSettings.brandColor;
+    themeStyle['--color-brand-light'] = themeSettings.brandColor;
   }
 
   return (

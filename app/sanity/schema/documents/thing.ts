@@ -117,6 +117,24 @@ export const thing = defineType({
       type: 'number',
       group: 'details',
     }),
+    defineField({
+      name: 'readwise',
+      title: 'Readwise metadata',
+      type: 'object',
+      description:
+        'Owned by the Readwise importer or a future MCP sync. Normal editorial fields remain editable.',
+      readOnly: true,
+      group: 'details',
+      fields: [
+        defineField({ name: 'userBookId', type: 'string' }),
+        defineField({ name: 'externalId', type: 'string' }),
+        defineField({ name: 'source', type: 'string' }),
+        defineField({ name: 'sourceUrl', type: 'url' }),
+        defineField({ name: 'readwiseUrl', type: 'url' }),
+        defineField({ name: 'coverImageUrl', type: 'url' }),
+        defineField({ name: 'syncedAt', type: 'datetime' }),
+      ],
+    }),
     defineField({ name: 'meta', title: 'SEO', type: 'meta', group: 'seo' }),
   ],
   preview: {

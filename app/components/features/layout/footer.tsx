@@ -4,6 +4,16 @@ import { ComplexImage, NavLink } from '@/components/features/sanity';
 import { Container } from '@/components/ui';
 import { cleanString } from '@/components/features/sanity/helpers/stega';
 
+function getSocialLabel(
+  platform: string | null | undefined,
+  url: string | null | undefined
+) {
+  if (url?.includes('github.com')) return 'GitHub';
+  if (platform === 'instagram') return 'Instagram';
+  if (platform === 'linkedin') return 'LinkedIn';
+  return platform;
+}
+
 export function Footer({
   footer,
   dataSanity,
@@ -31,7 +41,7 @@ export function Footer({
               <p className="text-sm font-semibold">Christian Cito</p>
             )}
             <p className="text-foreground/50 mt-2 text-xs">
-              Vienna and the internet · {new Date().getFullYear()}
+              Vienna / {new Date().getFullYear()}
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm">
@@ -65,17 +75,23 @@ export function Footer({
                 </Link>
               </>
             ) : null}
-            {footer?.socials?.map((social, idx) => (
-              <a
-                key={idx}
-                href={cleanString(social.url) || '#'}
-                target="_blank"
-                rel="noreferrer"
-                className="text-foreground/65 hover:text-foreground"
-              >
-                {cleanString(social.platform)}
-              </a>
-            ))}
+            {footer?.socials?.map((social, idx) => {
+              const platform = cleanString(social.platform);
+              const url = cleanString(social.url);
+              const label = getSocialLabel(platform, url);
+
+              return label && url ? (
+                <a
+                  key={idx}
+                  href={url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-foreground/65 hover:text-foreground"
+                >
+                  {label}
+                </a>
+              ) : null;
+            })}
           </div>
         </div>
       </Container>

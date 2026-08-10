@@ -13,63 +13,6 @@
  */
 
 // Source: schema.json
-export type Thing = {
-  _id: string;
-  _type: "thing";
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
-  title?: string;
-  kind?: "book" | "article" | "film" | "music" | "album" | "tool" | "game" | "website" | "other";
-  creator?: string;
-  url?: string;
-  image?: ComplexImage;
-  summary?: string;
-  notes?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: "span";
-      _key: string;
-    }>;
-    style?: "normal" | "h1" | "h2" | "h3" | "blockquote";
-    listItem?: "bullet" | "number";
-    markDefs?: Array<{
-      _key: string;
-    } & MarkExternalLink | {
-      _key: string;
-    } & MarkInternalLink | {
-      label?: string;
-      text?: string;
-      _type: "popupText";
-      _key: string;
-    }>;
-    level?: number;
-    _type: "block";
-    _key: string;
-  } | {
-    _key: string;
-  } & ComplexImage | {
-    _key: string;
-  } & Separator | {
-    _key: string;
-  } & ReferenceCollection>;
-  topics?: Array<{
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    _key: string;
-    [internalGroqTypeReferenceTo]?: "topic";
-  }>;
-  year?: number;
-  rating?: number;
-  category?: string;
-  tags?: Array<string>;
-  featured?: boolean;
-  sortOrder?: number;
-  meta?: Meta;
-};
-
 export type Topic = {
   _id: string;
   _type: "topic";
@@ -166,6 +109,159 @@ export type SiteSettings = {
   };
 };
 
+export type QuoteBlock = {
+  _type: "quoteBlock";
+  quote?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "quote";
+  };
+  context?: string;
+  showSource?: boolean;
+  showCommentary?: boolean;
+};
+
+export type Quote = {
+  _id: string;
+  _type: "quote";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  text?: string;
+  sourceItem?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "thing";
+  };
+  attribution?: string;
+  commentary?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h1" | "h2" | "h3" | "blockquote";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      _key: string;
+    } & MarkExternalLink | {
+      _key: string;
+    } & MarkInternalLink | {
+      label?: string;
+      text?: string;
+      _type: "popupText";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    _key: string;
+  } & ComplexImage | {
+    _key: string;
+  } & Separator | {
+    _key: string;
+  } & ReferenceCollection | {
+    _key: string;
+  } & QuoteBlock>;
+  topics?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "topic";
+  }>;
+  tags?: Array<string>;
+  featured?: boolean;
+  sortOrder?: number;
+  origin?: "manual" | "readwise";
+  location?: string;
+  locationType?: string;
+  sourceUrl?: string;
+  sourceNote?: string;
+  readwise?: {
+    highlightId?: string;
+    externalId?: string;
+    readwiseUrl?: string;
+    color?: string;
+    highlightedAt?: string;
+    sourceUpdatedAt?: string;
+    syncedAt?: string;
+  };
+  sourceState?: "active" | "archived";
+};
+
+export type Thing = {
+  _id: string;
+  _type: "thing";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  title?: string;
+  kind?: "book" | "article" | "film" | "music" | "album" | "tool" | "game" | "website" | "other";
+  creator?: string;
+  url?: string;
+  image?: ComplexImage;
+  summary?: string;
+  notes?: Array<{
+    children?: Array<{
+      marks?: Array<string>;
+      text?: string;
+      _type: "span";
+      _key: string;
+    }>;
+    style?: "normal" | "h1" | "h2" | "h3" | "blockquote";
+    listItem?: "bullet" | "number";
+    markDefs?: Array<{
+      _key: string;
+    } & MarkExternalLink | {
+      _key: string;
+    } & MarkInternalLink | {
+      label?: string;
+      text?: string;
+      _type: "popupText";
+      _key: string;
+    }>;
+    level?: number;
+    _type: "block";
+    _key: string;
+  } | {
+    _key: string;
+  } & ComplexImage | {
+    _key: string;
+  } & Separator | {
+    _key: string;
+  } & ReferenceCollection | {
+    _key: string;
+  } & QuoteBlock>;
+  topics?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "topic";
+  }>;
+  year?: number;
+  rating?: number;
+  category?: string;
+  tags?: Array<string>;
+  featured?: boolean;
+  sortOrder?: number;
+  readwise?: {
+    userBookId?: string;
+    externalId?: string;
+    source?: string;
+    sourceUrl?: string;
+    readwiseUrl?: string;
+    coverImageUrl?: string;
+    syncedAt?: string;
+  };
+  meta?: Meta;
+};
+
 export type LinkListBlock = {
   _type: "linkListBlock";
   title?: string;
@@ -210,6 +306,11 @@ export type ReferenceCollection = {
     _type: "reference";
     _weak?: boolean;
     [internalGroqTypeReferenceTo]?: "page";
+  } | {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "quote";
   }>;
   filter?: {
     contentTypes?: Array<string>;
@@ -262,7 +363,9 @@ export type RichTextBlock = {
     _key: string;
   } & Separator | {
     _key: string;
-  } & ReferenceCollection>;
+  } & ReferenceCollection | {
+    _key: string;
+  } & QuoteBlock>;
 };
 
 export type HeroBlock = {
@@ -297,7 +400,9 @@ export type HeroBlock = {
     _key: string;
   } & Separator | {
     _key: string;
-  } & ReferenceCollection>;
+  } & ReferenceCollection | {
+    _key: string;
+  } & QuoteBlock>;
   links?: Array<{
     _key: string;
   } & NavLink>;
@@ -406,7 +511,9 @@ export type RichText = Array<{
   _key: string;
 } & Separator | {
   _key: string;
-} & ReferenceCollection>;
+} & ReferenceCollection | {
+  _key: string;
+} & QuoteBlock>;
 
 export type MarkInternalLink = {
   _type: "markInternalLink";
@@ -511,6 +618,8 @@ export type Page = {
   } & RichTextBlock | {
     _key: string;
   } & ReferenceCollection | {
+    _key: string;
+  } & QuoteBlock | {
     _key: string;
   } & NewsletterBlock | {
     _key: string;
@@ -690,7 +799,7 @@ export type SanityAssetSourceData = {
   url?: string;
 };
 
-export type AllSanitySchemaTypes = Thing | Topic | Footer | Header | ThemeSettings | SiteSettings | LinkListBlock | NewsletterBlock | ReferenceCollection | RichTextBlock | HeroBlock | AnalyticsSettings | MetaSettings | SocialLink | CtaLink | NavLink | RichText | MarkInternalLink | Project | Article | Page | MarkExternalLink | Separator | Meta | ComplexImage | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
+export type AllSanitySchemaTypes = Topic | Footer | Header | ThemeSettings | SiteSettings | QuoteBlock | Quote | Thing | LinkListBlock | NewsletterBlock | ReferenceCollection | RichTextBlock | HeroBlock | AnalyticsSettings | MetaSettings | SocialLink | CtaLink | NavLink | RichText | MarkInternalLink | Project | Article | Page | MarkExternalLink | Separator | Meta | ComplexImage | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageHotspot | SanityImageCrop | SanityFileAsset | SanityImageAsset | SanityImageMetadata | Geopoint | Slug | SanityAssetSourceData;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./app/sanity/queries/analytics.ts
 // Variable: ANALYTICS_QUERY
@@ -729,7 +838,7 @@ export type ANALYTICS_QUERYResult = {
 
 // Source: ./app/sanity/queries/article.ts
 // Variable: ARTICLE_QUERY
-// Query: *[_type == "article" && slug.current == $slug][0]{    _id, _type, title, slug, excerpt, publishedAt, externalUrl,    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }}, topics[]->{_id, title, slug, color},    meta{title, description, keywords, ogImage{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }}, visibility},    body[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color}  },  filter{..., topics[]->{_id, title, slug, color}}}  }
+// Query: *[_type == "article" && slug.current == $slug][0]{    _id, _type, title, slug, excerpt, publishedAt, externalUrl,    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }}, topics[]->{_id, title, slug, color},    meta{title, description, keywords, ogImage{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }}, visibility},    body[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    text, attribution, location, locationType, sourceUrl, sourceNote,    origin, sourceState,    readwise{      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt    },    sourceItem->{_id, _type, title, kind, creator, url, summary, year},    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color},    commentary[]{      ...,      markDefs[]{..., link->{_id, _type, title, slug}}    }  },  filter{..., topics[]->{_id, title, slug, color}},  quote->{  _id,  _type,  text,  attribution,  location,  locationType,  sourceUrl,  sourceNote,  origin,  sourceState,  featured,  sortOrder,  tags,  topics[]->{_id, title, slug, color},  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},  sourceItem->{    _id, _type, title, kind, creator, url, summary, year,    image{asset, alt, caption, hotspot, crop}  },  commentary[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}}  }}}  }
 export type ARTICLE_QUERYResult = {
   _id: string;
   _type: "article";
@@ -837,6 +946,7 @@ export type ARTICLE_QUERYResult = {
     _key: string;
     items: null;
     filter: null;
+    quote: null;
   } | {
     _key: string;
     _type: "complexImage";
@@ -855,6 +965,219 @@ export type ARTICLE_QUERYResult = {
     alt?: string;
     caption?: string;
     width?: number;
+    markDefs: Array<never>;
+    items: null;
+    filter: null;
+    quote: null;
+  } | {
+    _key: string;
+    _type: "quoteBlock";
+    quote: {
+      _id: string;
+      _type: "quote";
+      text: string | null;
+      attribution: string | null;
+      location: string | null;
+      locationType: string | null;
+      sourceUrl: string | null;
+      sourceNote: string | null;
+      origin: "manual" | "readwise" | null;
+      sourceState: "active" | "archived" | null;
+      featured: boolean | null;
+      sortOrder: number | null;
+      tags: Array<string> | null;
+      topics: Array<{
+        _id: string;
+        title: string | null;
+        slug: Slug | null;
+        color: string | null;
+      }> | null;
+      readwise: {
+        highlightId: string | null;
+        externalId: string | null;
+        readwiseUrl: string | null;
+        color: string | null;
+        highlightedAt: string | null;
+        sourceUpdatedAt: string | null;
+        syncedAt: string | null;
+      } | null;
+      sourceItem: {
+        _id: string;
+        _type: "thing";
+        title: string | null;
+        kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+        creator: string | null;
+        url: string | null;
+        summary: string | null;
+        year: number | null;
+        image: {
+          asset: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          } | null;
+          alt: string | null;
+          caption: string | null;
+          hotspot: null;
+          crop: null;
+        } | null;
+      } | null;
+      commentary: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs: Array<{
+          _key: string;
+          _type: "markExternalLink";
+          type?: "email" | "file" | "phone" | "url";
+          url?: string;
+          email?: string;
+          phone?: string;
+          file?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+            };
+            media?: unknown;
+            _type: "file";
+          };
+          link: null;
+        } | {
+          _key: string;
+          _type: "markInternalLink";
+          link: {
+            _id: string;
+            _type: "article";
+            title: string | null;
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "page";
+            title: string | null;
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "project";
+            title: string | null;
+            slug: Slug | null;
+          } | null;
+        } | {
+          label?: string;
+          text?: string;
+          _type: "popupText";
+          _key: string;
+          link: null;
+        }> | null;
+        level?: number;
+        _type: "block";
+        _key: string;
+      } | {
+        _key: string;
+        _type: "complexImage";
+        asset?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        alt?: string;
+        caption?: string;
+        width?: number;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "quoteBlock";
+        quote?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "quote";
+        };
+        context?: string;
+        showSource?: boolean;
+        showCommentary?: boolean;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "referenceCollection";
+        title?: string;
+        introduction?: string;
+        source?: "filter" | "manual";
+        items?: Array<{
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "article";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "page";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "project";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "quote";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "thing";
+        }>;
+        filter?: {
+          contentTypes?: Array<string>;
+          kinds?: Array<string>;
+          topics?: Array<{
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            _key: string;
+            [internalGroqTypeReferenceTo]?: "topic";
+          }>;
+          featuredOnly?: boolean;
+          includeHistorical?: boolean;
+          limit?: number;
+          order?: "manual" | "newest" | "title";
+        };
+        presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+        showFilters?: boolean;
+        showNotes?: boolean;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "separator";
+        info?: string;
+        markDefs: null;
+      }> | null;
+    } | null;
+    context?: string;
+    showSource?: boolean;
+    showCommentary?: boolean;
     markDefs: Array<never>;
     items: null;
     filter: null;
@@ -880,6 +1203,16 @@ export type ARTICLE_QUERYResult = {
       featured: boolean | null;
       historical: null;
       sortOrder: null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: null;
+      sourceItem: null;
       image: null;
       cover: {
         alt: string | null;
@@ -903,6 +1236,7 @@ export type ARTICLE_QUERYResult = {
         slug: Slug | null;
         color: string | null;
       }> | null;
+      commentary: null;
     } | {
       _id: string;
       _type: "page";
@@ -919,9 +1253,20 @@ export type ARTICLE_QUERYResult = {
       featured: null;
       historical: null;
       sortOrder: null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: null;
+      sourceItem: null;
       image: null;
       cover: null;
       topics: null;
+      commentary: null;
     } | {
       _id: string;
       _type: "project";
@@ -938,6 +1283,16 @@ export type ARTICLE_QUERYResult = {
       featured: boolean | null;
       historical: boolean | null;
       sortOrder: null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: null;
+      sourceItem: null;
       image: null;
       cover: {
         alt: string | null;
@@ -960,6 +1315,207 @@ export type ARTICLE_QUERYResult = {
         title: string | null;
         slug: Slug | null;
         color: string | null;
+      }> | null;
+      commentary: null;
+    } | {
+      _id: string;
+      _type: "quote";
+      title: null;
+      slug: null;
+      kind: null;
+      creator: null;
+      url: null;
+      externalUrl: null;
+      summary: null;
+      excerpt: null;
+      year: null;
+      publishedAt: null;
+      featured: boolean | null;
+      historical: null;
+      sortOrder: number | null;
+      text: string | null;
+      attribution: string | null;
+      location: string | null;
+      locationType: string | null;
+      sourceUrl: string | null;
+      sourceNote: string | null;
+      origin: "manual" | "readwise" | null;
+      sourceState: "active" | "archived" | null;
+      readwise: {
+        userBookId: null;
+        highlightId: string | null;
+        externalId: string | null;
+        source: null;
+        sourceUrl: null;
+        readwiseUrl: string | null;
+        coverImageUrl: null;
+        color: string | null;
+        highlightedAt: string | null;
+        sourceUpdatedAt: string | null;
+        syncedAt: string | null;
+      } | null;
+      sourceItem: {
+        _id: string;
+        _type: "thing";
+        title: string | null;
+        kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+        creator: string | null;
+        url: string | null;
+        summary: string | null;
+        year: number | null;
+      } | null;
+      image: null;
+      cover: null;
+      topics: Array<{
+        _id: string;
+        title: string | null;
+        slug: Slug | null;
+        color: string | null;
+      }> | null;
+      commentary: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs: Array<{
+          _key: string;
+          _type: "markExternalLink";
+          type?: "email" | "file" | "phone" | "url";
+          url?: string;
+          email?: string;
+          phone?: string;
+          file?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+            };
+            media?: unknown;
+            _type: "file";
+          };
+          link: null;
+        } | {
+          _key: string;
+          _type: "markInternalLink";
+          link: {
+            _id: string;
+            _type: "article";
+            title: string | null;
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "page";
+            title: string | null;
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "project";
+            title: string | null;
+            slug: Slug | null;
+          } | null;
+        } | {
+          label?: string;
+          text?: string;
+          _type: "popupText";
+          _key: string;
+          link: null;
+        }> | null;
+        level?: number;
+        _type: "block";
+        _key: string;
+      } | {
+        _key: string;
+        _type: "complexImage";
+        asset?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        alt?: string;
+        caption?: string;
+        width?: number;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "quoteBlock";
+        quote?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "quote";
+        };
+        context?: string;
+        showSource?: boolean;
+        showCommentary?: boolean;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "referenceCollection";
+        title?: string;
+        introduction?: string;
+        source?: "filter" | "manual";
+        items?: Array<{
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "article";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "page";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "project";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "quote";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "thing";
+        }>;
+        filter?: {
+          contentTypes?: Array<string>;
+          kinds?: Array<string>;
+          topics?: Array<{
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            _key: string;
+            [internalGroqTypeReferenceTo]?: "topic";
+          }>;
+          featuredOnly?: boolean;
+          includeHistorical?: boolean;
+          limit?: number;
+          order?: "manual" | "newest" | "title";
+        };
+        presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+        showFilters?: boolean;
+        showNotes?: boolean;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "separator";
+        info?: string;
+        markDefs: null;
       }> | null;
     } | {
       _id: string;
@@ -977,6 +1533,28 @@ export type ARTICLE_QUERYResult = {
       featured: boolean | null;
       historical: null;
       sortOrder: number | null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: {
+        userBookId: string | null;
+        highlightId: null;
+        externalId: string | null;
+        source: string | null;
+        sourceUrl: string | null;
+        readwiseUrl: string | null;
+        coverImageUrl: string | null;
+        color: null;
+        highlightedAt: null;
+        sourceUpdatedAt: null;
+        syncedAt: string | null;
+      } | null;
+      sourceItem: null;
       image: {
         alt: string | null;
         caption: string | null;
@@ -1000,6 +1578,7 @@ export type ARTICLE_QUERYResult = {
         slug: Slug | null;
         color: string | null;
       }> | null;
+      commentary: null;
     }> | null;
     filter: {
       contentTypes?: Array<string>;
@@ -1019,6 +1598,7 @@ export type ARTICLE_QUERYResult = {
     showFilters?: boolean;
     showNotes?: boolean;
     markDefs: Array<never>;
+    quote: null;
   } | {
     _key: string;
     _type: "separator";
@@ -1026,6 +1606,7 @@ export type ARTICLE_QUERYResult = {
     markDefs: Array<never>;
     items: null;
     filter: null;
+    quote: null;
   }> | null;
 } | null;
 
@@ -1131,7 +1712,7 @@ export type HEADER_QUERYResult = {
 
 // Source: ./app/sanity/queries/homepage.ts
 // Variable: HOMEPAGE_QUERY
-// Query: *[_type == "page" && _id == "homepage"][0]{    _id,    _type,    title,    slug,    meta{      title,      description,      keywords,      ogImage{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},      visibility    },    contentMode,    showTableOfContents,    richText[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color}  },  filter{..., topics[]->{_id, title, slug, color}}},    components[]{  ...,  image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},  "richBody": body[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color}  },  filter{..., topics[]->{_id, title, slug, color}}},  links[]{    ...,    reference->{_id, _type, title, slug},    externalLink{..., "fileUrl": file.asset->url}  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }}, cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color},    notes[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color}  },  filter{..., topics[]->{_id, title, slug, color}}}  },  filter{..., topics[]->{_id, title, slug, color}}},    "library": *[      _type in ["thing", "project", "article"] &&      (meta.visibility == "public" || !defined(meta.visibility))    ]{  _id,  _type,  title,  slug,  kind,  creator,  url,  externalUrl,  summary,  excerpt,  year,  publishedAt,  featured,  historical,  sortOrder,  image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},  cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},  topics[]->{_id, title, slug, color},  notes[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}},    items[]->{_id, _type, title, slug, kind, creator, url, summary, excerpt, year, featured, historical}  }}  }
+// Query: *[_type == "page" && _id == "homepage"][0]{    _id,    _type,    title,    slug,    meta{      title,      description,      keywords,      ogImage{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},      visibility    },    contentMode,    showTableOfContents,    richText[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    text, attribution, location, locationType, sourceUrl, sourceNote,    origin, sourceState,    readwise{      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt    },    sourceItem->{_id, _type, title, kind, creator, url, summary, year},    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color},    commentary[]{      ...,      markDefs[]{..., link->{_id, _type, title, slug}}    }  },  filter{..., topics[]->{_id, title, slug, color}},  quote->{  _id,  _type,  text,  attribution,  location,  locationType,  sourceUrl,  sourceNote,  origin,  sourceState,  featured,  sortOrder,  tags,  topics[]->{_id, title, slug, color},  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},  sourceItem->{    _id, _type, title, kind, creator, url, summary, year,    image{asset, alt, caption, hotspot, crop}  },  commentary[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}}  }}},    components[]{  ...,  image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},  "richBody": body[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    text, attribution, location, locationType, sourceUrl, sourceNote,    origin, sourceState,    readwise{      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt    },    sourceItem->{_id, _type, title, kind, creator, url, summary, year},    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color},    commentary[]{      ...,      markDefs[]{..., link->{_id, _type, title, slug}}    }  },  filter{..., topics[]->{_id, title, slug, color}},  quote->{  _id,  _type,  text,  attribution,  location,  locationType,  sourceUrl,  sourceNote,  origin,  sourceState,  featured,  sortOrder,  tags,  topics[]->{_id, title, slug, color},  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},  sourceItem->{    _id, _type, title, kind, creator, url, summary, year,    image{asset, alt, caption, hotspot, crop}  },  commentary[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}}  }}},  links[]{    ...,    reference->{_id, _type, title, slug},    externalLink{..., "fileUrl": file.asset->url}  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    text, attribution, location, locationType, sourceUrl, sourceNote,    origin, sourceState,    readwise{      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt    },    sourceItem->{_id, _type, title, kind, creator, url, summary, year},    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }}, cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color},    notes[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    text, attribution, location, locationType, sourceUrl, sourceNote,    origin, sourceState,    readwise{      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt    },    sourceItem->{_id, _type, title, kind, creator, url, summary, year},    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color},    commentary[]{      ...,      markDefs[]{..., link->{_id, _type, title, slug}}    }  },  filter{..., topics[]->{_id, title, slug, color}},  quote->{  _id,  _type,  text,  attribution,  location,  locationType,  sourceUrl,  sourceNote,  origin,  sourceState,  featured,  sortOrder,  tags,  topics[]->{_id, title, slug, color},  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},  sourceItem->{    _id, _type, title, kind, creator, url, summary, year,    image{asset, alt, caption, hotspot, crop}  },  commentary[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}}  }}}, commentary[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    text, attribution, location, locationType, sourceUrl, sourceNote,    origin, sourceState,    readwise{      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt    },    sourceItem->{_id, _type, title, kind, creator, url, summary, year},    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color},    commentary[]{      ...,      markDefs[]{..., link->{_id, _type, title, slug}}    }  },  filter{..., topics[]->{_id, title, slug, color}},  quote->{  _id,  _type,  text,  attribution,  location,  locationType,  sourceUrl,  sourceNote,  origin,  sourceState,  featured,  sortOrder,  tags,  topics[]->{_id, title, slug, color},  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},  sourceItem->{    _id, _type, title, kind, creator, url, summary, year,    image{asset, alt, caption, hotspot, crop}  },  commentary[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}}  }}}  },  filter{..., topics[]->{_id, title, slug, color}},  quote->{  _id,  _type,  text,  attribution,  location,  locationType,  sourceUrl,  sourceNote,  origin,  sourceState,  featured,  sortOrder,  tags,  topics[]->{_id, title, slug, color},  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},  sourceItem->{    _id, _type, title, kind, creator, url, summary, year,    image{asset, alt, caption, hotspot, crop}  },  commentary[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}}  }}},    "library": *[      _type in ["thing", "project", "article"] &&      (meta.visibility == "public" || !defined(meta.visibility))    ]{  _id,  _type,  title,  slug,  kind,  creator,  url,  externalUrl,  summary,  excerpt,  year,  publishedAt,  featured,  historical,  sortOrder,  text,  attribution,  location,  locationType,  sourceUrl,  sourceNote,  origin,  sourceState,  tags,  readwise{    userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,    coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt  },  sourceItem->{    _id, _type, title, kind, creator, url, summary, year,    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }}  },  image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},  cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},  topics[]->{_id, title, slug, color},  notes[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}},    items[]->{_id, _type, title, slug, kind, creator, url, summary, excerpt, year, featured, historical}  },  commentary[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}}  }}  }
 export type HOMEPAGE_QUERYResult = {
   _id: string;
   _type: "page";
@@ -1216,6 +1797,7 @@ export type HOMEPAGE_QUERYResult = {
     _key: string;
     items: null;
     filter: null;
+    quote: null;
   } | {
     _key: string;
     _type: "complexImage";
@@ -1234,6 +1816,219 @@ export type HOMEPAGE_QUERYResult = {
     alt?: string;
     caption?: string;
     width?: number;
+    markDefs: Array<never>;
+    items: null;
+    filter: null;
+    quote: null;
+  } | {
+    _key: string;
+    _type: "quoteBlock";
+    quote: {
+      _id: string;
+      _type: "quote";
+      text: string | null;
+      attribution: string | null;
+      location: string | null;
+      locationType: string | null;
+      sourceUrl: string | null;
+      sourceNote: string | null;
+      origin: "manual" | "readwise" | null;
+      sourceState: "active" | "archived" | null;
+      featured: boolean | null;
+      sortOrder: number | null;
+      tags: Array<string> | null;
+      topics: Array<{
+        _id: string;
+        title: string | null;
+        slug: Slug | null;
+        color: string | null;
+      }> | null;
+      readwise: {
+        highlightId: string | null;
+        externalId: string | null;
+        readwiseUrl: string | null;
+        color: string | null;
+        highlightedAt: string | null;
+        sourceUpdatedAt: string | null;
+        syncedAt: string | null;
+      } | null;
+      sourceItem: {
+        _id: string;
+        _type: "thing";
+        title: string | null;
+        kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+        creator: string | null;
+        url: string | null;
+        summary: string | null;
+        year: number | null;
+        image: {
+          asset: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          } | null;
+          alt: string | null;
+          caption: string | null;
+          hotspot: null;
+          crop: null;
+        } | null;
+      } | null;
+      commentary: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs: Array<{
+          _key: string;
+          _type: "markExternalLink";
+          type?: "email" | "file" | "phone" | "url";
+          url?: string;
+          email?: string;
+          phone?: string;
+          file?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+            };
+            media?: unknown;
+            _type: "file";
+          };
+          link: null;
+        } | {
+          _key: string;
+          _type: "markInternalLink";
+          link: {
+            _id: string;
+            _type: "article";
+            title: string | null;
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "page";
+            title: string | null;
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "project";
+            title: string | null;
+            slug: Slug | null;
+          } | null;
+        } | {
+          label?: string;
+          text?: string;
+          _type: "popupText";
+          _key: string;
+          link: null;
+        }> | null;
+        level?: number;
+        _type: "block";
+        _key: string;
+      } | {
+        _key: string;
+        _type: "complexImage";
+        asset?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        alt?: string;
+        caption?: string;
+        width?: number;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "quoteBlock";
+        quote?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "quote";
+        };
+        context?: string;
+        showSource?: boolean;
+        showCommentary?: boolean;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "referenceCollection";
+        title?: string;
+        introduction?: string;
+        source?: "filter" | "manual";
+        items?: Array<{
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "article";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "page";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "project";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "quote";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "thing";
+        }>;
+        filter?: {
+          contentTypes?: Array<string>;
+          kinds?: Array<string>;
+          topics?: Array<{
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            _key: string;
+            [internalGroqTypeReferenceTo]?: "topic";
+          }>;
+          featuredOnly?: boolean;
+          includeHistorical?: boolean;
+          limit?: number;
+          order?: "manual" | "newest" | "title";
+        };
+        presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+        showFilters?: boolean;
+        showNotes?: boolean;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "separator";
+        info?: string;
+        markDefs: null;
+      }> | null;
+    } | null;
+    context?: string;
+    showSource?: boolean;
+    showCommentary?: boolean;
     markDefs: Array<never>;
     items: null;
     filter: null;
@@ -1259,6 +2054,16 @@ export type HOMEPAGE_QUERYResult = {
       featured: boolean | null;
       historical: null;
       sortOrder: null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: null;
+      sourceItem: null;
       image: null;
       cover: {
         alt: string | null;
@@ -1282,6 +2087,7 @@ export type HOMEPAGE_QUERYResult = {
         slug: Slug | null;
         color: string | null;
       }> | null;
+      commentary: null;
     } | {
       _id: string;
       _type: "page";
@@ -1298,9 +2104,20 @@ export type HOMEPAGE_QUERYResult = {
       featured: null;
       historical: null;
       sortOrder: null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: null;
+      sourceItem: null;
       image: null;
       cover: null;
       topics: null;
+      commentary: null;
     } | {
       _id: string;
       _type: "project";
@@ -1317,6 +2134,16 @@ export type HOMEPAGE_QUERYResult = {
       featured: boolean | null;
       historical: boolean | null;
       sortOrder: null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: null;
+      sourceItem: null;
       image: null;
       cover: {
         alt: string | null;
@@ -1339,6 +2166,207 @@ export type HOMEPAGE_QUERYResult = {
         title: string | null;
         slug: Slug | null;
         color: string | null;
+      }> | null;
+      commentary: null;
+    } | {
+      _id: string;
+      _type: "quote";
+      title: null;
+      slug: null;
+      kind: null;
+      creator: null;
+      url: null;
+      externalUrl: null;
+      summary: null;
+      excerpt: null;
+      year: null;
+      publishedAt: null;
+      featured: boolean | null;
+      historical: null;
+      sortOrder: number | null;
+      text: string | null;
+      attribution: string | null;
+      location: string | null;
+      locationType: string | null;
+      sourceUrl: string | null;
+      sourceNote: string | null;
+      origin: "manual" | "readwise" | null;
+      sourceState: "active" | "archived" | null;
+      readwise: {
+        userBookId: null;
+        highlightId: string | null;
+        externalId: string | null;
+        source: null;
+        sourceUrl: null;
+        readwiseUrl: string | null;
+        coverImageUrl: null;
+        color: string | null;
+        highlightedAt: string | null;
+        sourceUpdatedAt: string | null;
+        syncedAt: string | null;
+      } | null;
+      sourceItem: {
+        _id: string;
+        _type: "thing";
+        title: string | null;
+        kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+        creator: string | null;
+        url: string | null;
+        summary: string | null;
+        year: number | null;
+      } | null;
+      image: null;
+      cover: null;
+      topics: Array<{
+        _id: string;
+        title: string | null;
+        slug: Slug | null;
+        color: string | null;
+      }> | null;
+      commentary: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs: Array<{
+          _key: string;
+          _type: "markExternalLink";
+          type?: "email" | "file" | "phone" | "url";
+          url?: string;
+          email?: string;
+          phone?: string;
+          file?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+            };
+            media?: unknown;
+            _type: "file";
+          };
+          link: null;
+        } | {
+          _key: string;
+          _type: "markInternalLink";
+          link: {
+            _id: string;
+            _type: "article";
+            title: string | null;
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "page";
+            title: string | null;
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "project";
+            title: string | null;
+            slug: Slug | null;
+          } | null;
+        } | {
+          label?: string;
+          text?: string;
+          _type: "popupText";
+          _key: string;
+          link: null;
+        }> | null;
+        level?: number;
+        _type: "block";
+        _key: string;
+      } | {
+        _key: string;
+        _type: "complexImage";
+        asset?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        alt?: string;
+        caption?: string;
+        width?: number;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "quoteBlock";
+        quote?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "quote";
+        };
+        context?: string;
+        showSource?: boolean;
+        showCommentary?: boolean;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "referenceCollection";
+        title?: string;
+        introduction?: string;
+        source?: "filter" | "manual";
+        items?: Array<{
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "article";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "page";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "project";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "quote";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "thing";
+        }>;
+        filter?: {
+          contentTypes?: Array<string>;
+          kinds?: Array<string>;
+          topics?: Array<{
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            _key: string;
+            [internalGroqTypeReferenceTo]?: "topic";
+          }>;
+          featuredOnly?: boolean;
+          includeHistorical?: boolean;
+          limit?: number;
+          order?: "manual" | "newest" | "title";
+        };
+        presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+        showFilters?: boolean;
+        showNotes?: boolean;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "separator";
+        info?: string;
+        markDefs: null;
       }> | null;
     } | {
       _id: string;
@@ -1356,6 +2384,28 @@ export type HOMEPAGE_QUERYResult = {
       featured: boolean | null;
       historical: null;
       sortOrder: number | null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: {
+        userBookId: string | null;
+        highlightId: null;
+        externalId: string | null;
+        source: string | null;
+        sourceUrl: string | null;
+        readwiseUrl: string | null;
+        coverImageUrl: string | null;
+        color: null;
+        highlightedAt: null;
+        sourceUpdatedAt: null;
+        syncedAt: string | null;
+      } | null;
+      sourceItem: null;
       image: {
         alt: string | null;
         caption: string | null;
@@ -1379,6 +2429,7 @@ export type HOMEPAGE_QUERYResult = {
         slug: Slug | null;
         color: string | null;
       }> | null;
+      commentary: null;
     }> | null;
     filter: {
       contentTypes?: Array<string>;
@@ -1398,6 +2449,7 @@ export type HOMEPAGE_QUERYResult = {
     showFilters?: boolean;
     showNotes?: boolean;
     markDefs: Array<never>;
+    quote: null;
   } | {
     _key: string;
     _type: "separator";
@@ -1405,6 +2457,7 @@ export type HOMEPAGE_QUERYResult = {
     markDefs: Array<never>;
     items: null;
     filter: null;
+    quote: null;
   }> | null;
   components: Array<{
     _key: string;
@@ -1429,6 +2482,7 @@ export type HOMEPAGE_QUERYResult = {
     links: null;
     items: null;
     filter: null;
+    quote: null;
   } | {
     _key: string;
     _type: "heroBlock";
@@ -1437,6 +2491,8 @@ export type HOMEPAGE_QUERYResult = {
     body?: Array<{
       _key: string;
     } & ComplexImage | {
+      _key: string;
+    } & QuoteBlock | {
       _key: string;
     } & ReferenceCollection | {
       _key: string;
@@ -1564,6 +2620,7 @@ export type HOMEPAGE_QUERYResult = {
       _key: string;
       items: null;
       filter: null;
+      quote: null;
     } | {
       _key: string;
       _type: "complexImage";
@@ -1582,6 +2639,219 @@ export type HOMEPAGE_QUERYResult = {
       alt?: string;
       caption?: string;
       width?: number;
+      markDefs: Array<never>;
+      items: null;
+      filter: null;
+      quote: null;
+    } | {
+      _key: string;
+      _type: "quoteBlock";
+      quote: {
+        _id: string;
+        _type: "quote";
+        text: string | null;
+        attribution: string | null;
+        location: string | null;
+        locationType: string | null;
+        sourceUrl: string | null;
+        sourceNote: string | null;
+        origin: "manual" | "readwise" | null;
+        sourceState: "active" | "archived" | null;
+        featured: boolean | null;
+        sortOrder: number | null;
+        tags: Array<string> | null;
+        topics: Array<{
+          _id: string;
+          title: string | null;
+          slug: Slug | null;
+          color: string | null;
+        }> | null;
+        readwise: {
+          highlightId: string | null;
+          externalId: string | null;
+          readwiseUrl: string | null;
+          color: string | null;
+          highlightedAt: string | null;
+          sourceUpdatedAt: string | null;
+          syncedAt: string | null;
+        } | null;
+        sourceItem: {
+          _id: string;
+          _type: "thing";
+          title: string | null;
+          kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+          creator: string | null;
+          url: string | null;
+          summary: string | null;
+          year: number | null;
+          image: {
+            asset: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: "image";
+            } | null;
+            alt: string | null;
+            caption: string | null;
+            hotspot: null;
+            crop: null;
+          } | null;
+        } | null;
+        commentary: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs: Array<{
+            _key: string;
+            _type: "markExternalLink";
+            type?: "email" | "file" | "phone" | "url";
+            url?: string;
+            email?: string;
+            phone?: string;
+            file?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+              };
+              media?: unknown;
+              _type: "file";
+            };
+            link: null;
+          } | {
+            _key: string;
+            _type: "markInternalLink";
+            link: {
+              _id: string;
+              _type: "article";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "page";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "project";
+              title: string | null;
+              slug: Slug | null;
+            } | null;
+          } | {
+            label?: string;
+            text?: string;
+            _type: "popupText";
+            _key: string;
+            link: null;
+          }> | null;
+          level?: number;
+          _type: "block";
+          _key: string;
+        } | {
+          _key: string;
+          _type: "complexImage";
+          asset?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+          caption?: string;
+          width?: number;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "quoteBlock";
+          quote?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          };
+          context?: string;
+          showSource?: boolean;
+          showCommentary?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "referenceCollection";
+          title?: string;
+          introduction?: string;
+          source?: "filter" | "manual";
+          items?: Array<{
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "article";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "page";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "project";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "thing";
+          }>;
+          filter?: {
+            contentTypes?: Array<string>;
+            kinds?: Array<string>;
+            topics?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              _key: string;
+              [internalGroqTypeReferenceTo]?: "topic";
+            }>;
+            featuredOnly?: boolean;
+            includeHistorical?: boolean;
+            limit?: number;
+            order?: "manual" | "newest" | "title";
+          };
+          presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+          showFilters?: boolean;
+          showNotes?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "separator";
+          info?: string;
+          markDefs: null;
+        }> | null;
+      } | null;
+      context?: string;
+      showSource?: boolean;
+      showCommentary?: boolean;
       markDefs: Array<never>;
       items: null;
       filter: null;
@@ -1607,6 +2877,16 @@ export type HOMEPAGE_QUERYResult = {
         featured: boolean | null;
         historical: null;
         sortOrder: null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: null;
+        sourceItem: null;
         image: null;
         cover: {
           alt: string | null;
@@ -1630,6 +2910,7 @@ export type HOMEPAGE_QUERYResult = {
           slug: Slug | null;
           color: string | null;
         }> | null;
+        commentary: null;
       } | {
         _id: string;
         _type: "page";
@@ -1646,9 +2927,20 @@ export type HOMEPAGE_QUERYResult = {
         featured: null;
         historical: null;
         sortOrder: null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: null;
+        sourceItem: null;
         image: null;
         cover: null;
         topics: null;
+        commentary: null;
       } | {
         _id: string;
         _type: "project";
@@ -1665,6 +2957,16 @@ export type HOMEPAGE_QUERYResult = {
         featured: boolean | null;
         historical: boolean | null;
         sortOrder: null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: null;
+        sourceItem: null;
         image: null;
         cover: {
           alt: string | null;
@@ -1687,6 +2989,207 @@ export type HOMEPAGE_QUERYResult = {
           title: string | null;
           slug: Slug | null;
           color: string | null;
+        }> | null;
+        commentary: null;
+      } | {
+        _id: string;
+        _type: "quote";
+        title: null;
+        slug: null;
+        kind: null;
+        creator: null;
+        url: null;
+        externalUrl: null;
+        summary: null;
+        excerpt: null;
+        year: null;
+        publishedAt: null;
+        featured: boolean | null;
+        historical: null;
+        sortOrder: number | null;
+        text: string | null;
+        attribution: string | null;
+        location: string | null;
+        locationType: string | null;
+        sourceUrl: string | null;
+        sourceNote: string | null;
+        origin: "manual" | "readwise" | null;
+        sourceState: "active" | "archived" | null;
+        readwise: {
+          userBookId: null;
+          highlightId: string | null;
+          externalId: string | null;
+          source: null;
+          sourceUrl: null;
+          readwiseUrl: string | null;
+          coverImageUrl: null;
+          color: string | null;
+          highlightedAt: string | null;
+          sourceUpdatedAt: string | null;
+          syncedAt: string | null;
+        } | null;
+        sourceItem: {
+          _id: string;
+          _type: "thing";
+          title: string | null;
+          kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+          creator: string | null;
+          url: string | null;
+          summary: string | null;
+          year: number | null;
+        } | null;
+        image: null;
+        cover: null;
+        topics: Array<{
+          _id: string;
+          title: string | null;
+          slug: Slug | null;
+          color: string | null;
+        }> | null;
+        commentary: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs: Array<{
+            _key: string;
+            _type: "markExternalLink";
+            type?: "email" | "file" | "phone" | "url";
+            url?: string;
+            email?: string;
+            phone?: string;
+            file?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+              };
+              media?: unknown;
+              _type: "file";
+            };
+            link: null;
+          } | {
+            _key: string;
+            _type: "markInternalLink";
+            link: {
+              _id: string;
+              _type: "article";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "page";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "project";
+              title: string | null;
+              slug: Slug | null;
+            } | null;
+          } | {
+            label?: string;
+            text?: string;
+            _type: "popupText";
+            _key: string;
+            link: null;
+          }> | null;
+          level?: number;
+          _type: "block";
+          _key: string;
+        } | {
+          _key: string;
+          _type: "complexImage";
+          asset?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+          caption?: string;
+          width?: number;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "quoteBlock";
+          quote?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          };
+          context?: string;
+          showSource?: boolean;
+          showCommentary?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "referenceCollection";
+          title?: string;
+          introduction?: string;
+          source?: "filter" | "manual";
+          items?: Array<{
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "article";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "page";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "project";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "thing";
+          }>;
+          filter?: {
+            contentTypes?: Array<string>;
+            kinds?: Array<string>;
+            topics?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              _key: string;
+              [internalGroqTypeReferenceTo]?: "topic";
+            }>;
+            featuredOnly?: boolean;
+            includeHistorical?: boolean;
+            limit?: number;
+            order?: "manual" | "newest" | "title";
+          };
+          presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+          showFilters?: boolean;
+          showNotes?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "separator";
+          info?: string;
+          markDefs: null;
         }> | null;
       } | {
         _id: string;
@@ -1704,6 +3207,28 @@ export type HOMEPAGE_QUERYResult = {
         featured: boolean | null;
         historical: null;
         sortOrder: number | null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: {
+          userBookId: string | null;
+          highlightId: null;
+          externalId: string | null;
+          source: string | null;
+          sourceUrl: string | null;
+          readwiseUrl: string | null;
+          coverImageUrl: string | null;
+          color: null;
+          highlightedAt: null;
+          sourceUpdatedAt: null;
+          syncedAt: string | null;
+        } | null;
+        sourceItem: null;
         image: {
           alt: string | null;
           caption: string | null;
@@ -1727,6 +3252,7 @@ export type HOMEPAGE_QUERYResult = {
           slug: Slug | null;
           color: string | null;
         }> | null;
+        commentary: null;
       }> | null;
       filter: {
         contentTypes?: Array<string>;
@@ -1746,6 +3272,7 @@ export type HOMEPAGE_QUERYResult = {
       showFilters?: boolean;
       showNotes?: boolean;
       markDefs: Array<never>;
+      quote: null;
     } | {
       _key: string;
       _type: "separator";
@@ -1753,9 +3280,11 @@ export type HOMEPAGE_QUERYResult = {
       markDefs: Array<never>;
       items: null;
       filter: null;
+      quote: null;
     }> | null;
     items: null;
     filter: null;
+    quote: null;
   } | {
     _key: string;
     _type: "linkListBlock";
@@ -1795,6 +3324,7 @@ export type HOMEPAGE_QUERYResult = {
     richBody: null;
     items: null;
     filter: null;
+    quote: null;
   } | {
     _key: string;
     _type: "newsletterBlock";
@@ -1804,6 +3334,221 @@ export type HOMEPAGE_QUERYResult = {
     buttonLabel?: string;
     successMessage?: string;
     groupId?: string;
+    image: null;
+    richBody: null;
+    links: null;
+    items: null;
+    filter: null;
+    quote: null;
+  } | {
+    _key: string;
+    _type: "quoteBlock";
+    quote: {
+      _id: string;
+      _type: "quote";
+      text: string | null;
+      attribution: string | null;
+      location: string | null;
+      locationType: string | null;
+      sourceUrl: string | null;
+      sourceNote: string | null;
+      origin: "manual" | "readwise" | null;
+      sourceState: "active" | "archived" | null;
+      featured: boolean | null;
+      sortOrder: number | null;
+      tags: Array<string> | null;
+      topics: Array<{
+        _id: string;
+        title: string | null;
+        slug: Slug | null;
+        color: string | null;
+      }> | null;
+      readwise: {
+        highlightId: string | null;
+        externalId: string | null;
+        readwiseUrl: string | null;
+        color: string | null;
+        highlightedAt: string | null;
+        sourceUpdatedAt: string | null;
+        syncedAt: string | null;
+      } | null;
+      sourceItem: {
+        _id: string;
+        _type: "thing";
+        title: string | null;
+        kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+        creator: string | null;
+        url: string | null;
+        summary: string | null;
+        year: number | null;
+        image: {
+          asset: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          } | null;
+          alt: string | null;
+          caption: string | null;
+          hotspot: null;
+          crop: null;
+        } | null;
+      } | null;
+      commentary: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs: Array<{
+          _key: string;
+          _type: "markExternalLink";
+          type?: "email" | "file" | "phone" | "url";
+          url?: string;
+          email?: string;
+          phone?: string;
+          file?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+            };
+            media?: unknown;
+            _type: "file";
+          };
+          link: null;
+        } | {
+          _key: string;
+          _type: "markInternalLink";
+          link: {
+            _id: string;
+            _type: "article";
+            title: string | null;
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "page";
+            title: string | null;
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "project";
+            title: string | null;
+            slug: Slug | null;
+          } | null;
+        } | {
+          label?: string;
+          text?: string;
+          _type: "popupText";
+          _key: string;
+          link: null;
+        }> | null;
+        level?: number;
+        _type: "block";
+        _key: string;
+      } | {
+        _key: string;
+        _type: "complexImage";
+        asset?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        alt?: string;
+        caption?: string;
+        width?: number;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "quoteBlock";
+        quote?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "quote";
+        };
+        context?: string;
+        showSource?: boolean;
+        showCommentary?: boolean;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "referenceCollection";
+        title?: string;
+        introduction?: string;
+        source?: "filter" | "manual";
+        items?: Array<{
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "article";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "page";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "project";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "quote";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "thing";
+        }>;
+        filter?: {
+          contentTypes?: Array<string>;
+          kinds?: Array<string>;
+          topics?: Array<{
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            _key: string;
+            [internalGroqTypeReferenceTo]?: "topic";
+          }>;
+          featuredOnly?: boolean;
+          includeHistorical?: boolean;
+          limit?: number;
+          order?: "manual" | "newest" | "title";
+        };
+        presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+        showFilters?: boolean;
+        showNotes?: boolean;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "separator";
+        info?: string;
+        markDefs: null;
+      }> | null;
+    } | null;
+    context?: string;
+    showSource?: boolean;
+    showCommentary?: boolean;
     image: null;
     richBody: null;
     links: null;
@@ -1831,6 +3576,16 @@ export type HOMEPAGE_QUERYResult = {
       featured: boolean | null;
       historical: null;
       sortOrder: null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: null;
+      sourceItem: null;
       image: null;
       cover: {
         alt: string | null;
@@ -1855,6 +3610,7 @@ export type HOMEPAGE_QUERYResult = {
         color: string | null;
       }> | null;
       notes: null;
+      commentary: null;
     } | {
       _id: string;
       _type: "page";
@@ -1871,10 +3627,21 @@ export type HOMEPAGE_QUERYResult = {
       featured: null;
       historical: null;
       sortOrder: null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: null;
+      sourceItem: null;
       image: null;
       cover: null;
       topics: null;
       notes: null;
+      commentary: null;
     } | {
       _id: string;
       _type: "project";
@@ -1891,6 +3658,16 @@ export type HOMEPAGE_QUERYResult = {
       featured: boolean | null;
       historical: boolean | null;
       sortOrder: null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: null;
+      sourceItem: null;
       image: null;
       cover: {
         alt: string | null;
@@ -1915,6 +3692,780 @@ export type HOMEPAGE_QUERYResult = {
         color: string | null;
       }> | null;
       notes: null;
+      commentary: null;
+    } | {
+      _id: string;
+      _type: "quote";
+      title: null;
+      slug: null;
+      kind: null;
+      creator: null;
+      url: null;
+      externalUrl: null;
+      summary: null;
+      excerpt: null;
+      year: null;
+      publishedAt: null;
+      featured: boolean | null;
+      historical: null;
+      sortOrder: number | null;
+      text: string | null;
+      attribution: string | null;
+      location: string | null;
+      locationType: string | null;
+      sourceUrl: string | null;
+      sourceNote: string | null;
+      origin: "manual" | "readwise" | null;
+      sourceState: "active" | "archived" | null;
+      readwise: {
+        userBookId: null;
+        highlightId: string | null;
+        externalId: string | null;
+        source: null;
+        sourceUrl: null;
+        readwiseUrl: string | null;
+        coverImageUrl: null;
+        color: string | null;
+        highlightedAt: string | null;
+        sourceUpdatedAt: string | null;
+        syncedAt: string | null;
+      } | null;
+      sourceItem: {
+        _id: string;
+        _type: "thing";
+        title: string | null;
+        kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+        creator: string | null;
+        url: string | null;
+        summary: string | null;
+        year: number | null;
+      } | null;
+      image: null;
+      cover: null;
+      topics: Array<{
+        _id: string;
+        title: string | null;
+        slug: Slug | null;
+        color: string | null;
+      }> | null;
+      notes: null;
+      commentary: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs: Array<never> | Array<{
+          _key: string;
+          _type: "markExternalLink";
+          type?: "email" | "file" | "phone" | "url";
+          url?: string;
+          email?: string;
+          phone?: string;
+          file?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+            };
+            media?: unknown;
+            _type: "file";
+          };
+          link: null;
+        } | {
+          _key: string;
+          _type: "markInternalLink";
+          link: {
+            _id: string;
+            _type: "article";
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "page";
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "project";
+            slug: Slug | null;
+          } | null;
+        } | {
+          label?: string;
+          text?: string;
+          _type: "popupText";
+          _key: string;
+          link: null;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+        items: null;
+        filter: null;
+        quote: null;
+      } | {
+        _key: string;
+        _type: "complexImage";
+        asset?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        alt?: string;
+        caption?: string;
+        width?: number;
+        markDefs: Array<never>;
+        items: null;
+        filter: null;
+        quote: null;
+      } | {
+        _key: string;
+        _type: "quoteBlock";
+        quote: {
+          _id: string;
+          _type: "quote";
+          text: string | null;
+          attribution: string | null;
+          location: string | null;
+          locationType: string | null;
+          sourceUrl: string | null;
+          sourceNote: string | null;
+          origin: "manual" | "readwise" | null;
+          sourceState: "active" | "archived" | null;
+          featured: boolean | null;
+          sortOrder: number | null;
+          tags: Array<string> | null;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          readwise: {
+            highlightId: string | null;
+            externalId: string | null;
+            readwiseUrl: string | null;
+            color: string | null;
+            highlightedAt: string | null;
+            sourceUpdatedAt: string | null;
+            syncedAt: string | null;
+          } | null;
+          sourceItem: {
+            _id: string;
+            _type: "thing";
+            title: string | null;
+            kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+            creator: string | null;
+            url: string | null;
+            summary: string | null;
+            year: number | null;
+            image: {
+              asset: {
+                asset?: {
+                  _ref: string;
+                  _type: "reference";
+                  _weak?: boolean;
+                  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+                };
+                media?: unknown;
+                hotspot?: SanityImageHotspot;
+                crop?: SanityImageCrop;
+                _type: "image";
+              } | null;
+              alt: string | null;
+              caption: string | null;
+              hotspot: null;
+              crop: null;
+            } | null;
+          } | null;
+          commentary: Array<{
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+            listItem?: "bullet" | "number";
+            markDefs: Array<{
+              _key: string;
+              _type: "markExternalLink";
+              type?: "email" | "file" | "phone" | "url";
+              url?: string;
+              email?: string;
+              phone?: string;
+              file?: {
+                asset?: {
+                  _ref: string;
+                  _type: "reference";
+                  _weak?: boolean;
+                  [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+                };
+                media?: unknown;
+                _type: "file";
+              };
+              link: null;
+            } | {
+              _key: string;
+              _type: "markInternalLink";
+              link: {
+                _id: string;
+                _type: "article";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "page";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "project";
+                title: string | null;
+                slug: Slug | null;
+              } | null;
+            } | {
+              label?: string;
+              text?: string;
+              _type: "popupText";
+              _key: string;
+              link: null;
+            }> | null;
+            level?: number;
+            _type: "block";
+            _key: string;
+          } | {
+            _key: string;
+            _type: "complexImage";
+            asset?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: "image";
+            };
+            alt?: string;
+            caption?: string;
+            width?: number;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "quoteBlock";
+            quote?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            };
+            context?: string;
+            showSource?: boolean;
+            showCommentary?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "referenceCollection";
+            title?: string;
+            introduction?: string;
+            source?: "filter" | "manual";
+            items?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "article";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "page";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "project";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "thing";
+            }>;
+            filter?: {
+              contentTypes?: Array<string>;
+              kinds?: Array<string>;
+              topics?: Array<{
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                _key: string;
+                [internalGroqTypeReferenceTo]?: "topic";
+              }>;
+              featuredOnly?: boolean;
+              includeHistorical?: boolean;
+              limit?: number;
+              order?: "manual" | "newest" | "title";
+            };
+            presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+            showFilters?: boolean;
+            showNotes?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "separator";
+            info?: string;
+            markDefs: null;
+          }> | null;
+        } | null;
+        context?: string;
+        showSource?: boolean;
+        showCommentary?: boolean;
+        markDefs: Array<never>;
+        items: null;
+        filter: null;
+      } | {
+        _key: string;
+        _type: "referenceCollection";
+        title?: string;
+        introduction?: string;
+        source?: "filter" | "manual";
+        items: Array<{
+          _id: string;
+          _type: "article";
+          title: string | null;
+          slug: Slug | null;
+          kind: null;
+          creator: null;
+          url: null;
+          externalUrl: string | null;
+          summary: null;
+          excerpt: string | null;
+          year: null;
+          publishedAt: string | null;
+          featured: boolean | null;
+          historical: null;
+          sortOrder: null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: null;
+          sourceItem: null;
+          image: null;
+          cover: {
+            alt: string | null;
+            caption: string | null;
+            width: number | null;
+            asset: {
+              crop: SanityImageCrop | null;
+              hotspot: SanityImageHotspot | null;
+              asset: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              } | null;
+              lqip: string | null;
+            } | null;
+          } | null;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          commentary: null;
+        } | {
+          _id: string;
+          _type: "page";
+          title: string | null;
+          slug: Slug | null;
+          kind: null;
+          creator: null;
+          url: null;
+          externalUrl: null;
+          summary: null;
+          excerpt: null;
+          year: null;
+          publishedAt: null;
+          featured: null;
+          historical: null;
+          sortOrder: null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: null;
+          sourceItem: null;
+          image: null;
+          cover: null;
+          topics: null;
+          commentary: null;
+        } | {
+          _id: string;
+          _type: "project";
+          title: string | null;
+          slug: Slug | null;
+          kind: null;
+          creator: null;
+          url: string | null;
+          externalUrl: null;
+          summary: string | null;
+          excerpt: null;
+          year: number | null;
+          publishedAt: null;
+          featured: boolean | null;
+          historical: boolean | null;
+          sortOrder: null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: null;
+          sourceItem: null;
+          image: null;
+          cover: {
+            alt: string | null;
+            caption: string | null;
+            width: number | null;
+            asset: {
+              crop: SanityImageCrop | null;
+              hotspot: SanityImageHotspot | null;
+              asset: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              } | null;
+              lqip: string | null;
+            } | null;
+          } | null;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          commentary: null;
+        } | {
+          _id: string;
+          _type: "quote";
+          title: null;
+          slug: null;
+          kind: null;
+          creator: null;
+          url: null;
+          externalUrl: null;
+          summary: null;
+          excerpt: null;
+          year: null;
+          publishedAt: null;
+          featured: boolean | null;
+          historical: null;
+          sortOrder: number | null;
+          text: string | null;
+          attribution: string | null;
+          location: string | null;
+          locationType: string | null;
+          sourceUrl: string | null;
+          sourceNote: string | null;
+          origin: "manual" | "readwise" | null;
+          sourceState: "active" | "archived" | null;
+          readwise: {
+            userBookId: null;
+            highlightId: string | null;
+            externalId: string | null;
+            source: null;
+            sourceUrl: null;
+            readwiseUrl: string | null;
+            coverImageUrl: null;
+            color: string | null;
+            highlightedAt: string | null;
+            sourceUpdatedAt: string | null;
+            syncedAt: string | null;
+          } | null;
+          sourceItem: {
+            _id: string;
+            _type: "thing";
+            title: string | null;
+            kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+            creator: string | null;
+            url: string | null;
+            summary: string | null;
+            year: number | null;
+          } | null;
+          image: null;
+          cover: null;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          commentary: Array<{
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+            listItem?: "bullet" | "number";
+            markDefs: Array<{
+              _key: string;
+              _type: "markExternalLink";
+              type?: "email" | "file" | "phone" | "url";
+              url?: string;
+              email?: string;
+              phone?: string;
+              file?: {
+                asset?: {
+                  _ref: string;
+                  _type: "reference";
+                  _weak?: boolean;
+                  [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+                };
+                media?: unknown;
+                _type: "file";
+              };
+              link: null;
+            } | {
+              _key: string;
+              _type: "markInternalLink";
+              link: {
+                _id: string;
+                _type: "article";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "page";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "project";
+                title: string | null;
+                slug: Slug | null;
+              } | null;
+            } | {
+              label?: string;
+              text?: string;
+              _type: "popupText";
+              _key: string;
+              link: null;
+            }> | null;
+            level?: number;
+            _type: "block";
+            _key: string;
+          } | {
+            _key: string;
+            _type: "complexImage";
+            asset?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: "image";
+            };
+            alt?: string;
+            caption?: string;
+            width?: number;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "quoteBlock";
+            quote?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            };
+            context?: string;
+            showSource?: boolean;
+            showCommentary?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "referenceCollection";
+            title?: string;
+            introduction?: string;
+            source?: "filter" | "manual";
+            items?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "article";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "page";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "project";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "thing";
+            }>;
+            filter?: {
+              contentTypes?: Array<string>;
+              kinds?: Array<string>;
+              topics?: Array<{
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                _key: string;
+                [internalGroqTypeReferenceTo]?: "topic";
+              }>;
+              featuredOnly?: boolean;
+              includeHistorical?: boolean;
+              limit?: number;
+              order?: "manual" | "newest" | "title";
+            };
+            presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+            showFilters?: boolean;
+            showNotes?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "separator";
+            info?: string;
+            markDefs: null;
+          }> | null;
+        } | {
+          _id: string;
+          _type: "thing";
+          title: string | null;
+          slug: null;
+          kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+          creator: string | null;
+          url: string | null;
+          externalUrl: null;
+          summary: string | null;
+          excerpt: null;
+          year: number | null;
+          publishedAt: null;
+          featured: boolean | null;
+          historical: null;
+          sortOrder: number | null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: {
+            userBookId: string | null;
+            highlightId: null;
+            externalId: string | null;
+            source: string | null;
+            sourceUrl: string | null;
+            readwiseUrl: string | null;
+            coverImageUrl: string | null;
+            color: null;
+            highlightedAt: null;
+            sourceUpdatedAt: null;
+            syncedAt: string | null;
+          } | null;
+          sourceItem: null;
+          image: {
+            alt: string | null;
+            caption: string | null;
+            width: number | null;
+            asset: {
+              crop: SanityImageCrop | null;
+              hotspot: SanityImageHotspot | null;
+              asset: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              } | null;
+              lqip: string | null;
+            } | null;
+          } | null;
+          cover: null;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          commentary: null;
+        }> | null;
+        filter: {
+          contentTypes?: Array<string>;
+          kinds?: Array<string>;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          featuredOnly?: boolean;
+          includeHistorical?: boolean;
+          limit?: number;
+          order?: "manual" | "newest" | "title";
+        } | null;
+        presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+        showFilters?: boolean;
+        showNotes?: boolean;
+        markDefs: Array<never>;
+        quote: null;
+      } | {
+        _key: string;
+        _type: "separator";
+        info?: string;
+        markDefs: Array<never>;
+        items: null;
+        filter: null;
+        quote: null;
+      }> | null;
     } | {
       _id: string;
       _type: "thing";
@@ -1931,6 +4482,28 @@ export type HOMEPAGE_QUERYResult = {
       featured: boolean | null;
       historical: null;
       sortOrder: number | null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: {
+        userBookId: string | null;
+        highlightId: null;
+        externalId: string | null;
+        source: string | null;
+        sourceUrl: string | null;
+        readwiseUrl: string | null;
+        coverImageUrl: string | null;
+        color: null;
+        highlightedAt: null;
+        sourceUpdatedAt: null;
+        syncedAt: string | null;
+      } | null;
+      sourceItem: null;
       image: {
         alt: string | null;
         caption: string | null;
@@ -2009,6 +4582,7 @@ export type HOMEPAGE_QUERYResult = {
         _key: string;
         items: null;
         filter: null;
+        quote: null;
       } | {
         _key: string;
         _type: "complexImage";
@@ -2027,6 +4601,219 @@ export type HOMEPAGE_QUERYResult = {
         alt?: string;
         caption?: string;
         width?: number;
+        markDefs: Array<never>;
+        items: null;
+        filter: null;
+        quote: null;
+      } | {
+        _key: string;
+        _type: "quoteBlock";
+        quote: {
+          _id: string;
+          _type: "quote";
+          text: string | null;
+          attribution: string | null;
+          location: string | null;
+          locationType: string | null;
+          sourceUrl: string | null;
+          sourceNote: string | null;
+          origin: "manual" | "readwise" | null;
+          sourceState: "active" | "archived" | null;
+          featured: boolean | null;
+          sortOrder: number | null;
+          tags: Array<string> | null;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          readwise: {
+            highlightId: string | null;
+            externalId: string | null;
+            readwiseUrl: string | null;
+            color: string | null;
+            highlightedAt: string | null;
+            sourceUpdatedAt: string | null;
+            syncedAt: string | null;
+          } | null;
+          sourceItem: {
+            _id: string;
+            _type: "thing";
+            title: string | null;
+            kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+            creator: string | null;
+            url: string | null;
+            summary: string | null;
+            year: number | null;
+            image: {
+              asset: {
+                asset?: {
+                  _ref: string;
+                  _type: "reference";
+                  _weak?: boolean;
+                  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+                };
+                media?: unknown;
+                hotspot?: SanityImageHotspot;
+                crop?: SanityImageCrop;
+                _type: "image";
+              } | null;
+              alt: string | null;
+              caption: string | null;
+              hotspot: null;
+              crop: null;
+            } | null;
+          } | null;
+          commentary: Array<{
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+            listItem?: "bullet" | "number";
+            markDefs: Array<{
+              _key: string;
+              _type: "markExternalLink";
+              type?: "email" | "file" | "phone" | "url";
+              url?: string;
+              email?: string;
+              phone?: string;
+              file?: {
+                asset?: {
+                  _ref: string;
+                  _type: "reference";
+                  _weak?: boolean;
+                  [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+                };
+                media?: unknown;
+                _type: "file";
+              };
+              link: null;
+            } | {
+              _key: string;
+              _type: "markInternalLink";
+              link: {
+                _id: string;
+                _type: "article";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "page";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "project";
+                title: string | null;
+                slug: Slug | null;
+              } | null;
+            } | {
+              label?: string;
+              text?: string;
+              _type: "popupText";
+              _key: string;
+              link: null;
+            }> | null;
+            level?: number;
+            _type: "block";
+            _key: string;
+          } | {
+            _key: string;
+            _type: "complexImage";
+            asset?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: "image";
+            };
+            alt?: string;
+            caption?: string;
+            width?: number;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "quoteBlock";
+            quote?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            };
+            context?: string;
+            showSource?: boolean;
+            showCommentary?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "referenceCollection";
+            title?: string;
+            introduction?: string;
+            source?: "filter" | "manual";
+            items?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "article";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "page";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "project";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "thing";
+            }>;
+            filter?: {
+              contentTypes?: Array<string>;
+              kinds?: Array<string>;
+              topics?: Array<{
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                _key: string;
+                [internalGroqTypeReferenceTo]?: "topic";
+              }>;
+              featuredOnly?: boolean;
+              includeHistorical?: boolean;
+              limit?: number;
+              order?: "manual" | "newest" | "title";
+            };
+            presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+            showFilters?: boolean;
+            showNotes?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "separator";
+            info?: string;
+            markDefs: null;
+          }> | null;
+        } | null;
+        context?: string;
+        showSource?: boolean;
+        showCommentary?: boolean;
         markDefs: Array<never>;
         items: null;
         filter: null;
@@ -2052,6 +4839,16 @@ export type HOMEPAGE_QUERYResult = {
           featured: boolean | null;
           historical: null;
           sortOrder: null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: null;
+          sourceItem: null;
           image: null;
           cover: {
             alt: string | null;
@@ -2075,6 +4872,7 @@ export type HOMEPAGE_QUERYResult = {
             slug: Slug | null;
             color: string | null;
           }> | null;
+          commentary: null;
         } | {
           _id: string;
           _type: "page";
@@ -2091,9 +4889,20 @@ export type HOMEPAGE_QUERYResult = {
           featured: null;
           historical: null;
           sortOrder: null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: null;
+          sourceItem: null;
           image: null;
           cover: null;
           topics: null;
+          commentary: null;
         } | {
           _id: string;
           _type: "project";
@@ -2110,6 +4919,16 @@ export type HOMEPAGE_QUERYResult = {
           featured: boolean | null;
           historical: boolean | null;
           sortOrder: null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: null;
+          sourceItem: null;
           image: null;
           cover: {
             alt: string | null;
@@ -2132,6 +4951,207 @@ export type HOMEPAGE_QUERYResult = {
             title: string | null;
             slug: Slug | null;
             color: string | null;
+          }> | null;
+          commentary: null;
+        } | {
+          _id: string;
+          _type: "quote";
+          title: null;
+          slug: null;
+          kind: null;
+          creator: null;
+          url: null;
+          externalUrl: null;
+          summary: null;
+          excerpt: null;
+          year: null;
+          publishedAt: null;
+          featured: boolean | null;
+          historical: null;
+          sortOrder: number | null;
+          text: string | null;
+          attribution: string | null;
+          location: string | null;
+          locationType: string | null;
+          sourceUrl: string | null;
+          sourceNote: string | null;
+          origin: "manual" | "readwise" | null;
+          sourceState: "active" | "archived" | null;
+          readwise: {
+            userBookId: null;
+            highlightId: string | null;
+            externalId: string | null;
+            source: null;
+            sourceUrl: null;
+            readwiseUrl: string | null;
+            coverImageUrl: null;
+            color: string | null;
+            highlightedAt: string | null;
+            sourceUpdatedAt: string | null;
+            syncedAt: string | null;
+          } | null;
+          sourceItem: {
+            _id: string;
+            _type: "thing";
+            title: string | null;
+            kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+            creator: string | null;
+            url: string | null;
+            summary: string | null;
+            year: number | null;
+          } | null;
+          image: null;
+          cover: null;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          commentary: Array<{
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+            listItem?: "bullet" | "number";
+            markDefs: Array<{
+              _key: string;
+              _type: "markExternalLink";
+              type?: "email" | "file" | "phone" | "url";
+              url?: string;
+              email?: string;
+              phone?: string;
+              file?: {
+                asset?: {
+                  _ref: string;
+                  _type: "reference";
+                  _weak?: boolean;
+                  [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+                };
+                media?: unknown;
+                _type: "file";
+              };
+              link: null;
+            } | {
+              _key: string;
+              _type: "markInternalLink";
+              link: {
+                _id: string;
+                _type: "article";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "page";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "project";
+                title: string | null;
+                slug: Slug | null;
+              } | null;
+            } | {
+              label?: string;
+              text?: string;
+              _type: "popupText";
+              _key: string;
+              link: null;
+            }> | null;
+            level?: number;
+            _type: "block";
+            _key: string;
+          } | {
+            _key: string;
+            _type: "complexImage";
+            asset?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: "image";
+            };
+            alt?: string;
+            caption?: string;
+            width?: number;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "quoteBlock";
+            quote?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            };
+            context?: string;
+            showSource?: boolean;
+            showCommentary?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "referenceCollection";
+            title?: string;
+            introduction?: string;
+            source?: "filter" | "manual";
+            items?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "article";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "page";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "project";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "thing";
+            }>;
+            filter?: {
+              contentTypes?: Array<string>;
+              kinds?: Array<string>;
+              topics?: Array<{
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                _key: string;
+                [internalGroqTypeReferenceTo]?: "topic";
+              }>;
+              featuredOnly?: boolean;
+              includeHistorical?: boolean;
+              limit?: number;
+              order?: "manual" | "newest" | "title";
+            };
+            presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+            showFilters?: boolean;
+            showNotes?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "separator";
+            info?: string;
+            markDefs: null;
           }> | null;
         } | {
           _id: string;
@@ -2149,6 +5169,28 @@ export type HOMEPAGE_QUERYResult = {
           featured: boolean | null;
           historical: null;
           sortOrder: number | null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: {
+            userBookId: string | null;
+            highlightId: null;
+            externalId: string | null;
+            source: string | null;
+            sourceUrl: string | null;
+            readwiseUrl: string | null;
+            coverImageUrl: string | null;
+            color: null;
+            highlightedAt: null;
+            sourceUpdatedAt: null;
+            syncedAt: string | null;
+          } | null;
+          sourceItem: null;
           image: {
             alt: string | null;
             caption: string | null;
@@ -2172,6 +5214,7 @@ export type HOMEPAGE_QUERYResult = {
             slug: Slug | null;
             color: string | null;
           }> | null;
+          commentary: null;
         }> | null;
         filter: {
           contentTypes?: Array<string>;
@@ -2191,6 +5234,7 @@ export type HOMEPAGE_QUERYResult = {
         showFilters?: boolean;
         showNotes?: boolean;
         markDefs: Array<never>;
+        quote: null;
       } | {
         _key: string;
         _type: "separator";
@@ -2198,7 +5242,9 @@ export type HOMEPAGE_QUERYResult = {
         markDefs: Array<never>;
         items: null;
         filter: null;
+        quote: null;
       }> | null;
+      commentary: null;
     }> | null;
     filter: {
       contentTypes?: Array<string>;
@@ -2220,6 +5266,7 @@ export type HOMEPAGE_QUERYResult = {
     image: null;
     richBody: null;
     links: null;
+    quote: null;
   } | {
     _key: string;
     _type: "richTextBlock";
@@ -2227,6 +5274,8 @@ export type HOMEPAGE_QUERYResult = {
     body?: Array<{
       _key: string;
     } & ComplexImage | {
+      _key: string;
+    } & QuoteBlock | {
       _key: string;
     } & ReferenceCollection | {
       _key: string;
@@ -2309,6 +5358,7 @@ export type HOMEPAGE_QUERYResult = {
       _key: string;
       items: null;
       filter: null;
+      quote: null;
     } | {
       _key: string;
       _type: "complexImage";
@@ -2327,6 +5377,219 @@ export type HOMEPAGE_QUERYResult = {
       alt?: string;
       caption?: string;
       width?: number;
+      markDefs: Array<never>;
+      items: null;
+      filter: null;
+      quote: null;
+    } | {
+      _key: string;
+      _type: "quoteBlock";
+      quote: {
+        _id: string;
+        _type: "quote";
+        text: string | null;
+        attribution: string | null;
+        location: string | null;
+        locationType: string | null;
+        sourceUrl: string | null;
+        sourceNote: string | null;
+        origin: "manual" | "readwise" | null;
+        sourceState: "active" | "archived" | null;
+        featured: boolean | null;
+        sortOrder: number | null;
+        tags: Array<string> | null;
+        topics: Array<{
+          _id: string;
+          title: string | null;
+          slug: Slug | null;
+          color: string | null;
+        }> | null;
+        readwise: {
+          highlightId: string | null;
+          externalId: string | null;
+          readwiseUrl: string | null;
+          color: string | null;
+          highlightedAt: string | null;
+          sourceUpdatedAt: string | null;
+          syncedAt: string | null;
+        } | null;
+        sourceItem: {
+          _id: string;
+          _type: "thing";
+          title: string | null;
+          kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+          creator: string | null;
+          url: string | null;
+          summary: string | null;
+          year: number | null;
+          image: {
+            asset: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: "image";
+            } | null;
+            alt: string | null;
+            caption: string | null;
+            hotspot: null;
+            crop: null;
+          } | null;
+        } | null;
+        commentary: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs: Array<{
+            _key: string;
+            _type: "markExternalLink";
+            type?: "email" | "file" | "phone" | "url";
+            url?: string;
+            email?: string;
+            phone?: string;
+            file?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+              };
+              media?: unknown;
+              _type: "file";
+            };
+            link: null;
+          } | {
+            _key: string;
+            _type: "markInternalLink";
+            link: {
+              _id: string;
+              _type: "article";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "page";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "project";
+              title: string | null;
+              slug: Slug | null;
+            } | null;
+          } | {
+            label?: string;
+            text?: string;
+            _type: "popupText";
+            _key: string;
+            link: null;
+          }> | null;
+          level?: number;
+          _type: "block";
+          _key: string;
+        } | {
+          _key: string;
+          _type: "complexImage";
+          asset?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+          caption?: string;
+          width?: number;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "quoteBlock";
+          quote?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          };
+          context?: string;
+          showSource?: boolean;
+          showCommentary?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "referenceCollection";
+          title?: string;
+          introduction?: string;
+          source?: "filter" | "manual";
+          items?: Array<{
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "article";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "page";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "project";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "thing";
+          }>;
+          filter?: {
+            contentTypes?: Array<string>;
+            kinds?: Array<string>;
+            topics?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              _key: string;
+              [internalGroqTypeReferenceTo]?: "topic";
+            }>;
+            featuredOnly?: boolean;
+            includeHistorical?: boolean;
+            limit?: number;
+            order?: "manual" | "newest" | "title";
+          };
+          presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+          showFilters?: boolean;
+          showNotes?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "separator";
+          info?: string;
+          markDefs: null;
+        }> | null;
+      } | null;
+      context?: string;
+      showSource?: boolean;
+      showCommentary?: boolean;
       markDefs: Array<never>;
       items: null;
       filter: null;
@@ -2352,6 +5615,16 @@ export type HOMEPAGE_QUERYResult = {
         featured: boolean | null;
         historical: null;
         sortOrder: null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: null;
+        sourceItem: null;
         image: null;
         cover: {
           alt: string | null;
@@ -2375,6 +5648,7 @@ export type HOMEPAGE_QUERYResult = {
           slug: Slug | null;
           color: string | null;
         }> | null;
+        commentary: null;
       } | {
         _id: string;
         _type: "page";
@@ -2391,9 +5665,20 @@ export type HOMEPAGE_QUERYResult = {
         featured: null;
         historical: null;
         sortOrder: null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: null;
+        sourceItem: null;
         image: null;
         cover: null;
         topics: null;
+        commentary: null;
       } | {
         _id: string;
         _type: "project";
@@ -2410,6 +5695,16 @@ export type HOMEPAGE_QUERYResult = {
         featured: boolean | null;
         historical: boolean | null;
         sortOrder: null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: null;
+        sourceItem: null;
         image: null;
         cover: {
           alt: string | null;
@@ -2432,6 +5727,207 @@ export type HOMEPAGE_QUERYResult = {
           title: string | null;
           slug: Slug | null;
           color: string | null;
+        }> | null;
+        commentary: null;
+      } | {
+        _id: string;
+        _type: "quote";
+        title: null;
+        slug: null;
+        kind: null;
+        creator: null;
+        url: null;
+        externalUrl: null;
+        summary: null;
+        excerpt: null;
+        year: null;
+        publishedAt: null;
+        featured: boolean | null;
+        historical: null;
+        sortOrder: number | null;
+        text: string | null;
+        attribution: string | null;
+        location: string | null;
+        locationType: string | null;
+        sourceUrl: string | null;
+        sourceNote: string | null;
+        origin: "manual" | "readwise" | null;
+        sourceState: "active" | "archived" | null;
+        readwise: {
+          userBookId: null;
+          highlightId: string | null;
+          externalId: string | null;
+          source: null;
+          sourceUrl: null;
+          readwiseUrl: string | null;
+          coverImageUrl: null;
+          color: string | null;
+          highlightedAt: string | null;
+          sourceUpdatedAt: string | null;
+          syncedAt: string | null;
+        } | null;
+        sourceItem: {
+          _id: string;
+          _type: "thing";
+          title: string | null;
+          kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+          creator: string | null;
+          url: string | null;
+          summary: string | null;
+          year: number | null;
+        } | null;
+        image: null;
+        cover: null;
+        topics: Array<{
+          _id: string;
+          title: string | null;
+          slug: Slug | null;
+          color: string | null;
+        }> | null;
+        commentary: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs: Array<{
+            _key: string;
+            _type: "markExternalLink";
+            type?: "email" | "file" | "phone" | "url";
+            url?: string;
+            email?: string;
+            phone?: string;
+            file?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+              };
+              media?: unknown;
+              _type: "file";
+            };
+            link: null;
+          } | {
+            _key: string;
+            _type: "markInternalLink";
+            link: {
+              _id: string;
+              _type: "article";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "page";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "project";
+              title: string | null;
+              slug: Slug | null;
+            } | null;
+          } | {
+            label?: string;
+            text?: string;
+            _type: "popupText";
+            _key: string;
+            link: null;
+          }> | null;
+          level?: number;
+          _type: "block";
+          _key: string;
+        } | {
+          _key: string;
+          _type: "complexImage";
+          asset?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+          caption?: string;
+          width?: number;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "quoteBlock";
+          quote?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          };
+          context?: string;
+          showSource?: boolean;
+          showCommentary?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "referenceCollection";
+          title?: string;
+          introduction?: string;
+          source?: "filter" | "manual";
+          items?: Array<{
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "article";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "page";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "project";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "thing";
+          }>;
+          filter?: {
+            contentTypes?: Array<string>;
+            kinds?: Array<string>;
+            topics?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              _key: string;
+              [internalGroqTypeReferenceTo]?: "topic";
+            }>;
+            featuredOnly?: boolean;
+            includeHistorical?: boolean;
+            limit?: number;
+            order?: "manual" | "newest" | "title";
+          };
+          presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+          showFilters?: boolean;
+          showNotes?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "separator";
+          info?: string;
+          markDefs: null;
         }> | null;
       } | {
         _id: string;
@@ -2449,6 +5945,28 @@ export type HOMEPAGE_QUERYResult = {
         featured: boolean | null;
         historical: null;
         sortOrder: number | null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: {
+          userBookId: string | null;
+          highlightId: null;
+          externalId: string | null;
+          source: string | null;
+          sourceUrl: string | null;
+          readwiseUrl: string | null;
+          coverImageUrl: string | null;
+          color: null;
+          highlightedAt: null;
+          sourceUpdatedAt: null;
+          syncedAt: string | null;
+        } | null;
+        sourceItem: null;
         image: {
           alt: string | null;
           caption: string | null;
@@ -2472,6 +5990,7 @@ export type HOMEPAGE_QUERYResult = {
           slug: Slug | null;
           color: string | null;
         }> | null;
+        commentary: null;
       }> | null;
       filter: {
         contentTypes?: Array<string>;
@@ -2491,6 +6010,7 @@ export type HOMEPAGE_QUERYResult = {
       showFilters?: boolean;
       showNotes?: boolean;
       markDefs: Array<never>;
+      quote: null;
     } | {
       _key: string;
       _type: "separator";
@@ -2498,10 +6018,12 @@ export type HOMEPAGE_QUERYResult = {
       markDefs: Array<never>;
       items: null;
       filter: null;
+      quote: null;
     }> | null;
     links: null;
     items: null;
     filter: null;
+    quote: null;
   } | {
     _key: string;
     _type: "separator";
@@ -2511,6 +6033,7 @@ export type HOMEPAGE_QUERYResult = {
     links: null;
     items: null;
     filter: null;
+    quote: null;
   }> | null;
   library: Array<{
     _id: string;
@@ -2528,6 +6051,17 @@ export type HOMEPAGE_QUERYResult = {
     featured: boolean | null;
     historical: null;
     sortOrder: null;
+    text: null;
+    attribution: null;
+    location: null;
+    locationType: null;
+    sourceUrl: null;
+    sourceNote: null;
+    origin: null;
+    sourceState: null;
+    tags: null;
+    readwise: null;
+    sourceItem: null;
     image: null;
     cover: {
       alt: string | null;
@@ -2552,6 +6086,7 @@ export type HOMEPAGE_QUERYResult = {
       color: string | null;
     }> | null;
     notes: null;
+    commentary: null;
   } | {
     _id: string;
     _type: "project";
@@ -2568,6 +6103,17 @@ export type HOMEPAGE_QUERYResult = {
     featured: boolean | null;
     historical: boolean | null;
     sortOrder: null;
+    text: null;
+    attribution: null;
+    location: null;
+    locationType: null;
+    sourceUrl: null;
+    sourceNote: null;
+    origin: null;
+    sourceState: null;
+    tags: null;
+    readwise: null;
+    sourceItem: null;
     image: null;
     cover: {
       alt: string | null;
@@ -2592,6 +6138,7 @@ export type HOMEPAGE_QUERYResult = {
       color: string | null;
     }> | null;
     notes: null;
+    commentary: null;
   } | {
     _id: string;
     _type: "thing";
@@ -2608,6 +6155,29 @@ export type HOMEPAGE_QUERYResult = {
     featured: boolean | null;
     historical: null;
     sortOrder: number | null;
+    text: null;
+    attribution: null;
+    location: null;
+    locationType: null;
+    sourceUrl: null;
+    sourceNote: null;
+    origin: null;
+    sourceState: null;
+    tags: Array<string> | null;
+    readwise: {
+      userBookId: string | null;
+      highlightId: null;
+      externalId: string | null;
+      source: string | null;
+      sourceUrl: string | null;
+      readwiseUrl: string | null;
+      coverImageUrl: string | null;
+      color: null;
+      highlightedAt: null;
+      sourceUpdatedAt: null;
+      syncedAt: string | null;
+    } | null;
+    sourceItem: null;
     image: {
       alt: string | null;
       caption: string | null;
@@ -2710,6 +6280,20 @@ export type HOMEPAGE_QUERYResult = {
       items: null;
     } | {
       _key: string;
+      _type: "quoteBlock";
+      quote?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "quote";
+      };
+      context?: string;
+      showSource?: boolean;
+      showCommentary?: boolean;
+      markDefs: null;
+      items: null;
+    } | {
+      _key: string;
       _type: "referenceCollection";
       title?: string;
       introduction?: string;
@@ -2755,6 +6339,19 @@ export type HOMEPAGE_QUERYResult = {
         historical: boolean | null;
       } | {
         _id: string;
+        _type: "quote";
+        title: null;
+        slug: null;
+        kind: null;
+        creator: null;
+        url: null;
+        summary: null;
+        excerpt: null;
+        year: null;
+        featured: boolean | null;
+        historical: null;
+      } | {
+        _id: string;
         _type: "thing";
         title: string | null;
         slug: null;
@@ -2793,12 +6390,13 @@ export type HOMEPAGE_QUERYResult = {
       markDefs: null;
       items: null;
     }> | null;
+    commentary: null;
   }>;
 } | null;
 
 // Source: ./app/sanity/queries/page.ts
 // Variable: PAGE_QUERY
-// Query: *[_type == "page" && slug.current == $slug][0]{    _id,    _type,    title,    slug,    meta{      title,      description,      keywords,      ogImage{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},      visibility    },    contentMode,    showTableOfContents,    richText[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color}  },  filter{..., topics[]->{_id, title, slug, color}}},    components[]{  ...,  image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},  "richBody": body[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color}  },  filter{..., topics[]->{_id, title, slug, color}}},  links[]{    ...,    reference->{_id, _type, title, slug},    externalLink{..., "fileUrl": file.asset->url}  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }}, cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color},    notes[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color}  },  filter{..., topics[]->{_id, title, slug, color}}}  },  filter{..., topics[]->{_id, title, slug, color}}},    "library": *[      _type in ["thing", "project", "article"] &&      (meta.visibility == "public" || !defined(meta.visibility))    ]{  _id,  _type,  title,  slug,  kind,  creator,  url,  externalUrl,  summary,  excerpt,  year,  publishedAt,  featured,  historical,  sortOrder,  image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},  cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},  topics[]->{_id, title, slug, color},  notes[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}},    items[]->{_id, _type, title, slug, kind, creator, url, summary, excerpt, year, featured, historical}  }}  }
+// Query: *[_type == "page" && slug.current == $slug][0]{    _id,    _type,    title,    slug,    meta{      title,      description,      keywords,      ogImage{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},      visibility    },    contentMode,    showTableOfContents,    richText[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    text, attribution, location, locationType, sourceUrl, sourceNote,    origin, sourceState,    readwise{      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt    },    sourceItem->{_id, _type, title, kind, creator, url, summary, year},    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color},    commentary[]{      ...,      markDefs[]{..., link->{_id, _type, title, slug}}    }  },  filter{..., topics[]->{_id, title, slug, color}},  quote->{  _id,  _type,  text,  attribution,  location,  locationType,  sourceUrl,  sourceNote,  origin,  sourceState,  featured,  sortOrder,  tags,  topics[]->{_id, title, slug, color},  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},  sourceItem->{    _id, _type, title, kind, creator, url, summary, year,    image{asset, alt, caption, hotspot, crop}  },  commentary[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}}  }}},    components[]{  ...,  image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},  "richBody": body[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    text, attribution, location, locationType, sourceUrl, sourceNote,    origin, sourceState,    readwise{      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt    },    sourceItem->{_id, _type, title, kind, creator, url, summary, year},    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color},    commentary[]{      ...,      markDefs[]{..., link->{_id, _type, title, slug}}    }  },  filter{..., topics[]->{_id, title, slug, color}},  quote->{  _id,  _type,  text,  attribution,  location,  locationType,  sourceUrl,  sourceNote,  origin,  sourceState,  featured,  sortOrder,  tags,  topics[]->{_id, title, slug, color},  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},  sourceItem->{    _id, _type, title, kind, creator, url, summary, year,    image{asset, alt, caption, hotspot, crop}  },  commentary[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}}  }}},  links[]{    ...,    reference->{_id, _type, title, slug},    externalLink{..., "fileUrl": file.asset->url}  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    text, attribution, location, locationType, sourceUrl, sourceNote,    origin, sourceState,    readwise{      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt    },    sourceItem->{_id, _type, title, kind, creator, url, summary, year},    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }}, cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color},    notes[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    text, attribution, location, locationType, sourceUrl, sourceNote,    origin, sourceState,    readwise{      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt    },    sourceItem->{_id, _type, title, kind, creator, url, summary, year},    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color},    commentary[]{      ...,      markDefs[]{..., link->{_id, _type, title, slug}}    }  },  filter{..., topics[]->{_id, title, slug, color}},  quote->{  _id,  _type,  text,  attribution,  location,  locationType,  sourceUrl,  sourceNote,  origin,  sourceState,  featured,  sortOrder,  tags,  topics[]->{_id, title, slug, color},  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},  sourceItem->{    _id, _type, title, kind, creator, url, summary, year,    image{asset, alt, caption, hotspot, crop}  },  commentary[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}}  }}}, commentary[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    text, attribution, location, locationType, sourceUrl, sourceNote,    origin, sourceState,    readwise{      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt    },    sourceItem->{_id, _type, title, kind, creator, url, summary, year},    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color},    commentary[]{      ...,      markDefs[]{..., link->{_id, _type, title, slug}}    }  },  filter{..., topics[]->{_id, title, slug, color}},  quote->{  _id,  _type,  text,  attribution,  location,  locationType,  sourceUrl,  sourceNote,  origin,  sourceState,  featured,  sortOrder,  tags,  topics[]->{_id, title, slug, color},  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},  sourceItem->{    _id, _type, title, kind, creator, url, summary, year,    image{asset, alt, caption, hotspot, crop}  },  commentary[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}}  }}}  },  filter{..., topics[]->{_id, title, slug, color}},  quote->{  _id,  _type,  text,  attribution,  location,  locationType,  sourceUrl,  sourceNote,  origin,  sourceState,  featured,  sortOrder,  tags,  topics[]->{_id, title, slug, color},  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},  sourceItem->{    _id, _type, title, kind, creator, url, summary, year,    image{asset, alt, caption, hotspot, crop}  },  commentary[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}}  }}},    "library": *[      _type in ["thing", "project", "article"] &&      (meta.visibility == "public" || !defined(meta.visibility))    ]{  _id,  _type,  title,  slug,  kind,  creator,  url,  externalUrl,  summary,  excerpt,  year,  publishedAt,  featured,  historical,  sortOrder,  text,  attribution,  location,  locationType,  sourceUrl,  sourceNote,  origin,  sourceState,  tags,  readwise{    userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,    coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt  },  sourceItem->{    _id, _type, title, kind, creator, url, summary, year,    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }}  },  image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},  cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},  topics[]->{_id, title, slug, color},  notes[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}},    items[]->{_id, _type, title, slug, kind, creator, url, summary, excerpt, year, featured, historical}  },  commentary[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}}  }}  }
 export type PAGE_QUERYResult = {
   _id: string;
   _type: "page";
@@ -2883,6 +6481,7 @@ export type PAGE_QUERYResult = {
     _key: string;
     items: null;
     filter: null;
+    quote: null;
   } | {
     _key: string;
     _type: "complexImage";
@@ -2901,6 +6500,219 @@ export type PAGE_QUERYResult = {
     alt?: string;
     caption?: string;
     width?: number;
+    markDefs: Array<never>;
+    items: null;
+    filter: null;
+    quote: null;
+  } | {
+    _key: string;
+    _type: "quoteBlock";
+    quote: {
+      _id: string;
+      _type: "quote";
+      text: string | null;
+      attribution: string | null;
+      location: string | null;
+      locationType: string | null;
+      sourceUrl: string | null;
+      sourceNote: string | null;
+      origin: "manual" | "readwise" | null;
+      sourceState: "active" | "archived" | null;
+      featured: boolean | null;
+      sortOrder: number | null;
+      tags: Array<string> | null;
+      topics: Array<{
+        _id: string;
+        title: string | null;
+        slug: Slug | null;
+        color: string | null;
+      }> | null;
+      readwise: {
+        highlightId: string | null;
+        externalId: string | null;
+        readwiseUrl: string | null;
+        color: string | null;
+        highlightedAt: string | null;
+        sourceUpdatedAt: string | null;
+        syncedAt: string | null;
+      } | null;
+      sourceItem: {
+        _id: string;
+        _type: "thing";
+        title: string | null;
+        kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+        creator: string | null;
+        url: string | null;
+        summary: string | null;
+        year: number | null;
+        image: {
+          asset: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          } | null;
+          alt: string | null;
+          caption: string | null;
+          hotspot: null;
+          crop: null;
+        } | null;
+      } | null;
+      commentary: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs: Array<{
+          _key: string;
+          _type: "markExternalLink";
+          type?: "email" | "file" | "phone" | "url";
+          url?: string;
+          email?: string;
+          phone?: string;
+          file?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+            };
+            media?: unknown;
+            _type: "file";
+          };
+          link: null;
+        } | {
+          _key: string;
+          _type: "markInternalLink";
+          link: {
+            _id: string;
+            _type: "article";
+            title: string | null;
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "page";
+            title: string | null;
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "project";
+            title: string | null;
+            slug: Slug | null;
+          } | null;
+        } | {
+          label?: string;
+          text?: string;
+          _type: "popupText";
+          _key: string;
+          link: null;
+        }> | null;
+        level?: number;
+        _type: "block";
+        _key: string;
+      } | {
+        _key: string;
+        _type: "complexImage";
+        asset?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        alt?: string;
+        caption?: string;
+        width?: number;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "quoteBlock";
+        quote?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "quote";
+        };
+        context?: string;
+        showSource?: boolean;
+        showCommentary?: boolean;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "referenceCollection";
+        title?: string;
+        introduction?: string;
+        source?: "filter" | "manual";
+        items?: Array<{
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "article";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "page";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "project";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "quote";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "thing";
+        }>;
+        filter?: {
+          contentTypes?: Array<string>;
+          kinds?: Array<string>;
+          topics?: Array<{
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            _key: string;
+            [internalGroqTypeReferenceTo]?: "topic";
+          }>;
+          featuredOnly?: boolean;
+          includeHistorical?: boolean;
+          limit?: number;
+          order?: "manual" | "newest" | "title";
+        };
+        presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+        showFilters?: boolean;
+        showNotes?: boolean;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "separator";
+        info?: string;
+        markDefs: null;
+      }> | null;
+    } | null;
+    context?: string;
+    showSource?: boolean;
+    showCommentary?: boolean;
     markDefs: Array<never>;
     items: null;
     filter: null;
@@ -2926,6 +6738,16 @@ export type PAGE_QUERYResult = {
       featured: boolean | null;
       historical: null;
       sortOrder: null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: null;
+      sourceItem: null;
       image: null;
       cover: {
         alt: string | null;
@@ -2949,6 +6771,7 @@ export type PAGE_QUERYResult = {
         slug: Slug | null;
         color: string | null;
       }> | null;
+      commentary: null;
     } | {
       _id: string;
       _type: "page";
@@ -2965,9 +6788,20 @@ export type PAGE_QUERYResult = {
       featured: null;
       historical: null;
       sortOrder: null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: null;
+      sourceItem: null;
       image: null;
       cover: null;
       topics: null;
+      commentary: null;
     } | {
       _id: string;
       _type: "project";
@@ -2984,6 +6818,16 @@ export type PAGE_QUERYResult = {
       featured: boolean | null;
       historical: boolean | null;
       sortOrder: null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: null;
+      sourceItem: null;
       image: null;
       cover: {
         alt: string | null;
@@ -3006,6 +6850,207 @@ export type PAGE_QUERYResult = {
         title: string | null;
         slug: Slug | null;
         color: string | null;
+      }> | null;
+      commentary: null;
+    } | {
+      _id: string;
+      _type: "quote";
+      title: null;
+      slug: null;
+      kind: null;
+      creator: null;
+      url: null;
+      externalUrl: null;
+      summary: null;
+      excerpt: null;
+      year: null;
+      publishedAt: null;
+      featured: boolean | null;
+      historical: null;
+      sortOrder: number | null;
+      text: string | null;
+      attribution: string | null;
+      location: string | null;
+      locationType: string | null;
+      sourceUrl: string | null;
+      sourceNote: string | null;
+      origin: "manual" | "readwise" | null;
+      sourceState: "active" | "archived" | null;
+      readwise: {
+        userBookId: null;
+        highlightId: string | null;
+        externalId: string | null;
+        source: null;
+        sourceUrl: null;
+        readwiseUrl: string | null;
+        coverImageUrl: null;
+        color: string | null;
+        highlightedAt: string | null;
+        sourceUpdatedAt: string | null;
+        syncedAt: string | null;
+      } | null;
+      sourceItem: {
+        _id: string;
+        _type: "thing";
+        title: string | null;
+        kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+        creator: string | null;
+        url: string | null;
+        summary: string | null;
+        year: number | null;
+      } | null;
+      image: null;
+      cover: null;
+      topics: Array<{
+        _id: string;
+        title: string | null;
+        slug: Slug | null;
+        color: string | null;
+      }> | null;
+      commentary: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs: Array<{
+          _key: string;
+          _type: "markExternalLink";
+          type?: "email" | "file" | "phone" | "url";
+          url?: string;
+          email?: string;
+          phone?: string;
+          file?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+            };
+            media?: unknown;
+            _type: "file";
+          };
+          link: null;
+        } | {
+          _key: string;
+          _type: "markInternalLink";
+          link: {
+            _id: string;
+            _type: "article";
+            title: string | null;
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "page";
+            title: string | null;
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "project";
+            title: string | null;
+            slug: Slug | null;
+          } | null;
+        } | {
+          label?: string;
+          text?: string;
+          _type: "popupText";
+          _key: string;
+          link: null;
+        }> | null;
+        level?: number;
+        _type: "block";
+        _key: string;
+      } | {
+        _key: string;
+        _type: "complexImage";
+        asset?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        alt?: string;
+        caption?: string;
+        width?: number;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "quoteBlock";
+        quote?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "quote";
+        };
+        context?: string;
+        showSource?: boolean;
+        showCommentary?: boolean;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "referenceCollection";
+        title?: string;
+        introduction?: string;
+        source?: "filter" | "manual";
+        items?: Array<{
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "article";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "page";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "project";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "quote";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "thing";
+        }>;
+        filter?: {
+          contentTypes?: Array<string>;
+          kinds?: Array<string>;
+          topics?: Array<{
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            _key: string;
+            [internalGroqTypeReferenceTo]?: "topic";
+          }>;
+          featuredOnly?: boolean;
+          includeHistorical?: boolean;
+          limit?: number;
+          order?: "manual" | "newest" | "title";
+        };
+        presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+        showFilters?: boolean;
+        showNotes?: boolean;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "separator";
+        info?: string;
+        markDefs: null;
       }> | null;
     } | {
       _id: string;
@@ -3023,6 +7068,28 @@ export type PAGE_QUERYResult = {
       featured: boolean | null;
       historical: null;
       sortOrder: number | null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: {
+        userBookId: string | null;
+        highlightId: null;
+        externalId: string | null;
+        source: string | null;
+        sourceUrl: string | null;
+        readwiseUrl: string | null;
+        coverImageUrl: string | null;
+        color: null;
+        highlightedAt: null;
+        sourceUpdatedAt: null;
+        syncedAt: string | null;
+      } | null;
+      sourceItem: null;
       image: {
         alt: string | null;
         caption: string | null;
@@ -3046,6 +7113,7 @@ export type PAGE_QUERYResult = {
         slug: Slug | null;
         color: string | null;
       }> | null;
+      commentary: null;
     }> | null;
     filter: {
       contentTypes?: Array<string>;
@@ -3065,6 +7133,7 @@ export type PAGE_QUERYResult = {
     showFilters?: boolean;
     showNotes?: boolean;
     markDefs: Array<never>;
+    quote: null;
   } | {
     _key: string;
     _type: "separator";
@@ -3072,6 +7141,7 @@ export type PAGE_QUERYResult = {
     markDefs: Array<never>;
     items: null;
     filter: null;
+    quote: null;
   }> | null;
   components: Array<{
     _key: string;
@@ -3096,6 +7166,7 @@ export type PAGE_QUERYResult = {
     links: null;
     items: null;
     filter: null;
+    quote: null;
   } | {
     _key: string;
     _type: "heroBlock";
@@ -3104,6 +7175,8 @@ export type PAGE_QUERYResult = {
     body?: Array<{
       _key: string;
     } & ComplexImage | {
+      _key: string;
+    } & QuoteBlock | {
       _key: string;
     } & ReferenceCollection | {
       _key: string;
@@ -3231,6 +7304,7 @@ export type PAGE_QUERYResult = {
       _key: string;
       items: null;
       filter: null;
+      quote: null;
     } | {
       _key: string;
       _type: "complexImage";
@@ -3249,6 +7323,219 @@ export type PAGE_QUERYResult = {
       alt?: string;
       caption?: string;
       width?: number;
+      markDefs: Array<never>;
+      items: null;
+      filter: null;
+      quote: null;
+    } | {
+      _key: string;
+      _type: "quoteBlock";
+      quote: {
+        _id: string;
+        _type: "quote";
+        text: string | null;
+        attribution: string | null;
+        location: string | null;
+        locationType: string | null;
+        sourceUrl: string | null;
+        sourceNote: string | null;
+        origin: "manual" | "readwise" | null;
+        sourceState: "active" | "archived" | null;
+        featured: boolean | null;
+        sortOrder: number | null;
+        tags: Array<string> | null;
+        topics: Array<{
+          _id: string;
+          title: string | null;
+          slug: Slug | null;
+          color: string | null;
+        }> | null;
+        readwise: {
+          highlightId: string | null;
+          externalId: string | null;
+          readwiseUrl: string | null;
+          color: string | null;
+          highlightedAt: string | null;
+          sourceUpdatedAt: string | null;
+          syncedAt: string | null;
+        } | null;
+        sourceItem: {
+          _id: string;
+          _type: "thing";
+          title: string | null;
+          kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+          creator: string | null;
+          url: string | null;
+          summary: string | null;
+          year: number | null;
+          image: {
+            asset: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: "image";
+            } | null;
+            alt: string | null;
+            caption: string | null;
+            hotspot: null;
+            crop: null;
+          } | null;
+        } | null;
+        commentary: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs: Array<{
+            _key: string;
+            _type: "markExternalLink";
+            type?: "email" | "file" | "phone" | "url";
+            url?: string;
+            email?: string;
+            phone?: string;
+            file?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+              };
+              media?: unknown;
+              _type: "file";
+            };
+            link: null;
+          } | {
+            _key: string;
+            _type: "markInternalLink";
+            link: {
+              _id: string;
+              _type: "article";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "page";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "project";
+              title: string | null;
+              slug: Slug | null;
+            } | null;
+          } | {
+            label?: string;
+            text?: string;
+            _type: "popupText";
+            _key: string;
+            link: null;
+          }> | null;
+          level?: number;
+          _type: "block";
+          _key: string;
+        } | {
+          _key: string;
+          _type: "complexImage";
+          asset?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+          caption?: string;
+          width?: number;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "quoteBlock";
+          quote?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          };
+          context?: string;
+          showSource?: boolean;
+          showCommentary?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "referenceCollection";
+          title?: string;
+          introduction?: string;
+          source?: "filter" | "manual";
+          items?: Array<{
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "article";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "page";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "project";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "thing";
+          }>;
+          filter?: {
+            contentTypes?: Array<string>;
+            kinds?: Array<string>;
+            topics?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              _key: string;
+              [internalGroqTypeReferenceTo]?: "topic";
+            }>;
+            featuredOnly?: boolean;
+            includeHistorical?: boolean;
+            limit?: number;
+            order?: "manual" | "newest" | "title";
+          };
+          presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+          showFilters?: boolean;
+          showNotes?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "separator";
+          info?: string;
+          markDefs: null;
+        }> | null;
+      } | null;
+      context?: string;
+      showSource?: boolean;
+      showCommentary?: boolean;
       markDefs: Array<never>;
       items: null;
       filter: null;
@@ -3274,6 +7561,16 @@ export type PAGE_QUERYResult = {
         featured: boolean | null;
         historical: null;
         sortOrder: null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: null;
+        sourceItem: null;
         image: null;
         cover: {
           alt: string | null;
@@ -3297,6 +7594,7 @@ export type PAGE_QUERYResult = {
           slug: Slug | null;
           color: string | null;
         }> | null;
+        commentary: null;
       } | {
         _id: string;
         _type: "page";
@@ -3313,9 +7611,20 @@ export type PAGE_QUERYResult = {
         featured: null;
         historical: null;
         sortOrder: null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: null;
+        sourceItem: null;
         image: null;
         cover: null;
         topics: null;
+        commentary: null;
       } | {
         _id: string;
         _type: "project";
@@ -3332,6 +7641,16 @@ export type PAGE_QUERYResult = {
         featured: boolean | null;
         historical: boolean | null;
         sortOrder: null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: null;
+        sourceItem: null;
         image: null;
         cover: {
           alt: string | null;
@@ -3354,6 +7673,207 @@ export type PAGE_QUERYResult = {
           title: string | null;
           slug: Slug | null;
           color: string | null;
+        }> | null;
+        commentary: null;
+      } | {
+        _id: string;
+        _type: "quote";
+        title: null;
+        slug: null;
+        kind: null;
+        creator: null;
+        url: null;
+        externalUrl: null;
+        summary: null;
+        excerpt: null;
+        year: null;
+        publishedAt: null;
+        featured: boolean | null;
+        historical: null;
+        sortOrder: number | null;
+        text: string | null;
+        attribution: string | null;
+        location: string | null;
+        locationType: string | null;
+        sourceUrl: string | null;
+        sourceNote: string | null;
+        origin: "manual" | "readwise" | null;
+        sourceState: "active" | "archived" | null;
+        readwise: {
+          userBookId: null;
+          highlightId: string | null;
+          externalId: string | null;
+          source: null;
+          sourceUrl: null;
+          readwiseUrl: string | null;
+          coverImageUrl: null;
+          color: string | null;
+          highlightedAt: string | null;
+          sourceUpdatedAt: string | null;
+          syncedAt: string | null;
+        } | null;
+        sourceItem: {
+          _id: string;
+          _type: "thing";
+          title: string | null;
+          kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+          creator: string | null;
+          url: string | null;
+          summary: string | null;
+          year: number | null;
+        } | null;
+        image: null;
+        cover: null;
+        topics: Array<{
+          _id: string;
+          title: string | null;
+          slug: Slug | null;
+          color: string | null;
+        }> | null;
+        commentary: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs: Array<{
+            _key: string;
+            _type: "markExternalLink";
+            type?: "email" | "file" | "phone" | "url";
+            url?: string;
+            email?: string;
+            phone?: string;
+            file?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+              };
+              media?: unknown;
+              _type: "file";
+            };
+            link: null;
+          } | {
+            _key: string;
+            _type: "markInternalLink";
+            link: {
+              _id: string;
+              _type: "article";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "page";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "project";
+              title: string | null;
+              slug: Slug | null;
+            } | null;
+          } | {
+            label?: string;
+            text?: string;
+            _type: "popupText";
+            _key: string;
+            link: null;
+          }> | null;
+          level?: number;
+          _type: "block";
+          _key: string;
+        } | {
+          _key: string;
+          _type: "complexImage";
+          asset?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+          caption?: string;
+          width?: number;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "quoteBlock";
+          quote?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          };
+          context?: string;
+          showSource?: boolean;
+          showCommentary?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "referenceCollection";
+          title?: string;
+          introduction?: string;
+          source?: "filter" | "manual";
+          items?: Array<{
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "article";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "page";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "project";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "thing";
+          }>;
+          filter?: {
+            contentTypes?: Array<string>;
+            kinds?: Array<string>;
+            topics?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              _key: string;
+              [internalGroqTypeReferenceTo]?: "topic";
+            }>;
+            featuredOnly?: boolean;
+            includeHistorical?: boolean;
+            limit?: number;
+            order?: "manual" | "newest" | "title";
+          };
+          presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+          showFilters?: boolean;
+          showNotes?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "separator";
+          info?: string;
+          markDefs: null;
         }> | null;
       } | {
         _id: string;
@@ -3371,6 +7891,28 @@ export type PAGE_QUERYResult = {
         featured: boolean | null;
         historical: null;
         sortOrder: number | null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: {
+          userBookId: string | null;
+          highlightId: null;
+          externalId: string | null;
+          source: string | null;
+          sourceUrl: string | null;
+          readwiseUrl: string | null;
+          coverImageUrl: string | null;
+          color: null;
+          highlightedAt: null;
+          sourceUpdatedAt: null;
+          syncedAt: string | null;
+        } | null;
+        sourceItem: null;
         image: {
           alt: string | null;
           caption: string | null;
@@ -3394,6 +7936,7 @@ export type PAGE_QUERYResult = {
           slug: Slug | null;
           color: string | null;
         }> | null;
+        commentary: null;
       }> | null;
       filter: {
         contentTypes?: Array<string>;
@@ -3413,6 +7956,7 @@ export type PAGE_QUERYResult = {
       showFilters?: boolean;
       showNotes?: boolean;
       markDefs: Array<never>;
+      quote: null;
     } | {
       _key: string;
       _type: "separator";
@@ -3420,9 +7964,11 @@ export type PAGE_QUERYResult = {
       markDefs: Array<never>;
       items: null;
       filter: null;
+      quote: null;
     }> | null;
     items: null;
     filter: null;
+    quote: null;
   } | {
     _key: string;
     _type: "linkListBlock";
@@ -3462,6 +8008,7 @@ export type PAGE_QUERYResult = {
     richBody: null;
     items: null;
     filter: null;
+    quote: null;
   } | {
     _key: string;
     _type: "newsletterBlock";
@@ -3471,6 +8018,221 @@ export type PAGE_QUERYResult = {
     buttonLabel?: string;
     successMessage?: string;
     groupId?: string;
+    image: null;
+    richBody: null;
+    links: null;
+    items: null;
+    filter: null;
+    quote: null;
+  } | {
+    _key: string;
+    _type: "quoteBlock";
+    quote: {
+      _id: string;
+      _type: "quote";
+      text: string | null;
+      attribution: string | null;
+      location: string | null;
+      locationType: string | null;
+      sourceUrl: string | null;
+      sourceNote: string | null;
+      origin: "manual" | "readwise" | null;
+      sourceState: "active" | "archived" | null;
+      featured: boolean | null;
+      sortOrder: number | null;
+      tags: Array<string> | null;
+      topics: Array<{
+        _id: string;
+        title: string | null;
+        slug: Slug | null;
+        color: string | null;
+      }> | null;
+      readwise: {
+        highlightId: string | null;
+        externalId: string | null;
+        readwiseUrl: string | null;
+        color: string | null;
+        highlightedAt: string | null;
+        sourceUpdatedAt: string | null;
+        syncedAt: string | null;
+      } | null;
+      sourceItem: {
+        _id: string;
+        _type: "thing";
+        title: string | null;
+        kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+        creator: string | null;
+        url: string | null;
+        summary: string | null;
+        year: number | null;
+        image: {
+          asset: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          } | null;
+          alt: string | null;
+          caption: string | null;
+          hotspot: null;
+          crop: null;
+        } | null;
+      } | null;
+      commentary: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs: Array<{
+          _key: string;
+          _type: "markExternalLink";
+          type?: "email" | "file" | "phone" | "url";
+          url?: string;
+          email?: string;
+          phone?: string;
+          file?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+            };
+            media?: unknown;
+            _type: "file";
+          };
+          link: null;
+        } | {
+          _key: string;
+          _type: "markInternalLink";
+          link: {
+            _id: string;
+            _type: "article";
+            title: string | null;
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "page";
+            title: string | null;
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "project";
+            title: string | null;
+            slug: Slug | null;
+          } | null;
+        } | {
+          label?: string;
+          text?: string;
+          _type: "popupText";
+          _key: string;
+          link: null;
+        }> | null;
+        level?: number;
+        _type: "block";
+        _key: string;
+      } | {
+        _key: string;
+        _type: "complexImage";
+        asset?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        alt?: string;
+        caption?: string;
+        width?: number;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "quoteBlock";
+        quote?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "quote";
+        };
+        context?: string;
+        showSource?: boolean;
+        showCommentary?: boolean;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "referenceCollection";
+        title?: string;
+        introduction?: string;
+        source?: "filter" | "manual";
+        items?: Array<{
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "article";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "page";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "project";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "quote";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "thing";
+        }>;
+        filter?: {
+          contentTypes?: Array<string>;
+          kinds?: Array<string>;
+          topics?: Array<{
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            _key: string;
+            [internalGroqTypeReferenceTo]?: "topic";
+          }>;
+          featuredOnly?: boolean;
+          includeHistorical?: boolean;
+          limit?: number;
+          order?: "manual" | "newest" | "title";
+        };
+        presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+        showFilters?: boolean;
+        showNotes?: boolean;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "separator";
+        info?: string;
+        markDefs: null;
+      }> | null;
+    } | null;
+    context?: string;
+    showSource?: boolean;
+    showCommentary?: boolean;
     image: null;
     richBody: null;
     links: null;
@@ -3498,6 +8260,16 @@ export type PAGE_QUERYResult = {
       featured: boolean | null;
       historical: null;
       sortOrder: null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: null;
+      sourceItem: null;
       image: null;
       cover: {
         alt: string | null;
@@ -3522,6 +8294,7 @@ export type PAGE_QUERYResult = {
         color: string | null;
       }> | null;
       notes: null;
+      commentary: null;
     } | {
       _id: string;
       _type: "page";
@@ -3538,10 +8311,21 @@ export type PAGE_QUERYResult = {
       featured: null;
       historical: null;
       sortOrder: null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: null;
+      sourceItem: null;
       image: null;
       cover: null;
       topics: null;
       notes: null;
+      commentary: null;
     } | {
       _id: string;
       _type: "project";
@@ -3558,6 +8342,16 @@ export type PAGE_QUERYResult = {
       featured: boolean | null;
       historical: boolean | null;
       sortOrder: null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: null;
+      sourceItem: null;
       image: null;
       cover: {
         alt: string | null;
@@ -3582,6 +8376,780 @@ export type PAGE_QUERYResult = {
         color: string | null;
       }> | null;
       notes: null;
+      commentary: null;
+    } | {
+      _id: string;
+      _type: "quote";
+      title: null;
+      slug: null;
+      kind: null;
+      creator: null;
+      url: null;
+      externalUrl: null;
+      summary: null;
+      excerpt: null;
+      year: null;
+      publishedAt: null;
+      featured: boolean | null;
+      historical: null;
+      sortOrder: number | null;
+      text: string | null;
+      attribution: string | null;
+      location: string | null;
+      locationType: string | null;
+      sourceUrl: string | null;
+      sourceNote: string | null;
+      origin: "manual" | "readwise" | null;
+      sourceState: "active" | "archived" | null;
+      readwise: {
+        userBookId: null;
+        highlightId: string | null;
+        externalId: string | null;
+        source: null;
+        sourceUrl: null;
+        readwiseUrl: string | null;
+        coverImageUrl: null;
+        color: string | null;
+        highlightedAt: string | null;
+        sourceUpdatedAt: string | null;
+        syncedAt: string | null;
+      } | null;
+      sourceItem: {
+        _id: string;
+        _type: "thing";
+        title: string | null;
+        kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+        creator: string | null;
+        url: string | null;
+        summary: string | null;
+        year: number | null;
+      } | null;
+      image: null;
+      cover: null;
+      topics: Array<{
+        _id: string;
+        title: string | null;
+        slug: Slug | null;
+        color: string | null;
+      }> | null;
+      notes: null;
+      commentary: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs: Array<never> | Array<{
+          _key: string;
+          _type: "markExternalLink";
+          type?: "email" | "file" | "phone" | "url";
+          url?: string;
+          email?: string;
+          phone?: string;
+          file?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+            };
+            media?: unknown;
+            _type: "file";
+          };
+          link: null;
+        } | {
+          _key: string;
+          _type: "markInternalLink";
+          link: {
+            _id: string;
+            _type: "article";
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "page";
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "project";
+            slug: Slug | null;
+          } | null;
+        } | {
+          label?: string;
+          text?: string;
+          _type: "popupText";
+          _key: string;
+          link: null;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+        items: null;
+        filter: null;
+        quote: null;
+      } | {
+        _key: string;
+        _type: "complexImage";
+        asset?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        alt?: string;
+        caption?: string;
+        width?: number;
+        markDefs: Array<never>;
+        items: null;
+        filter: null;
+        quote: null;
+      } | {
+        _key: string;
+        _type: "quoteBlock";
+        quote: {
+          _id: string;
+          _type: "quote";
+          text: string | null;
+          attribution: string | null;
+          location: string | null;
+          locationType: string | null;
+          sourceUrl: string | null;
+          sourceNote: string | null;
+          origin: "manual" | "readwise" | null;
+          sourceState: "active" | "archived" | null;
+          featured: boolean | null;
+          sortOrder: number | null;
+          tags: Array<string> | null;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          readwise: {
+            highlightId: string | null;
+            externalId: string | null;
+            readwiseUrl: string | null;
+            color: string | null;
+            highlightedAt: string | null;
+            sourceUpdatedAt: string | null;
+            syncedAt: string | null;
+          } | null;
+          sourceItem: {
+            _id: string;
+            _type: "thing";
+            title: string | null;
+            kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+            creator: string | null;
+            url: string | null;
+            summary: string | null;
+            year: number | null;
+            image: {
+              asset: {
+                asset?: {
+                  _ref: string;
+                  _type: "reference";
+                  _weak?: boolean;
+                  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+                };
+                media?: unknown;
+                hotspot?: SanityImageHotspot;
+                crop?: SanityImageCrop;
+                _type: "image";
+              } | null;
+              alt: string | null;
+              caption: string | null;
+              hotspot: null;
+              crop: null;
+            } | null;
+          } | null;
+          commentary: Array<{
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+            listItem?: "bullet" | "number";
+            markDefs: Array<{
+              _key: string;
+              _type: "markExternalLink";
+              type?: "email" | "file" | "phone" | "url";
+              url?: string;
+              email?: string;
+              phone?: string;
+              file?: {
+                asset?: {
+                  _ref: string;
+                  _type: "reference";
+                  _weak?: boolean;
+                  [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+                };
+                media?: unknown;
+                _type: "file";
+              };
+              link: null;
+            } | {
+              _key: string;
+              _type: "markInternalLink";
+              link: {
+                _id: string;
+                _type: "article";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "page";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "project";
+                title: string | null;
+                slug: Slug | null;
+              } | null;
+            } | {
+              label?: string;
+              text?: string;
+              _type: "popupText";
+              _key: string;
+              link: null;
+            }> | null;
+            level?: number;
+            _type: "block";
+            _key: string;
+          } | {
+            _key: string;
+            _type: "complexImage";
+            asset?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: "image";
+            };
+            alt?: string;
+            caption?: string;
+            width?: number;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "quoteBlock";
+            quote?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            };
+            context?: string;
+            showSource?: boolean;
+            showCommentary?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "referenceCollection";
+            title?: string;
+            introduction?: string;
+            source?: "filter" | "manual";
+            items?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "article";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "page";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "project";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "thing";
+            }>;
+            filter?: {
+              contentTypes?: Array<string>;
+              kinds?: Array<string>;
+              topics?: Array<{
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                _key: string;
+                [internalGroqTypeReferenceTo]?: "topic";
+              }>;
+              featuredOnly?: boolean;
+              includeHistorical?: boolean;
+              limit?: number;
+              order?: "manual" | "newest" | "title";
+            };
+            presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+            showFilters?: boolean;
+            showNotes?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "separator";
+            info?: string;
+            markDefs: null;
+          }> | null;
+        } | null;
+        context?: string;
+        showSource?: boolean;
+        showCommentary?: boolean;
+        markDefs: Array<never>;
+        items: null;
+        filter: null;
+      } | {
+        _key: string;
+        _type: "referenceCollection";
+        title?: string;
+        introduction?: string;
+        source?: "filter" | "manual";
+        items: Array<{
+          _id: string;
+          _type: "article";
+          title: string | null;
+          slug: Slug | null;
+          kind: null;
+          creator: null;
+          url: null;
+          externalUrl: string | null;
+          summary: null;
+          excerpt: string | null;
+          year: null;
+          publishedAt: string | null;
+          featured: boolean | null;
+          historical: null;
+          sortOrder: null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: null;
+          sourceItem: null;
+          image: null;
+          cover: {
+            alt: string | null;
+            caption: string | null;
+            width: number | null;
+            asset: {
+              crop: SanityImageCrop | null;
+              hotspot: SanityImageHotspot | null;
+              asset: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              } | null;
+              lqip: string | null;
+            } | null;
+          } | null;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          commentary: null;
+        } | {
+          _id: string;
+          _type: "page";
+          title: string | null;
+          slug: Slug | null;
+          kind: null;
+          creator: null;
+          url: null;
+          externalUrl: null;
+          summary: null;
+          excerpt: null;
+          year: null;
+          publishedAt: null;
+          featured: null;
+          historical: null;
+          sortOrder: null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: null;
+          sourceItem: null;
+          image: null;
+          cover: null;
+          topics: null;
+          commentary: null;
+        } | {
+          _id: string;
+          _type: "project";
+          title: string | null;
+          slug: Slug | null;
+          kind: null;
+          creator: null;
+          url: string | null;
+          externalUrl: null;
+          summary: string | null;
+          excerpt: null;
+          year: number | null;
+          publishedAt: null;
+          featured: boolean | null;
+          historical: boolean | null;
+          sortOrder: null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: null;
+          sourceItem: null;
+          image: null;
+          cover: {
+            alt: string | null;
+            caption: string | null;
+            width: number | null;
+            asset: {
+              crop: SanityImageCrop | null;
+              hotspot: SanityImageHotspot | null;
+              asset: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              } | null;
+              lqip: string | null;
+            } | null;
+          } | null;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          commentary: null;
+        } | {
+          _id: string;
+          _type: "quote";
+          title: null;
+          slug: null;
+          kind: null;
+          creator: null;
+          url: null;
+          externalUrl: null;
+          summary: null;
+          excerpt: null;
+          year: null;
+          publishedAt: null;
+          featured: boolean | null;
+          historical: null;
+          sortOrder: number | null;
+          text: string | null;
+          attribution: string | null;
+          location: string | null;
+          locationType: string | null;
+          sourceUrl: string | null;
+          sourceNote: string | null;
+          origin: "manual" | "readwise" | null;
+          sourceState: "active" | "archived" | null;
+          readwise: {
+            userBookId: null;
+            highlightId: string | null;
+            externalId: string | null;
+            source: null;
+            sourceUrl: null;
+            readwiseUrl: string | null;
+            coverImageUrl: null;
+            color: string | null;
+            highlightedAt: string | null;
+            sourceUpdatedAt: string | null;
+            syncedAt: string | null;
+          } | null;
+          sourceItem: {
+            _id: string;
+            _type: "thing";
+            title: string | null;
+            kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+            creator: string | null;
+            url: string | null;
+            summary: string | null;
+            year: number | null;
+          } | null;
+          image: null;
+          cover: null;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          commentary: Array<{
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+            listItem?: "bullet" | "number";
+            markDefs: Array<{
+              _key: string;
+              _type: "markExternalLink";
+              type?: "email" | "file" | "phone" | "url";
+              url?: string;
+              email?: string;
+              phone?: string;
+              file?: {
+                asset?: {
+                  _ref: string;
+                  _type: "reference";
+                  _weak?: boolean;
+                  [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+                };
+                media?: unknown;
+                _type: "file";
+              };
+              link: null;
+            } | {
+              _key: string;
+              _type: "markInternalLink";
+              link: {
+                _id: string;
+                _type: "article";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "page";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "project";
+                title: string | null;
+                slug: Slug | null;
+              } | null;
+            } | {
+              label?: string;
+              text?: string;
+              _type: "popupText";
+              _key: string;
+              link: null;
+            }> | null;
+            level?: number;
+            _type: "block";
+            _key: string;
+          } | {
+            _key: string;
+            _type: "complexImage";
+            asset?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: "image";
+            };
+            alt?: string;
+            caption?: string;
+            width?: number;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "quoteBlock";
+            quote?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            };
+            context?: string;
+            showSource?: boolean;
+            showCommentary?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "referenceCollection";
+            title?: string;
+            introduction?: string;
+            source?: "filter" | "manual";
+            items?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "article";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "page";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "project";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "thing";
+            }>;
+            filter?: {
+              contentTypes?: Array<string>;
+              kinds?: Array<string>;
+              topics?: Array<{
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                _key: string;
+                [internalGroqTypeReferenceTo]?: "topic";
+              }>;
+              featuredOnly?: boolean;
+              includeHistorical?: boolean;
+              limit?: number;
+              order?: "manual" | "newest" | "title";
+            };
+            presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+            showFilters?: boolean;
+            showNotes?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "separator";
+            info?: string;
+            markDefs: null;
+          }> | null;
+        } | {
+          _id: string;
+          _type: "thing";
+          title: string | null;
+          slug: null;
+          kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+          creator: string | null;
+          url: string | null;
+          externalUrl: null;
+          summary: string | null;
+          excerpt: null;
+          year: number | null;
+          publishedAt: null;
+          featured: boolean | null;
+          historical: null;
+          sortOrder: number | null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: {
+            userBookId: string | null;
+            highlightId: null;
+            externalId: string | null;
+            source: string | null;
+            sourceUrl: string | null;
+            readwiseUrl: string | null;
+            coverImageUrl: string | null;
+            color: null;
+            highlightedAt: null;
+            sourceUpdatedAt: null;
+            syncedAt: string | null;
+          } | null;
+          sourceItem: null;
+          image: {
+            alt: string | null;
+            caption: string | null;
+            width: number | null;
+            asset: {
+              crop: SanityImageCrop | null;
+              hotspot: SanityImageHotspot | null;
+              asset: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              } | null;
+              lqip: string | null;
+            } | null;
+          } | null;
+          cover: null;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          commentary: null;
+        }> | null;
+        filter: {
+          contentTypes?: Array<string>;
+          kinds?: Array<string>;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          featuredOnly?: boolean;
+          includeHistorical?: boolean;
+          limit?: number;
+          order?: "manual" | "newest" | "title";
+        } | null;
+        presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+        showFilters?: boolean;
+        showNotes?: boolean;
+        markDefs: Array<never>;
+        quote: null;
+      } | {
+        _key: string;
+        _type: "separator";
+        info?: string;
+        markDefs: Array<never>;
+        items: null;
+        filter: null;
+        quote: null;
+      }> | null;
     } | {
       _id: string;
       _type: "thing";
@@ -3598,6 +9166,28 @@ export type PAGE_QUERYResult = {
       featured: boolean | null;
       historical: null;
       sortOrder: number | null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: {
+        userBookId: string | null;
+        highlightId: null;
+        externalId: string | null;
+        source: string | null;
+        sourceUrl: string | null;
+        readwiseUrl: string | null;
+        coverImageUrl: string | null;
+        color: null;
+        highlightedAt: null;
+        sourceUpdatedAt: null;
+        syncedAt: string | null;
+      } | null;
+      sourceItem: null;
       image: {
         alt: string | null;
         caption: string | null;
@@ -3676,6 +9266,7 @@ export type PAGE_QUERYResult = {
         _key: string;
         items: null;
         filter: null;
+        quote: null;
       } | {
         _key: string;
         _type: "complexImage";
@@ -3694,6 +9285,219 @@ export type PAGE_QUERYResult = {
         alt?: string;
         caption?: string;
         width?: number;
+        markDefs: Array<never>;
+        items: null;
+        filter: null;
+        quote: null;
+      } | {
+        _key: string;
+        _type: "quoteBlock";
+        quote: {
+          _id: string;
+          _type: "quote";
+          text: string | null;
+          attribution: string | null;
+          location: string | null;
+          locationType: string | null;
+          sourceUrl: string | null;
+          sourceNote: string | null;
+          origin: "manual" | "readwise" | null;
+          sourceState: "active" | "archived" | null;
+          featured: boolean | null;
+          sortOrder: number | null;
+          tags: Array<string> | null;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          readwise: {
+            highlightId: string | null;
+            externalId: string | null;
+            readwiseUrl: string | null;
+            color: string | null;
+            highlightedAt: string | null;
+            sourceUpdatedAt: string | null;
+            syncedAt: string | null;
+          } | null;
+          sourceItem: {
+            _id: string;
+            _type: "thing";
+            title: string | null;
+            kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+            creator: string | null;
+            url: string | null;
+            summary: string | null;
+            year: number | null;
+            image: {
+              asset: {
+                asset?: {
+                  _ref: string;
+                  _type: "reference";
+                  _weak?: boolean;
+                  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+                };
+                media?: unknown;
+                hotspot?: SanityImageHotspot;
+                crop?: SanityImageCrop;
+                _type: "image";
+              } | null;
+              alt: string | null;
+              caption: string | null;
+              hotspot: null;
+              crop: null;
+            } | null;
+          } | null;
+          commentary: Array<{
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+            listItem?: "bullet" | "number";
+            markDefs: Array<{
+              _key: string;
+              _type: "markExternalLink";
+              type?: "email" | "file" | "phone" | "url";
+              url?: string;
+              email?: string;
+              phone?: string;
+              file?: {
+                asset?: {
+                  _ref: string;
+                  _type: "reference";
+                  _weak?: boolean;
+                  [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+                };
+                media?: unknown;
+                _type: "file";
+              };
+              link: null;
+            } | {
+              _key: string;
+              _type: "markInternalLink";
+              link: {
+                _id: string;
+                _type: "article";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "page";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "project";
+                title: string | null;
+                slug: Slug | null;
+              } | null;
+            } | {
+              label?: string;
+              text?: string;
+              _type: "popupText";
+              _key: string;
+              link: null;
+            }> | null;
+            level?: number;
+            _type: "block";
+            _key: string;
+          } | {
+            _key: string;
+            _type: "complexImage";
+            asset?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: "image";
+            };
+            alt?: string;
+            caption?: string;
+            width?: number;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "quoteBlock";
+            quote?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            };
+            context?: string;
+            showSource?: boolean;
+            showCommentary?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "referenceCollection";
+            title?: string;
+            introduction?: string;
+            source?: "filter" | "manual";
+            items?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "article";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "page";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "project";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "thing";
+            }>;
+            filter?: {
+              contentTypes?: Array<string>;
+              kinds?: Array<string>;
+              topics?: Array<{
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                _key: string;
+                [internalGroqTypeReferenceTo]?: "topic";
+              }>;
+              featuredOnly?: boolean;
+              includeHistorical?: boolean;
+              limit?: number;
+              order?: "manual" | "newest" | "title";
+            };
+            presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+            showFilters?: boolean;
+            showNotes?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "separator";
+            info?: string;
+            markDefs: null;
+          }> | null;
+        } | null;
+        context?: string;
+        showSource?: boolean;
+        showCommentary?: boolean;
         markDefs: Array<never>;
         items: null;
         filter: null;
@@ -3719,6 +9523,16 @@ export type PAGE_QUERYResult = {
           featured: boolean | null;
           historical: null;
           sortOrder: null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: null;
+          sourceItem: null;
           image: null;
           cover: {
             alt: string | null;
@@ -3742,6 +9556,7 @@ export type PAGE_QUERYResult = {
             slug: Slug | null;
             color: string | null;
           }> | null;
+          commentary: null;
         } | {
           _id: string;
           _type: "page";
@@ -3758,9 +9573,20 @@ export type PAGE_QUERYResult = {
           featured: null;
           historical: null;
           sortOrder: null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: null;
+          sourceItem: null;
           image: null;
           cover: null;
           topics: null;
+          commentary: null;
         } | {
           _id: string;
           _type: "project";
@@ -3777,6 +9603,16 @@ export type PAGE_QUERYResult = {
           featured: boolean | null;
           historical: boolean | null;
           sortOrder: null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: null;
+          sourceItem: null;
           image: null;
           cover: {
             alt: string | null;
@@ -3799,6 +9635,207 @@ export type PAGE_QUERYResult = {
             title: string | null;
             slug: Slug | null;
             color: string | null;
+          }> | null;
+          commentary: null;
+        } | {
+          _id: string;
+          _type: "quote";
+          title: null;
+          slug: null;
+          kind: null;
+          creator: null;
+          url: null;
+          externalUrl: null;
+          summary: null;
+          excerpt: null;
+          year: null;
+          publishedAt: null;
+          featured: boolean | null;
+          historical: null;
+          sortOrder: number | null;
+          text: string | null;
+          attribution: string | null;
+          location: string | null;
+          locationType: string | null;
+          sourceUrl: string | null;
+          sourceNote: string | null;
+          origin: "manual" | "readwise" | null;
+          sourceState: "active" | "archived" | null;
+          readwise: {
+            userBookId: null;
+            highlightId: string | null;
+            externalId: string | null;
+            source: null;
+            sourceUrl: null;
+            readwiseUrl: string | null;
+            coverImageUrl: null;
+            color: string | null;
+            highlightedAt: string | null;
+            sourceUpdatedAt: string | null;
+            syncedAt: string | null;
+          } | null;
+          sourceItem: {
+            _id: string;
+            _type: "thing";
+            title: string | null;
+            kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+            creator: string | null;
+            url: string | null;
+            summary: string | null;
+            year: number | null;
+          } | null;
+          image: null;
+          cover: null;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          commentary: Array<{
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+            listItem?: "bullet" | "number";
+            markDefs: Array<{
+              _key: string;
+              _type: "markExternalLink";
+              type?: "email" | "file" | "phone" | "url";
+              url?: string;
+              email?: string;
+              phone?: string;
+              file?: {
+                asset?: {
+                  _ref: string;
+                  _type: "reference";
+                  _weak?: boolean;
+                  [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+                };
+                media?: unknown;
+                _type: "file";
+              };
+              link: null;
+            } | {
+              _key: string;
+              _type: "markInternalLink";
+              link: {
+                _id: string;
+                _type: "article";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "page";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "project";
+                title: string | null;
+                slug: Slug | null;
+              } | null;
+            } | {
+              label?: string;
+              text?: string;
+              _type: "popupText";
+              _key: string;
+              link: null;
+            }> | null;
+            level?: number;
+            _type: "block";
+            _key: string;
+          } | {
+            _key: string;
+            _type: "complexImage";
+            asset?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: "image";
+            };
+            alt?: string;
+            caption?: string;
+            width?: number;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "quoteBlock";
+            quote?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            };
+            context?: string;
+            showSource?: boolean;
+            showCommentary?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "referenceCollection";
+            title?: string;
+            introduction?: string;
+            source?: "filter" | "manual";
+            items?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "article";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "page";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "project";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "thing";
+            }>;
+            filter?: {
+              contentTypes?: Array<string>;
+              kinds?: Array<string>;
+              topics?: Array<{
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                _key: string;
+                [internalGroqTypeReferenceTo]?: "topic";
+              }>;
+              featuredOnly?: boolean;
+              includeHistorical?: boolean;
+              limit?: number;
+              order?: "manual" | "newest" | "title";
+            };
+            presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+            showFilters?: boolean;
+            showNotes?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "separator";
+            info?: string;
+            markDefs: null;
           }> | null;
         } | {
           _id: string;
@@ -3816,6 +9853,28 @@ export type PAGE_QUERYResult = {
           featured: boolean | null;
           historical: null;
           sortOrder: number | null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: {
+            userBookId: string | null;
+            highlightId: null;
+            externalId: string | null;
+            source: string | null;
+            sourceUrl: string | null;
+            readwiseUrl: string | null;
+            coverImageUrl: string | null;
+            color: null;
+            highlightedAt: null;
+            sourceUpdatedAt: null;
+            syncedAt: string | null;
+          } | null;
+          sourceItem: null;
           image: {
             alt: string | null;
             caption: string | null;
@@ -3839,6 +9898,7 @@ export type PAGE_QUERYResult = {
             slug: Slug | null;
             color: string | null;
           }> | null;
+          commentary: null;
         }> | null;
         filter: {
           contentTypes?: Array<string>;
@@ -3858,6 +9918,7 @@ export type PAGE_QUERYResult = {
         showFilters?: boolean;
         showNotes?: boolean;
         markDefs: Array<never>;
+        quote: null;
       } | {
         _key: string;
         _type: "separator";
@@ -3865,7 +9926,9 @@ export type PAGE_QUERYResult = {
         markDefs: Array<never>;
         items: null;
         filter: null;
+        quote: null;
       }> | null;
+      commentary: null;
     }> | null;
     filter: {
       contentTypes?: Array<string>;
@@ -3887,6 +9950,7 @@ export type PAGE_QUERYResult = {
     image: null;
     richBody: null;
     links: null;
+    quote: null;
   } | {
     _key: string;
     _type: "richTextBlock";
@@ -3894,6 +9958,8 @@ export type PAGE_QUERYResult = {
     body?: Array<{
       _key: string;
     } & ComplexImage | {
+      _key: string;
+    } & QuoteBlock | {
       _key: string;
     } & ReferenceCollection | {
       _key: string;
@@ -3976,6 +10042,7 @@ export type PAGE_QUERYResult = {
       _key: string;
       items: null;
       filter: null;
+      quote: null;
     } | {
       _key: string;
       _type: "complexImage";
@@ -3994,6 +10061,219 @@ export type PAGE_QUERYResult = {
       alt?: string;
       caption?: string;
       width?: number;
+      markDefs: Array<never>;
+      items: null;
+      filter: null;
+      quote: null;
+    } | {
+      _key: string;
+      _type: "quoteBlock";
+      quote: {
+        _id: string;
+        _type: "quote";
+        text: string | null;
+        attribution: string | null;
+        location: string | null;
+        locationType: string | null;
+        sourceUrl: string | null;
+        sourceNote: string | null;
+        origin: "manual" | "readwise" | null;
+        sourceState: "active" | "archived" | null;
+        featured: boolean | null;
+        sortOrder: number | null;
+        tags: Array<string> | null;
+        topics: Array<{
+          _id: string;
+          title: string | null;
+          slug: Slug | null;
+          color: string | null;
+        }> | null;
+        readwise: {
+          highlightId: string | null;
+          externalId: string | null;
+          readwiseUrl: string | null;
+          color: string | null;
+          highlightedAt: string | null;
+          sourceUpdatedAt: string | null;
+          syncedAt: string | null;
+        } | null;
+        sourceItem: {
+          _id: string;
+          _type: "thing";
+          title: string | null;
+          kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+          creator: string | null;
+          url: string | null;
+          summary: string | null;
+          year: number | null;
+          image: {
+            asset: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: "image";
+            } | null;
+            alt: string | null;
+            caption: string | null;
+            hotspot: null;
+            crop: null;
+          } | null;
+        } | null;
+        commentary: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs: Array<{
+            _key: string;
+            _type: "markExternalLink";
+            type?: "email" | "file" | "phone" | "url";
+            url?: string;
+            email?: string;
+            phone?: string;
+            file?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+              };
+              media?: unknown;
+              _type: "file";
+            };
+            link: null;
+          } | {
+            _key: string;
+            _type: "markInternalLink";
+            link: {
+              _id: string;
+              _type: "article";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "page";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "project";
+              title: string | null;
+              slug: Slug | null;
+            } | null;
+          } | {
+            label?: string;
+            text?: string;
+            _type: "popupText";
+            _key: string;
+            link: null;
+          }> | null;
+          level?: number;
+          _type: "block";
+          _key: string;
+        } | {
+          _key: string;
+          _type: "complexImage";
+          asset?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+          caption?: string;
+          width?: number;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "quoteBlock";
+          quote?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          };
+          context?: string;
+          showSource?: boolean;
+          showCommentary?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "referenceCollection";
+          title?: string;
+          introduction?: string;
+          source?: "filter" | "manual";
+          items?: Array<{
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "article";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "page";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "project";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "thing";
+          }>;
+          filter?: {
+            contentTypes?: Array<string>;
+            kinds?: Array<string>;
+            topics?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              _key: string;
+              [internalGroqTypeReferenceTo]?: "topic";
+            }>;
+            featuredOnly?: boolean;
+            includeHistorical?: boolean;
+            limit?: number;
+            order?: "manual" | "newest" | "title";
+          };
+          presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+          showFilters?: boolean;
+          showNotes?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "separator";
+          info?: string;
+          markDefs: null;
+        }> | null;
+      } | null;
+      context?: string;
+      showSource?: boolean;
+      showCommentary?: boolean;
       markDefs: Array<never>;
       items: null;
       filter: null;
@@ -4019,6 +10299,16 @@ export type PAGE_QUERYResult = {
         featured: boolean | null;
         historical: null;
         sortOrder: null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: null;
+        sourceItem: null;
         image: null;
         cover: {
           alt: string | null;
@@ -4042,6 +10332,7 @@ export type PAGE_QUERYResult = {
           slug: Slug | null;
           color: string | null;
         }> | null;
+        commentary: null;
       } | {
         _id: string;
         _type: "page";
@@ -4058,9 +10349,20 @@ export type PAGE_QUERYResult = {
         featured: null;
         historical: null;
         sortOrder: null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: null;
+        sourceItem: null;
         image: null;
         cover: null;
         topics: null;
+        commentary: null;
       } | {
         _id: string;
         _type: "project";
@@ -4077,6 +10379,16 @@ export type PAGE_QUERYResult = {
         featured: boolean | null;
         historical: boolean | null;
         sortOrder: null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: null;
+        sourceItem: null;
         image: null;
         cover: {
           alt: string | null;
@@ -4099,6 +10411,207 @@ export type PAGE_QUERYResult = {
           title: string | null;
           slug: Slug | null;
           color: string | null;
+        }> | null;
+        commentary: null;
+      } | {
+        _id: string;
+        _type: "quote";
+        title: null;
+        slug: null;
+        kind: null;
+        creator: null;
+        url: null;
+        externalUrl: null;
+        summary: null;
+        excerpt: null;
+        year: null;
+        publishedAt: null;
+        featured: boolean | null;
+        historical: null;
+        sortOrder: number | null;
+        text: string | null;
+        attribution: string | null;
+        location: string | null;
+        locationType: string | null;
+        sourceUrl: string | null;
+        sourceNote: string | null;
+        origin: "manual" | "readwise" | null;
+        sourceState: "active" | "archived" | null;
+        readwise: {
+          userBookId: null;
+          highlightId: string | null;
+          externalId: string | null;
+          source: null;
+          sourceUrl: null;
+          readwiseUrl: string | null;
+          coverImageUrl: null;
+          color: string | null;
+          highlightedAt: string | null;
+          sourceUpdatedAt: string | null;
+          syncedAt: string | null;
+        } | null;
+        sourceItem: {
+          _id: string;
+          _type: "thing";
+          title: string | null;
+          kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+          creator: string | null;
+          url: string | null;
+          summary: string | null;
+          year: number | null;
+        } | null;
+        image: null;
+        cover: null;
+        topics: Array<{
+          _id: string;
+          title: string | null;
+          slug: Slug | null;
+          color: string | null;
+        }> | null;
+        commentary: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs: Array<{
+            _key: string;
+            _type: "markExternalLink";
+            type?: "email" | "file" | "phone" | "url";
+            url?: string;
+            email?: string;
+            phone?: string;
+            file?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+              };
+              media?: unknown;
+              _type: "file";
+            };
+            link: null;
+          } | {
+            _key: string;
+            _type: "markInternalLink";
+            link: {
+              _id: string;
+              _type: "article";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "page";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "project";
+              title: string | null;
+              slug: Slug | null;
+            } | null;
+          } | {
+            label?: string;
+            text?: string;
+            _type: "popupText";
+            _key: string;
+            link: null;
+          }> | null;
+          level?: number;
+          _type: "block";
+          _key: string;
+        } | {
+          _key: string;
+          _type: "complexImage";
+          asset?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+          caption?: string;
+          width?: number;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "quoteBlock";
+          quote?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          };
+          context?: string;
+          showSource?: boolean;
+          showCommentary?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "referenceCollection";
+          title?: string;
+          introduction?: string;
+          source?: "filter" | "manual";
+          items?: Array<{
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "article";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "page";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "project";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "thing";
+          }>;
+          filter?: {
+            contentTypes?: Array<string>;
+            kinds?: Array<string>;
+            topics?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              _key: string;
+              [internalGroqTypeReferenceTo]?: "topic";
+            }>;
+            featuredOnly?: boolean;
+            includeHistorical?: boolean;
+            limit?: number;
+            order?: "manual" | "newest" | "title";
+          };
+          presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+          showFilters?: boolean;
+          showNotes?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "separator";
+          info?: string;
+          markDefs: null;
         }> | null;
       } | {
         _id: string;
@@ -4116,6 +10629,28 @@ export type PAGE_QUERYResult = {
         featured: boolean | null;
         historical: null;
         sortOrder: number | null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: {
+          userBookId: string | null;
+          highlightId: null;
+          externalId: string | null;
+          source: string | null;
+          sourceUrl: string | null;
+          readwiseUrl: string | null;
+          coverImageUrl: string | null;
+          color: null;
+          highlightedAt: null;
+          sourceUpdatedAt: null;
+          syncedAt: string | null;
+        } | null;
+        sourceItem: null;
         image: {
           alt: string | null;
           caption: string | null;
@@ -4139,6 +10674,7 @@ export type PAGE_QUERYResult = {
           slug: Slug | null;
           color: string | null;
         }> | null;
+        commentary: null;
       }> | null;
       filter: {
         contentTypes?: Array<string>;
@@ -4158,6 +10694,7 @@ export type PAGE_QUERYResult = {
       showFilters?: boolean;
       showNotes?: boolean;
       markDefs: Array<never>;
+      quote: null;
     } | {
       _key: string;
       _type: "separator";
@@ -4165,10 +10702,12 @@ export type PAGE_QUERYResult = {
       markDefs: Array<never>;
       items: null;
       filter: null;
+      quote: null;
     }> | null;
     links: null;
     items: null;
     filter: null;
+    quote: null;
   } | {
     _key: string;
     _type: "separator";
@@ -4178,6 +10717,7 @@ export type PAGE_QUERYResult = {
     links: null;
     items: null;
     filter: null;
+    quote: null;
   }> | null;
   library: Array<{
     _id: string;
@@ -4195,6 +10735,17 @@ export type PAGE_QUERYResult = {
     featured: boolean | null;
     historical: null;
     sortOrder: null;
+    text: null;
+    attribution: null;
+    location: null;
+    locationType: null;
+    sourceUrl: null;
+    sourceNote: null;
+    origin: null;
+    sourceState: null;
+    tags: null;
+    readwise: null;
+    sourceItem: null;
     image: null;
     cover: {
       alt: string | null;
@@ -4219,6 +10770,7 @@ export type PAGE_QUERYResult = {
       color: string | null;
     }> | null;
     notes: null;
+    commentary: null;
   } | {
     _id: string;
     _type: "project";
@@ -4235,6 +10787,17 @@ export type PAGE_QUERYResult = {
     featured: boolean | null;
     historical: boolean | null;
     sortOrder: null;
+    text: null;
+    attribution: null;
+    location: null;
+    locationType: null;
+    sourceUrl: null;
+    sourceNote: null;
+    origin: null;
+    sourceState: null;
+    tags: null;
+    readwise: null;
+    sourceItem: null;
     image: null;
     cover: {
       alt: string | null;
@@ -4259,6 +10822,7 @@ export type PAGE_QUERYResult = {
       color: string | null;
     }> | null;
     notes: null;
+    commentary: null;
   } | {
     _id: string;
     _type: "thing";
@@ -4275,6 +10839,29 @@ export type PAGE_QUERYResult = {
     featured: boolean | null;
     historical: null;
     sortOrder: number | null;
+    text: null;
+    attribution: null;
+    location: null;
+    locationType: null;
+    sourceUrl: null;
+    sourceNote: null;
+    origin: null;
+    sourceState: null;
+    tags: Array<string> | null;
+    readwise: {
+      userBookId: string | null;
+      highlightId: null;
+      externalId: string | null;
+      source: string | null;
+      sourceUrl: string | null;
+      readwiseUrl: string | null;
+      coverImageUrl: string | null;
+      color: null;
+      highlightedAt: null;
+      sourceUpdatedAt: null;
+      syncedAt: string | null;
+    } | null;
+    sourceItem: null;
     image: {
       alt: string | null;
       caption: string | null;
@@ -4377,6 +10964,20 @@ export type PAGE_QUERYResult = {
       items: null;
     } | {
       _key: string;
+      _type: "quoteBlock";
+      quote?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "quote";
+      };
+      context?: string;
+      showSource?: boolean;
+      showCommentary?: boolean;
+      markDefs: null;
+      items: null;
+    } | {
+      _key: string;
       _type: "referenceCollection";
       title?: string;
       introduction?: string;
@@ -4422,6 +11023,19 @@ export type PAGE_QUERYResult = {
         historical: boolean | null;
       } | {
         _id: string;
+        _type: "quote";
+        title: null;
+        slug: null;
+        kind: null;
+        creator: null;
+        url: null;
+        summary: null;
+        excerpt: null;
+        year: null;
+        featured: boolean | null;
+        historical: null;
+      } | {
+        _id: string;
         _type: "thing";
         title: string | null;
         slug: null;
@@ -4460,12 +11074,13 @@ export type PAGE_QUERYResult = {
       markDefs: null;
       items: null;
     }> | null;
+    commentary: null;
   }>;
 } | null;
 
 // Source: ./app/sanity/queries/project.ts
 // Variable: PROJECT_QUERY
-// Query: *[_type == "project" && slug.current == $slug][0]{    _id, _type, title, slug, summary, url, year, historical,    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color},    meta{title, description, keywords, ogImage{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }}, visibility},    body[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color}  },  filter{..., topics[]->{_id, title, slug, color}}}, components[]{  ...,  image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},  "richBody": body[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color}  },  filter{..., topics[]->{_id, title, slug, color}}},  links[]{    ...,    reference->{_id, _type, title, slug},    externalLink{..., "fileUrl": file.asset->url}  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }}, cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color},    notes[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color}  },  filter{..., topics[]->{_id, title, slug, color}}}  },  filter{..., topics[]->{_id, title, slug, color}}},    "library": *[_type in ["thing", "project", "article"] && (meta.visibility == "public" || !defined(meta.visibility))]{  _id,  _type,  title,  slug,  kind,  creator,  url,  externalUrl,  summary,  excerpt,  year,  publishedAt,  featured,  historical,  sortOrder,  image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},  cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},  topics[]->{_id, title, slug, color},  notes[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}},    items[]->{_id, _type, title, slug, kind, creator, url, summary, excerpt, year, featured, historical}  }}  }
+// Query: *[_type == "project" && slug.current == $slug][0]{    _id, _type, title, slug, summary, url, year, historical,    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color},    meta{title, description, keywords, ogImage{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }}, visibility},    body[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    text, attribution, location, locationType, sourceUrl, sourceNote,    origin, sourceState,    readwise{      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt    },    sourceItem->{_id, _type, title, kind, creator, url, summary, year},    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color},    commentary[]{      ...,      markDefs[]{..., link->{_id, _type, title, slug}}    }  },  filter{..., topics[]->{_id, title, slug, color}},  quote->{  _id,  _type,  text,  attribution,  location,  locationType,  sourceUrl,  sourceNote,  origin,  sourceState,  featured,  sortOrder,  tags,  topics[]->{_id, title, slug, color},  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},  sourceItem->{    _id, _type, title, kind, creator, url, summary, year,    image{asset, alt, caption, hotspot, crop}  },  commentary[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}}  }}}, components[]{  ...,  image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},  "richBody": body[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    text, attribution, location, locationType, sourceUrl, sourceNote,    origin, sourceState,    readwise{      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt    },    sourceItem->{_id, _type, title, kind, creator, url, summary, year},    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color},    commentary[]{      ...,      markDefs[]{..., link->{_id, _type, title, slug}}    }  },  filter{..., topics[]->{_id, title, slug, color}},  quote->{  _id,  _type,  text,  attribution,  location,  locationType,  sourceUrl,  sourceNote,  origin,  sourceState,  featured,  sortOrder,  tags,  topics[]->{_id, title, slug, color},  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},  sourceItem->{    _id, _type, title, kind, creator, url, summary, year,    image{asset, alt, caption, hotspot, crop}  },  commentary[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}}  }}},  links[]{    ...,    reference->{_id, _type, title, slug},    externalLink{..., "fileUrl": file.asset->url}  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    text, attribution, location, locationType, sourceUrl, sourceNote,    origin, sourceState,    readwise{      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt    },    sourceItem->{_id, _type, title, kind, creator, url, summary, year},    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }}, cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color},    notes[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    text, attribution, location, locationType, sourceUrl, sourceNote,    origin, sourceState,    readwise{      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt    },    sourceItem->{_id, _type, title, kind, creator, url, summary, year},    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color},    commentary[]{      ...,      markDefs[]{..., link->{_id, _type, title, slug}}    }  },  filter{..., topics[]->{_id, title, slug, color}},  quote->{  _id,  _type,  text,  attribution,  location,  locationType,  sourceUrl,  sourceNote,  origin,  sourceState,  featured,  sortOrder,  tags,  topics[]->{_id, title, slug, color},  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},  sourceItem->{    _id, _type, title, kind, creator, url, summary, year,    image{asset, alt, caption, hotspot, crop}  },  commentary[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}}  }}}, commentary[]{  ...,  "markDefs": coalesce(markDefs, [])[]{    ...,    link->{      _id,      _type,      slug    }  },  items[]->{    _id, _type, title, slug, kind, creator, url, externalUrl,    summary, excerpt, year, publishedAt, featured, historical, sortOrder,    text, attribution, location, locationType, sourceUrl, sourceNote,    origin, sourceState,    readwise{      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt    },    sourceItem->{_id, _type, title, kind, creator, url, summary, year},    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},    topics[]->{_id, title, slug, color},    commentary[]{      ...,      markDefs[]{..., link->{_id, _type, title, slug}}    }  },  filter{..., topics[]->{_id, title, slug, color}},  quote->{  _id,  _type,  text,  attribution,  location,  locationType,  sourceUrl,  sourceNote,  origin,  sourceState,  featured,  sortOrder,  tags,  topics[]->{_id, title, slug, color},  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},  sourceItem->{    _id, _type, title, kind, creator, url, summary, year,    image{asset, alt, caption, hotspot, crop}  },  commentary[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}}  }}}  },  filter{..., topics[]->{_id, title, slug, color}},  quote->{  _id,  _type,  text,  attribution,  location,  locationType,  sourceUrl,  sourceNote,  origin,  sourceState,  featured,  sortOrder,  tags,  topics[]->{_id, title, slug, color},  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},  sourceItem->{    _id, _type, title, kind, creator, url, summary, year,    image{asset, alt, caption, hotspot, crop}  },  commentary[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}}  }}},    "library": *[_type in ["thing", "project", "article"] && (meta.visibility == "public" || !defined(meta.visibility))]{  _id,  _type,  title,  slug,  kind,  creator,  url,  externalUrl,  summary,  excerpt,  year,  publishedAt,  featured,  historical,  sortOrder,  text,  attribution,  location,  locationType,  sourceUrl,  sourceNote,  origin,  sourceState,  tags,  readwise{    userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,    coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt  },  sourceItem->{    _id, _type, title, kind, creator, url, summary, year,    image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }}  },  image{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},  cover{  alt,  caption,  width,  asset{    crop,    hotspot,    asset,    "lqip": asset->metadata.lqip  }},  topics[]->{_id, title, slug, color},  notes[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}},    items[]->{_id, _type, title, slug, kind, creator, url, summary, excerpt, year, featured, historical}  },  commentary[]{    ...,    markDefs[]{..., link->{_id, _type, title, slug}}  }}  }
 export type PROJECT_QUERYResult = {
   _id: string;
   _type: "project";
@@ -4574,6 +11189,7 @@ export type PROJECT_QUERYResult = {
     _key: string;
     items: null;
     filter: null;
+    quote: null;
   } | {
     _key: string;
     _type: "complexImage";
@@ -4592,6 +11208,219 @@ export type PROJECT_QUERYResult = {
     alt?: string;
     caption?: string;
     width?: number;
+    markDefs: Array<never>;
+    items: null;
+    filter: null;
+    quote: null;
+  } | {
+    _key: string;
+    _type: "quoteBlock";
+    quote: {
+      _id: string;
+      _type: "quote";
+      text: string | null;
+      attribution: string | null;
+      location: string | null;
+      locationType: string | null;
+      sourceUrl: string | null;
+      sourceNote: string | null;
+      origin: "manual" | "readwise" | null;
+      sourceState: "active" | "archived" | null;
+      featured: boolean | null;
+      sortOrder: number | null;
+      tags: Array<string> | null;
+      topics: Array<{
+        _id: string;
+        title: string | null;
+        slug: Slug | null;
+        color: string | null;
+      }> | null;
+      readwise: {
+        highlightId: string | null;
+        externalId: string | null;
+        readwiseUrl: string | null;
+        color: string | null;
+        highlightedAt: string | null;
+        sourceUpdatedAt: string | null;
+        syncedAt: string | null;
+      } | null;
+      sourceItem: {
+        _id: string;
+        _type: "thing";
+        title: string | null;
+        kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+        creator: string | null;
+        url: string | null;
+        summary: string | null;
+        year: number | null;
+        image: {
+          asset: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          } | null;
+          alt: string | null;
+          caption: string | null;
+          hotspot: null;
+          crop: null;
+        } | null;
+      } | null;
+      commentary: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs: Array<{
+          _key: string;
+          _type: "markExternalLink";
+          type?: "email" | "file" | "phone" | "url";
+          url?: string;
+          email?: string;
+          phone?: string;
+          file?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+            };
+            media?: unknown;
+            _type: "file";
+          };
+          link: null;
+        } | {
+          _key: string;
+          _type: "markInternalLink";
+          link: {
+            _id: string;
+            _type: "article";
+            title: string | null;
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "page";
+            title: string | null;
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "project";
+            title: string | null;
+            slug: Slug | null;
+          } | null;
+        } | {
+          label?: string;
+          text?: string;
+          _type: "popupText";
+          _key: string;
+          link: null;
+        }> | null;
+        level?: number;
+        _type: "block";
+        _key: string;
+      } | {
+        _key: string;
+        _type: "complexImage";
+        asset?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        alt?: string;
+        caption?: string;
+        width?: number;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "quoteBlock";
+        quote?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "quote";
+        };
+        context?: string;
+        showSource?: boolean;
+        showCommentary?: boolean;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "referenceCollection";
+        title?: string;
+        introduction?: string;
+        source?: "filter" | "manual";
+        items?: Array<{
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "article";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "page";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "project";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "quote";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "thing";
+        }>;
+        filter?: {
+          contentTypes?: Array<string>;
+          kinds?: Array<string>;
+          topics?: Array<{
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            _key: string;
+            [internalGroqTypeReferenceTo]?: "topic";
+          }>;
+          featuredOnly?: boolean;
+          includeHistorical?: boolean;
+          limit?: number;
+          order?: "manual" | "newest" | "title";
+        };
+        presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+        showFilters?: boolean;
+        showNotes?: boolean;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "separator";
+        info?: string;
+        markDefs: null;
+      }> | null;
+    } | null;
+    context?: string;
+    showSource?: boolean;
+    showCommentary?: boolean;
     markDefs: Array<never>;
     items: null;
     filter: null;
@@ -4617,6 +11446,16 @@ export type PROJECT_QUERYResult = {
       featured: boolean | null;
       historical: null;
       sortOrder: null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: null;
+      sourceItem: null;
       image: null;
       cover: {
         alt: string | null;
@@ -4640,6 +11479,7 @@ export type PROJECT_QUERYResult = {
         slug: Slug | null;
         color: string | null;
       }> | null;
+      commentary: null;
     } | {
       _id: string;
       _type: "page";
@@ -4656,9 +11496,20 @@ export type PROJECT_QUERYResult = {
       featured: null;
       historical: null;
       sortOrder: null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: null;
+      sourceItem: null;
       image: null;
       cover: null;
       topics: null;
+      commentary: null;
     } | {
       _id: string;
       _type: "project";
@@ -4675,6 +11526,16 @@ export type PROJECT_QUERYResult = {
       featured: boolean | null;
       historical: boolean | null;
       sortOrder: null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: null;
+      sourceItem: null;
       image: null;
       cover: {
         alt: string | null;
@@ -4697,6 +11558,207 @@ export type PROJECT_QUERYResult = {
         title: string | null;
         slug: Slug | null;
         color: string | null;
+      }> | null;
+      commentary: null;
+    } | {
+      _id: string;
+      _type: "quote";
+      title: null;
+      slug: null;
+      kind: null;
+      creator: null;
+      url: null;
+      externalUrl: null;
+      summary: null;
+      excerpt: null;
+      year: null;
+      publishedAt: null;
+      featured: boolean | null;
+      historical: null;
+      sortOrder: number | null;
+      text: string | null;
+      attribution: string | null;
+      location: string | null;
+      locationType: string | null;
+      sourceUrl: string | null;
+      sourceNote: string | null;
+      origin: "manual" | "readwise" | null;
+      sourceState: "active" | "archived" | null;
+      readwise: {
+        userBookId: null;
+        highlightId: string | null;
+        externalId: string | null;
+        source: null;
+        sourceUrl: null;
+        readwiseUrl: string | null;
+        coverImageUrl: null;
+        color: string | null;
+        highlightedAt: string | null;
+        sourceUpdatedAt: string | null;
+        syncedAt: string | null;
+      } | null;
+      sourceItem: {
+        _id: string;
+        _type: "thing";
+        title: string | null;
+        kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+        creator: string | null;
+        url: string | null;
+        summary: string | null;
+        year: number | null;
+      } | null;
+      image: null;
+      cover: null;
+      topics: Array<{
+        _id: string;
+        title: string | null;
+        slug: Slug | null;
+        color: string | null;
+      }> | null;
+      commentary: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs: Array<{
+          _key: string;
+          _type: "markExternalLink";
+          type?: "email" | "file" | "phone" | "url";
+          url?: string;
+          email?: string;
+          phone?: string;
+          file?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+            };
+            media?: unknown;
+            _type: "file";
+          };
+          link: null;
+        } | {
+          _key: string;
+          _type: "markInternalLink";
+          link: {
+            _id: string;
+            _type: "article";
+            title: string | null;
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "page";
+            title: string | null;
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "project";
+            title: string | null;
+            slug: Slug | null;
+          } | null;
+        } | {
+          label?: string;
+          text?: string;
+          _type: "popupText";
+          _key: string;
+          link: null;
+        }> | null;
+        level?: number;
+        _type: "block";
+        _key: string;
+      } | {
+        _key: string;
+        _type: "complexImage";
+        asset?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        alt?: string;
+        caption?: string;
+        width?: number;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "quoteBlock";
+        quote?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "quote";
+        };
+        context?: string;
+        showSource?: boolean;
+        showCommentary?: boolean;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "referenceCollection";
+        title?: string;
+        introduction?: string;
+        source?: "filter" | "manual";
+        items?: Array<{
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "article";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "page";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "project";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "quote";
+        } | {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "thing";
+        }>;
+        filter?: {
+          contentTypes?: Array<string>;
+          kinds?: Array<string>;
+          topics?: Array<{
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            _key: string;
+            [internalGroqTypeReferenceTo]?: "topic";
+          }>;
+          featuredOnly?: boolean;
+          includeHistorical?: boolean;
+          limit?: number;
+          order?: "manual" | "newest" | "title";
+        };
+        presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+        showFilters?: boolean;
+        showNotes?: boolean;
+        markDefs: null;
+      } | {
+        _key: string;
+        _type: "separator";
+        info?: string;
+        markDefs: null;
       }> | null;
     } | {
       _id: string;
@@ -4714,6 +11776,28 @@ export type PROJECT_QUERYResult = {
       featured: boolean | null;
       historical: null;
       sortOrder: number | null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: {
+        userBookId: string | null;
+        highlightId: null;
+        externalId: string | null;
+        source: string | null;
+        sourceUrl: string | null;
+        readwiseUrl: string | null;
+        coverImageUrl: string | null;
+        color: null;
+        highlightedAt: null;
+        sourceUpdatedAt: null;
+        syncedAt: string | null;
+      } | null;
+      sourceItem: null;
       image: {
         alt: string | null;
         caption: string | null;
@@ -4737,6 +11821,7 @@ export type PROJECT_QUERYResult = {
         slug: Slug | null;
         color: string | null;
       }> | null;
+      commentary: null;
     }> | null;
     filter: {
       contentTypes?: Array<string>;
@@ -4756,6 +11841,7 @@ export type PROJECT_QUERYResult = {
     showFilters?: boolean;
     showNotes?: boolean;
     markDefs: Array<never>;
+    quote: null;
   } | {
     _key: string;
     _type: "separator";
@@ -4763,6 +11849,7 @@ export type PROJECT_QUERYResult = {
     markDefs: Array<never>;
     items: null;
     filter: null;
+    quote: null;
   }> | null;
   components: Array<{
     _key: string;
@@ -4787,6 +11874,7 @@ export type PROJECT_QUERYResult = {
     links: null;
     items: null;
     filter: null;
+    quote: null;
   } | {
     _key: string;
     _type: "heroBlock";
@@ -4795,6 +11883,8 @@ export type PROJECT_QUERYResult = {
     body?: Array<{
       _key: string;
     } & ComplexImage | {
+      _key: string;
+    } & QuoteBlock | {
       _key: string;
     } & ReferenceCollection | {
       _key: string;
@@ -4922,6 +12012,7 @@ export type PROJECT_QUERYResult = {
       _key: string;
       items: null;
       filter: null;
+      quote: null;
     } | {
       _key: string;
       _type: "complexImage";
@@ -4940,6 +12031,219 @@ export type PROJECT_QUERYResult = {
       alt?: string;
       caption?: string;
       width?: number;
+      markDefs: Array<never>;
+      items: null;
+      filter: null;
+      quote: null;
+    } | {
+      _key: string;
+      _type: "quoteBlock";
+      quote: {
+        _id: string;
+        _type: "quote";
+        text: string | null;
+        attribution: string | null;
+        location: string | null;
+        locationType: string | null;
+        sourceUrl: string | null;
+        sourceNote: string | null;
+        origin: "manual" | "readwise" | null;
+        sourceState: "active" | "archived" | null;
+        featured: boolean | null;
+        sortOrder: number | null;
+        tags: Array<string> | null;
+        topics: Array<{
+          _id: string;
+          title: string | null;
+          slug: Slug | null;
+          color: string | null;
+        }> | null;
+        readwise: {
+          highlightId: string | null;
+          externalId: string | null;
+          readwiseUrl: string | null;
+          color: string | null;
+          highlightedAt: string | null;
+          sourceUpdatedAt: string | null;
+          syncedAt: string | null;
+        } | null;
+        sourceItem: {
+          _id: string;
+          _type: "thing";
+          title: string | null;
+          kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+          creator: string | null;
+          url: string | null;
+          summary: string | null;
+          year: number | null;
+          image: {
+            asset: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: "image";
+            } | null;
+            alt: string | null;
+            caption: string | null;
+            hotspot: null;
+            crop: null;
+          } | null;
+        } | null;
+        commentary: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs: Array<{
+            _key: string;
+            _type: "markExternalLink";
+            type?: "email" | "file" | "phone" | "url";
+            url?: string;
+            email?: string;
+            phone?: string;
+            file?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+              };
+              media?: unknown;
+              _type: "file";
+            };
+            link: null;
+          } | {
+            _key: string;
+            _type: "markInternalLink";
+            link: {
+              _id: string;
+              _type: "article";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "page";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "project";
+              title: string | null;
+              slug: Slug | null;
+            } | null;
+          } | {
+            label?: string;
+            text?: string;
+            _type: "popupText";
+            _key: string;
+            link: null;
+          }> | null;
+          level?: number;
+          _type: "block";
+          _key: string;
+        } | {
+          _key: string;
+          _type: "complexImage";
+          asset?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+          caption?: string;
+          width?: number;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "quoteBlock";
+          quote?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          };
+          context?: string;
+          showSource?: boolean;
+          showCommentary?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "referenceCollection";
+          title?: string;
+          introduction?: string;
+          source?: "filter" | "manual";
+          items?: Array<{
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "article";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "page";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "project";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "thing";
+          }>;
+          filter?: {
+            contentTypes?: Array<string>;
+            kinds?: Array<string>;
+            topics?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              _key: string;
+              [internalGroqTypeReferenceTo]?: "topic";
+            }>;
+            featuredOnly?: boolean;
+            includeHistorical?: boolean;
+            limit?: number;
+            order?: "manual" | "newest" | "title";
+          };
+          presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+          showFilters?: boolean;
+          showNotes?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "separator";
+          info?: string;
+          markDefs: null;
+        }> | null;
+      } | null;
+      context?: string;
+      showSource?: boolean;
+      showCommentary?: boolean;
       markDefs: Array<never>;
       items: null;
       filter: null;
@@ -4965,6 +12269,16 @@ export type PROJECT_QUERYResult = {
         featured: boolean | null;
         historical: null;
         sortOrder: null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: null;
+        sourceItem: null;
         image: null;
         cover: {
           alt: string | null;
@@ -4988,6 +12302,7 @@ export type PROJECT_QUERYResult = {
           slug: Slug | null;
           color: string | null;
         }> | null;
+        commentary: null;
       } | {
         _id: string;
         _type: "page";
@@ -5004,9 +12319,20 @@ export type PROJECT_QUERYResult = {
         featured: null;
         historical: null;
         sortOrder: null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: null;
+        sourceItem: null;
         image: null;
         cover: null;
         topics: null;
+        commentary: null;
       } | {
         _id: string;
         _type: "project";
@@ -5023,6 +12349,16 @@ export type PROJECT_QUERYResult = {
         featured: boolean | null;
         historical: boolean | null;
         sortOrder: null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: null;
+        sourceItem: null;
         image: null;
         cover: {
           alt: string | null;
@@ -5045,6 +12381,207 @@ export type PROJECT_QUERYResult = {
           title: string | null;
           slug: Slug | null;
           color: string | null;
+        }> | null;
+        commentary: null;
+      } | {
+        _id: string;
+        _type: "quote";
+        title: null;
+        slug: null;
+        kind: null;
+        creator: null;
+        url: null;
+        externalUrl: null;
+        summary: null;
+        excerpt: null;
+        year: null;
+        publishedAt: null;
+        featured: boolean | null;
+        historical: null;
+        sortOrder: number | null;
+        text: string | null;
+        attribution: string | null;
+        location: string | null;
+        locationType: string | null;
+        sourceUrl: string | null;
+        sourceNote: string | null;
+        origin: "manual" | "readwise" | null;
+        sourceState: "active" | "archived" | null;
+        readwise: {
+          userBookId: null;
+          highlightId: string | null;
+          externalId: string | null;
+          source: null;
+          sourceUrl: null;
+          readwiseUrl: string | null;
+          coverImageUrl: null;
+          color: string | null;
+          highlightedAt: string | null;
+          sourceUpdatedAt: string | null;
+          syncedAt: string | null;
+        } | null;
+        sourceItem: {
+          _id: string;
+          _type: "thing";
+          title: string | null;
+          kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+          creator: string | null;
+          url: string | null;
+          summary: string | null;
+          year: number | null;
+        } | null;
+        image: null;
+        cover: null;
+        topics: Array<{
+          _id: string;
+          title: string | null;
+          slug: Slug | null;
+          color: string | null;
+        }> | null;
+        commentary: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs: Array<{
+            _key: string;
+            _type: "markExternalLink";
+            type?: "email" | "file" | "phone" | "url";
+            url?: string;
+            email?: string;
+            phone?: string;
+            file?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+              };
+              media?: unknown;
+              _type: "file";
+            };
+            link: null;
+          } | {
+            _key: string;
+            _type: "markInternalLink";
+            link: {
+              _id: string;
+              _type: "article";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "page";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "project";
+              title: string | null;
+              slug: Slug | null;
+            } | null;
+          } | {
+            label?: string;
+            text?: string;
+            _type: "popupText";
+            _key: string;
+            link: null;
+          }> | null;
+          level?: number;
+          _type: "block";
+          _key: string;
+        } | {
+          _key: string;
+          _type: "complexImage";
+          asset?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+          caption?: string;
+          width?: number;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "quoteBlock";
+          quote?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          };
+          context?: string;
+          showSource?: boolean;
+          showCommentary?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "referenceCollection";
+          title?: string;
+          introduction?: string;
+          source?: "filter" | "manual";
+          items?: Array<{
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "article";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "page";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "project";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "thing";
+          }>;
+          filter?: {
+            contentTypes?: Array<string>;
+            kinds?: Array<string>;
+            topics?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              _key: string;
+              [internalGroqTypeReferenceTo]?: "topic";
+            }>;
+            featuredOnly?: boolean;
+            includeHistorical?: boolean;
+            limit?: number;
+            order?: "manual" | "newest" | "title";
+          };
+          presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+          showFilters?: boolean;
+          showNotes?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "separator";
+          info?: string;
+          markDefs: null;
         }> | null;
       } | {
         _id: string;
@@ -5062,6 +12599,28 @@ export type PROJECT_QUERYResult = {
         featured: boolean | null;
         historical: null;
         sortOrder: number | null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: {
+          userBookId: string | null;
+          highlightId: null;
+          externalId: string | null;
+          source: string | null;
+          sourceUrl: string | null;
+          readwiseUrl: string | null;
+          coverImageUrl: string | null;
+          color: null;
+          highlightedAt: null;
+          sourceUpdatedAt: null;
+          syncedAt: string | null;
+        } | null;
+        sourceItem: null;
         image: {
           alt: string | null;
           caption: string | null;
@@ -5085,6 +12644,7 @@ export type PROJECT_QUERYResult = {
           slug: Slug | null;
           color: string | null;
         }> | null;
+        commentary: null;
       }> | null;
       filter: {
         contentTypes?: Array<string>;
@@ -5104,6 +12664,7 @@ export type PROJECT_QUERYResult = {
       showFilters?: boolean;
       showNotes?: boolean;
       markDefs: Array<never>;
+      quote: null;
     } | {
       _key: string;
       _type: "separator";
@@ -5111,9 +12672,11 @@ export type PROJECT_QUERYResult = {
       markDefs: Array<never>;
       items: null;
       filter: null;
+      quote: null;
     }> | null;
     items: null;
     filter: null;
+    quote: null;
   } | {
     _key: string;
     _type: "linkListBlock";
@@ -5153,6 +12716,7 @@ export type PROJECT_QUERYResult = {
     richBody: null;
     items: null;
     filter: null;
+    quote: null;
   } | {
     _key: string;
     _type: "newsletterBlock";
@@ -5167,6 +12731,7 @@ export type PROJECT_QUERYResult = {
     links: null;
     items: null;
     filter: null;
+    quote: null;
   } | {
     _key: string;
     _type: "referenceCollection";
@@ -5189,6 +12754,16 @@ export type PROJECT_QUERYResult = {
       featured: boolean | null;
       historical: null;
       sortOrder: null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: null;
+      sourceItem: null;
       image: null;
       cover: {
         alt: string | null;
@@ -5213,6 +12788,7 @@ export type PROJECT_QUERYResult = {
         color: string | null;
       }> | null;
       notes: null;
+      commentary: null;
     } | {
       _id: string;
       _type: "page";
@@ -5229,10 +12805,21 @@ export type PROJECT_QUERYResult = {
       featured: null;
       historical: null;
       sortOrder: null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: null;
+      sourceItem: null;
       image: null;
       cover: null;
       topics: null;
       notes: null;
+      commentary: null;
     } | {
       _id: string;
       _type: "project";
@@ -5249,6 +12836,16 @@ export type PROJECT_QUERYResult = {
       featured: boolean | null;
       historical: boolean | null;
       sortOrder: null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: null;
+      sourceItem: null;
       image: null;
       cover: {
         alt: string | null;
@@ -5273,6 +12870,780 @@ export type PROJECT_QUERYResult = {
         color: string | null;
       }> | null;
       notes: null;
+      commentary: null;
+    } | {
+      _id: string;
+      _type: "quote";
+      title: null;
+      slug: null;
+      kind: null;
+      creator: null;
+      url: null;
+      externalUrl: null;
+      summary: null;
+      excerpt: null;
+      year: null;
+      publishedAt: null;
+      featured: boolean | null;
+      historical: null;
+      sortOrder: number | null;
+      text: string | null;
+      attribution: string | null;
+      location: string | null;
+      locationType: string | null;
+      sourceUrl: string | null;
+      sourceNote: string | null;
+      origin: "manual" | "readwise" | null;
+      sourceState: "active" | "archived" | null;
+      readwise: {
+        userBookId: null;
+        highlightId: string | null;
+        externalId: string | null;
+        source: null;
+        sourceUrl: null;
+        readwiseUrl: string | null;
+        coverImageUrl: null;
+        color: string | null;
+        highlightedAt: string | null;
+        sourceUpdatedAt: string | null;
+        syncedAt: string | null;
+      } | null;
+      sourceItem: {
+        _id: string;
+        _type: "thing";
+        title: string | null;
+        kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+        creator: string | null;
+        url: string | null;
+        summary: string | null;
+        year: number | null;
+      } | null;
+      image: null;
+      cover: null;
+      topics: Array<{
+        _id: string;
+        title: string | null;
+        slug: Slug | null;
+        color: string | null;
+      }> | null;
+      notes: null;
+      commentary: Array<{
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: "span";
+          _key: string;
+        }>;
+        style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+        listItem?: "bullet" | "number";
+        markDefs: Array<never> | Array<{
+          _key: string;
+          _type: "markExternalLink";
+          type?: "email" | "file" | "phone" | "url";
+          url?: string;
+          email?: string;
+          phone?: string;
+          file?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+            };
+            media?: unknown;
+            _type: "file";
+          };
+          link: null;
+        } | {
+          _key: string;
+          _type: "markInternalLink";
+          link: {
+            _id: string;
+            _type: "article";
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "page";
+            slug: Slug | null;
+          } | {
+            _id: string;
+            _type: "project";
+            slug: Slug | null;
+          } | null;
+        } | {
+          label?: string;
+          text?: string;
+          _type: "popupText";
+          _key: string;
+          link: null;
+        }>;
+        level?: number;
+        _type: "block";
+        _key: string;
+        items: null;
+        filter: null;
+        quote: null;
+      } | {
+        _key: string;
+        _type: "complexImage";
+        asset?: {
+          asset?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+          };
+          media?: unknown;
+          hotspot?: SanityImageHotspot;
+          crop?: SanityImageCrop;
+          _type: "image";
+        };
+        alt?: string;
+        caption?: string;
+        width?: number;
+        markDefs: Array<never>;
+        items: null;
+        filter: null;
+        quote: null;
+      } | {
+        _key: string;
+        _type: "quoteBlock";
+        quote: {
+          _id: string;
+          _type: "quote";
+          text: string | null;
+          attribution: string | null;
+          location: string | null;
+          locationType: string | null;
+          sourceUrl: string | null;
+          sourceNote: string | null;
+          origin: "manual" | "readwise" | null;
+          sourceState: "active" | "archived" | null;
+          featured: boolean | null;
+          sortOrder: number | null;
+          tags: Array<string> | null;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          readwise: {
+            highlightId: string | null;
+            externalId: string | null;
+            readwiseUrl: string | null;
+            color: string | null;
+            highlightedAt: string | null;
+            sourceUpdatedAt: string | null;
+            syncedAt: string | null;
+          } | null;
+          sourceItem: {
+            _id: string;
+            _type: "thing";
+            title: string | null;
+            kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+            creator: string | null;
+            url: string | null;
+            summary: string | null;
+            year: number | null;
+            image: {
+              asset: {
+                asset?: {
+                  _ref: string;
+                  _type: "reference";
+                  _weak?: boolean;
+                  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+                };
+                media?: unknown;
+                hotspot?: SanityImageHotspot;
+                crop?: SanityImageCrop;
+                _type: "image";
+              } | null;
+              alt: string | null;
+              caption: string | null;
+              hotspot: null;
+              crop: null;
+            } | null;
+          } | null;
+          commentary: Array<{
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+            listItem?: "bullet" | "number";
+            markDefs: Array<{
+              _key: string;
+              _type: "markExternalLink";
+              type?: "email" | "file" | "phone" | "url";
+              url?: string;
+              email?: string;
+              phone?: string;
+              file?: {
+                asset?: {
+                  _ref: string;
+                  _type: "reference";
+                  _weak?: boolean;
+                  [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+                };
+                media?: unknown;
+                _type: "file";
+              };
+              link: null;
+            } | {
+              _key: string;
+              _type: "markInternalLink";
+              link: {
+                _id: string;
+                _type: "article";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "page";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "project";
+                title: string | null;
+                slug: Slug | null;
+              } | null;
+            } | {
+              label?: string;
+              text?: string;
+              _type: "popupText";
+              _key: string;
+              link: null;
+            }> | null;
+            level?: number;
+            _type: "block";
+            _key: string;
+          } | {
+            _key: string;
+            _type: "complexImage";
+            asset?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: "image";
+            };
+            alt?: string;
+            caption?: string;
+            width?: number;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "quoteBlock";
+            quote?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            };
+            context?: string;
+            showSource?: boolean;
+            showCommentary?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "referenceCollection";
+            title?: string;
+            introduction?: string;
+            source?: "filter" | "manual";
+            items?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "article";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "page";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "project";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "thing";
+            }>;
+            filter?: {
+              contentTypes?: Array<string>;
+              kinds?: Array<string>;
+              topics?: Array<{
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                _key: string;
+                [internalGroqTypeReferenceTo]?: "topic";
+              }>;
+              featuredOnly?: boolean;
+              includeHistorical?: boolean;
+              limit?: number;
+              order?: "manual" | "newest" | "title";
+            };
+            presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+            showFilters?: boolean;
+            showNotes?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "separator";
+            info?: string;
+            markDefs: null;
+          }> | null;
+        } | null;
+        context?: string;
+        showSource?: boolean;
+        showCommentary?: boolean;
+        markDefs: Array<never>;
+        items: null;
+        filter: null;
+      } | {
+        _key: string;
+        _type: "referenceCollection";
+        title?: string;
+        introduction?: string;
+        source?: "filter" | "manual";
+        items: Array<{
+          _id: string;
+          _type: "article";
+          title: string | null;
+          slug: Slug | null;
+          kind: null;
+          creator: null;
+          url: null;
+          externalUrl: string | null;
+          summary: null;
+          excerpt: string | null;
+          year: null;
+          publishedAt: string | null;
+          featured: boolean | null;
+          historical: null;
+          sortOrder: null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: null;
+          sourceItem: null;
+          image: null;
+          cover: {
+            alt: string | null;
+            caption: string | null;
+            width: number | null;
+            asset: {
+              crop: SanityImageCrop | null;
+              hotspot: SanityImageHotspot | null;
+              asset: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              } | null;
+              lqip: string | null;
+            } | null;
+          } | null;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          commentary: null;
+        } | {
+          _id: string;
+          _type: "page";
+          title: string | null;
+          slug: Slug | null;
+          kind: null;
+          creator: null;
+          url: null;
+          externalUrl: null;
+          summary: null;
+          excerpt: null;
+          year: null;
+          publishedAt: null;
+          featured: null;
+          historical: null;
+          sortOrder: null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: null;
+          sourceItem: null;
+          image: null;
+          cover: null;
+          topics: null;
+          commentary: null;
+        } | {
+          _id: string;
+          _type: "project";
+          title: string | null;
+          slug: Slug | null;
+          kind: null;
+          creator: null;
+          url: string | null;
+          externalUrl: null;
+          summary: string | null;
+          excerpt: null;
+          year: number | null;
+          publishedAt: null;
+          featured: boolean | null;
+          historical: boolean | null;
+          sortOrder: null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: null;
+          sourceItem: null;
+          image: null;
+          cover: {
+            alt: string | null;
+            caption: string | null;
+            width: number | null;
+            asset: {
+              crop: SanityImageCrop | null;
+              hotspot: SanityImageHotspot | null;
+              asset: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              } | null;
+              lqip: string | null;
+            } | null;
+          } | null;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          commentary: null;
+        } | {
+          _id: string;
+          _type: "quote";
+          title: null;
+          slug: null;
+          kind: null;
+          creator: null;
+          url: null;
+          externalUrl: null;
+          summary: null;
+          excerpt: null;
+          year: null;
+          publishedAt: null;
+          featured: boolean | null;
+          historical: null;
+          sortOrder: number | null;
+          text: string | null;
+          attribution: string | null;
+          location: string | null;
+          locationType: string | null;
+          sourceUrl: string | null;
+          sourceNote: string | null;
+          origin: "manual" | "readwise" | null;
+          sourceState: "active" | "archived" | null;
+          readwise: {
+            userBookId: null;
+            highlightId: string | null;
+            externalId: string | null;
+            source: null;
+            sourceUrl: null;
+            readwiseUrl: string | null;
+            coverImageUrl: null;
+            color: string | null;
+            highlightedAt: string | null;
+            sourceUpdatedAt: string | null;
+            syncedAt: string | null;
+          } | null;
+          sourceItem: {
+            _id: string;
+            _type: "thing";
+            title: string | null;
+            kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+            creator: string | null;
+            url: string | null;
+            summary: string | null;
+            year: number | null;
+          } | null;
+          image: null;
+          cover: null;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          commentary: Array<{
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+            listItem?: "bullet" | "number";
+            markDefs: Array<{
+              _key: string;
+              _type: "markExternalLink";
+              type?: "email" | "file" | "phone" | "url";
+              url?: string;
+              email?: string;
+              phone?: string;
+              file?: {
+                asset?: {
+                  _ref: string;
+                  _type: "reference";
+                  _weak?: boolean;
+                  [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+                };
+                media?: unknown;
+                _type: "file";
+              };
+              link: null;
+            } | {
+              _key: string;
+              _type: "markInternalLink";
+              link: {
+                _id: string;
+                _type: "article";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "page";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "project";
+                title: string | null;
+                slug: Slug | null;
+              } | null;
+            } | {
+              label?: string;
+              text?: string;
+              _type: "popupText";
+              _key: string;
+              link: null;
+            }> | null;
+            level?: number;
+            _type: "block";
+            _key: string;
+          } | {
+            _key: string;
+            _type: "complexImage";
+            asset?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: "image";
+            };
+            alt?: string;
+            caption?: string;
+            width?: number;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "quoteBlock";
+            quote?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            };
+            context?: string;
+            showSource?: boolean;
+            showCommentary?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "referenceCollection";
+            title?: string;
+            introduction?: string;
+            source?: "filter" | "manual";
+            items?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "article";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "page";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "project";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "thing";
+            }>;
+            filter?: {
+              contentTypes?: Array<string>;
+              kinds?: Array<string>;
+              topics?: Array<{
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                _key: string;
+                [internalGroqTypeReferenceTo]?: "topic";
+              }>;
+              featuredOnly?: boolean;
+              includeHistorical?: boolean;
+              limit?: number;
+              order?: "manual" | "newest" | "title";
+            };
+            presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+            showFilters?: boolean;
+            showNotes?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "separator";
+            info?: string;
+            markDefs: null;
+          }> | null;
+        } | {
+          _id: string;
+          _type: "thing";
+          title: string | null;
+          slug: null;
+          kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+          creator: string | null;
+          url: string | null;
+          externalUrl: null;
+          summary: string | null;
+          excerpt: null;
+          year: number | null;
+          publishedAt: null;
+          featured: boolean | null;
+          historical: null;
+          sortOrder: number | null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: {
+            userBookId: string | null;
+            highlightId: null;
+            externalId: string | null;
+            source: string | null;
+            sourceUrl: string | null;
+            readwiseUrl: string | null;
+            coverImageUrl: string | null;
+            color: null;
+            highlightedAt: null;
+            sourceUpdatedAt: null;
+            syncedAt: string | null;
+          } | null;
+          sourceItem: null;
+          image: {
+            alt: string | null;
+            caption: string | null;
+            width: number | null;
+            asset: {
+              crop: SanityImageCrop | null;
+              hotspot: SanityImageHotspot | null;
+              asset: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              } | null;
+              lqip: string | null;
+            } | null;
+          } | null;
+          cover: null;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          commentary: null;
+        }> | null;
+        filter: {
+          contentTypes?: Array<string>;
+          kinds?: Array<string>;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          featuredOnly?: boolean;
+          includeHistorical?: boolean;
+          limit?: number;
+          order?: "manual" | "newest" | "title";
+        } | null;
+        presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+        showFilters?: boolean;
+        showNotes?: boolean;
+        markDefs: Array<never>;
+        quote: null;
+      } | {
+        _key: string;
+        _type: "separator";
+        info?: string;
+        markDefs: Array<never>;
+        items: null;
+        filter: null;
+        quote: null;
+      }> | null;
     } | {
       _id: string;
       _type: "thing";
@@ -5289,6 +13660,28 @@ export type PROJECT_QUERYResult = {
       featured: boolean | null;
       historical: null;
       sortOrder: number | null;
+      text: null;
+      attribution: null;
+      location: null;
+      locationType: null;
+      sourceUrl: null;
+      sourceNote: null;
+      origin: null;
+      sourceState: null;
+      readwise: {
+        userBookId: string | null;
+        highlightId: null;
+        externalId: string | null;
+        source: string | null;
+        sourceUrl: string | null;
+        readwiseUrl: string | null;
+        coverImageUrl: string | null;
+        color: null;
+        highlightedAt: null;
+        sourceUpdatedAt: null;
+        syncedAt: string | null;
+      } | null;
+      sourceItem: null;
       image: {
         alt: string | null;
         caption: string | null;
@@ -5367,6 +13760,7 @@ export type PROJECT_QUERYResult = {
         _key: string;
         items: null;
         filter: null;
+        quote: null;
       } | {
         _key: string;
         _type: "complexImage";
@@ -5385,6 +13779,219 @@ export type PROJECT_QUERYResult = {
         alt?: string;
         caption?: string;
         width?: number;
+        markDefs: Array<never>;
+        items: null;
+        filter: null;
+        quote: null;
+      } | {
+        _key: string;
+        _type: "quoteBlock";
+        quote: {
+          _id: string;
+          _type: "quote";
+          text: string | null;
+          attribution: string | null;
+          location: string | null;
+          locationType: string | null;
+          sourceUrl: string | null;
+          sourceNote: string | null;
+          origin: "manual" | "readwise" | null;
+          sourceState: "active" | "archived" | null;
+          featured: boolean | null;
+          sortOrder: number | null;
+          tags: Array<string> | null;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          readwise: {
+            highlightId: string | null;
+            externalId: string | null;
+            readwiseUrl: string | null;
+            color: string | null;
+            highlightedAt: string | null;
+            sourceUpdatedAt: string | null;
+            syncedAt: string | null;
+          } | null;
+          sourceItem: {
+            _id: string;
+            _type: "thing";
+            title: string | null;
+            kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+            creator: string | null;
+            url: string | null;
+            summary: string | null;
+            year: number | null;
+            image: {
+              asset: {
+                asset?: {
+                  _ref: string;
+                  _type: "reference";
+                  _weak?: boolean;
+                  [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+                };
+                media?: unknown;
+                hotspot?: SanityImageHotspot;
+                crop?: SanityImageCrop;
+                _type: "image";
+              } | null;
+              alt: string | null;
+              caption: string | null;
+              hotspot: null;
+              crop: null;
+            } | null;
+          } | null;
+          commentary: Array<{
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+            listItem?: "bullet" | "number";
+            markDefs: Array<{
+              _key: string;
+              _type: "markExternalLink";
+              type?: "email" | "file" | "phone" | "url";
+              url?: string;
+              email?: string;
+              phone?: string;
+              file?: {
+                asset?: {
+                  _ref: string;
+                  _type: "reference";
+                  _weak?: boolean;
+                  [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+                };
+                media?: unknown;
+                _type: "file";
+              };
+              link: null;
+            } | {
+              _key: string;
+              _type: "markInternalLink";
+              link: {
+                _id: string;
+                _type: "article";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "page";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "project";
+                title: string | null;
+                slug: Slug | null;
+              } | null;
+            } | {
+              label?: string;
+              text?: string;
+              _type: "popupText";
+              _key: string;
+              link: null;
+            }> | null;
+            level?: number;
+            _type: "block";
+            _key: string;
+          } | {
+            _key: string;
+            _type: "complexImage";
+            asset?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: "image";
+            };
+            alt?: string;
+            caption?: string;
+            width?: number;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "quoteBlock";
+            quote?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            };
+            context?: string;
+            showSource?: boolean;
+            showCommentary?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "referenceCollection";
+            title?: string;
+            introduction?: string;
+            source?: "filter" | "manual";
+            items?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "article";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "page";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "project";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "thing";
+            }>;
+            filter?: {
+              contentTypes?: Array<string>;
+              kinds?: Array<string>;
+              topics?: Array<{
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                _key: string;
+                [internalGroqTypeReferenceTo]?: "topic";
+              }>;
+              featuredOnly?: boolean;
+              includeHistorical?: boolean;
+              limit?: number;
+              order?: "manual" | "newest" | "title";
+            };
+            presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+            showFilters?: boolean;
+            showNotes?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "separator";
+            info?: string;
+            markDefs: null;
+          }> | null;
+        } | null;
+        context?: string;
+        showSource?: boolean;
+        showCommentary?: boolean;
         markDefs: Array<never>;
         items: null;
         filter: null;
@@ -5410,6 +14017,16 @@ export type PROJECT_QUERYResult = {
           featured: boolean | null;
           historical: null;
           sortOrder: null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: null;
+          sourceItem: null;
           image: null;
           cover: {
             alt: string | null;
@@ -5433,6 +14050,7 @@ export type PROJECT_QUERYResult = {
             slug: Slug | null;
             color: string | null;
           }> | null;
+          commentary: null;
         } | {
           _id: string;
           _type: "page";
@@ -5449,9 +14067,20 @@ export type PROJECT_QUERYResult = {
           featured: null;
           historical: null;
           sortOrder: null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: null;
+          sourceItem: null;
           image: null;
           cover: null;
           topics: null;
+          commentary: null;
         } | {
           _id: string;
           _type: "project";
@@ -5468,6 +14097,16 @@ export type PROJECT_QUERYResult = {
           featured: boolean | null;
           historical: boolean | null;
           sortOrder: null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: null;
+          sourceItem: null;
           image: null;
           cover: {
             alt: string | null;
@@ -5490,6 +14129,207 @@ export type PROJECT_QUERYResult = {
             title: string | null;
             slug: Slug | null;
             color: string | null;
+          }> | null;
+          commentary: null;
+        } | {
+          _id: string;
+          _type: "quote";
+          title: null;
+          slug: null;
+          kind: null;
+          creator: null;
+          url: null;
+          externalUrl: null;
+          summary: null;
+          excerpt: null;
+          year: null;
+          publishedAt: null;
+          featured: boolean | null;
+          historical: null;
+          sortOrder: number | null;
+          text: string | null;
+          attribution: string | null;
+          location: string | null;
+          locationType: string | null;
+          sourceUrl: string | null;
+          sourceNote: string | null;
+          origin: "manual" | "readwise" | null;
+          sourceState: "active" | "archived" | null;
+          readwise: {
+            userBookId: null;
+            highlightId: string | null;
+            externalId: string | null;
+            source: null;
+            sourceUrl: null;
+            readwiseUrl: string | null;
+            coverImageUrl: null;
+            color: string | null;
+            highlightedAt: string | null;
+            sourceUpdatedAt: string | null;
+            syncedAt: string | null;
+          } | null;
+          sourceItem: {
+            _id: string;
+            _type: "thing";
+            title: string | null;
+            kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+            creator: string | null;
+            url: string | null;
+            summary: string | null;
+            year: number | null;
+          } | null;
+          image: null;
+          cover: null;
+          topics: Array<{
+            _id: string;
+            title: string | null;
+            slug: Slug | null;
+            color: string | null;
+          }> | null;
+          commentary: Array<{
+            children?: Array<{
+              marks?: Array<string>;
+              text?: string;
+              _type: "span";
+              _key: string;
+            }>;
+            style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+            listItem?: "bullet" | "number";
+            markDefs: Array<{
+              _key: string;
+              _type: "markExternalLink";
+              type?: "email" | "file" | "phone" | "url";
+              url?: string;
+              email?: string;
+              phone?: string;
+              file?: {
+                asset?: {
+                  _ref: string;
+                  _type: "reference";
+                  _weak?: boolean;
+                  [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+                };
+                media?: unknown;
+                _type: "file";
+              };
+              link: null;
+            } | {
+              _key: string;
+              _type: "markInternalLink";
+              link: {
+                _id: string;
+                _type: "article";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "page";
+                title: string | null;
+                slug: Slug | null;
+              } | {
+                _id: string;
+                _type: "project";
+                title: string | null;
+                slug: Slug | null;
+              } | null;
+            } | {
+              label?: string;
+              text?: string;
+              _type: "popupText";
+              _key: string;
+              link: null;
+            }> | null;
+            level?: number;
+            _type: "block";
+            _key: string;
+          } | {
+            _key: string;
+            _type: "complexImage";
+            asset?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: "image";
+            };
+            alt?: string;
+            caption?: string;
+            width?: number;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "quoteBlock";
+            quote?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            };
+            context?: string;
+            showSource?: boolean;
+            showCommentary?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "referenceCollection";
+            title?: string;
+            introduction?: string;
+            source?: "filter" | "manual";
+            items?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "article";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "page";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "project";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "quote";
+            } | {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "thing";
+            }>;
+            filter?: {
+              contentTypes?: Array<string>;
+              kinds?: Array<string>;
+              topics?: Array<{
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                _key: string;
+                [internalGroqTypeReferenceTo]?: "topic";
+              }>;
+              featuredOnly?: boolean;
+              includeHistorical?: boolean;
+              limit?: number;
+              order?: "manual" | "newest" | "title";
+            };
+            presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+            showFilters?: boolean;
+            showNotes?: boolean;
+            markDefs: null;
+          } | {
+            _key: string;
+            _type: "separator";
+            info?: string;
+            markDefs: null;
           }> | null;
         } | {
           _id: string;
@@ -5507,6 +14347,28 @@ export type PROJECT_QUERYResult = {
           featured: boolean | null;
           historical: null;
           sortOrder: number | null;
+          text: null;
+          attribution: null;
+          location: null;
+          locationType: null;
+          sourceUrl: null;
+          sourceNote: null;
+          origin: null;
+          sourceState: null;
+          readwise: {
+            userBookId: string | null;
+            highlightId: null;
+            externalId: string | null;
+            source: string | null;
+            sourceUrl: string | null;
+            readwiseUrl: string | null;
+            coverImageUrl: string | null;
+            color: null;
+            highlightedAt: null;
+            sourceUpdatedAt: null;
+            syncedAt: string | null;
+          } | null;
+          sourceItem: null;
           image: {
             alt: string | null;
             caption: string | null;
@@ -5530,6 +14392,7 @@ export type PROJECT_QUERYResult = {
             slug: Slug | null;
             color: string | null;
           }> | null;
+          commentary: null;
         }> | null;
         filter: {
           contentTypes?: Array<string>;
@@ -5549,6 +14412,7 @@ export type PROJECT_QUERYResult = {
         showFilters?: boolean;
         showNotes?: boolean;
         markDefs: Array<never>;
+        quote: null;
       } | {
         _key: string;
         _type: "separator";
@@ -5556,7 +14420,9 @@ export type PROJECT_QUERYResult = {
         markDefs: Array<never>;
         items: null;
         filter: null;
+        quote: null;
       }> | null;
+      commentary: null;
     }> | null;
     filter: {
       contentTypes?: Array<string>;
@@ -5578,6 +14444,7 @@ export type PROJECT_QUERYResult = {
     image: null;
     richBody: null;
     links: null;
+    quote: null;
   } | {
     _key: string;
     _type: "richTextBlock";
@@ -5585,6 +14452,8 @@ export type PROJECT_QUERYResult = {
     body?: Array<{
       _key: string;
     } & ComplexImage | {
+      _key: string;
+    } & QuoteBlock | {
       _key: string;
     } & ReferenceCollection | {
       _key: string;
@@ -5667,6 +14536,7 @@ export type PROJECT_QUERYResult = {
       _key: string;
       items: null;
       filter: null;
+      quote: null;
     } | {
       _key: string;
       _type: "complexImage";
@@ -5685,6 +14555,219 @@ export type PROJECT_QUERYResult = {
       alt?: string;
       caption?: string;
       width?: number;
+      markDefs: Array<never>;
+      items: null;
+      filter: null;
+      quote: null;
+    } | {
+      _key: string;
+      _type: "quoteBlock";
+      quote: {
+        _id: string;
+        _type: "quote";
+        text: string | null;
+        attribution: string | null;
+        location: string | null;
+        locationType: string | null;
+        sourceUrl: string | null;
+        sourceNote: string | null;
+        origin: "manual" | "readwise" | null;
+        sourceState: "active" | "archived" | null;
+        featured: boolean | null;
+        sortOrder: number | null;
+        tags: Array<string> | null;
+        topics: Array<{
+          _id: string;
+          title: string | null;
+          slug: Slug | null;
+          color: string | null;
+        }> | null;
+        readwise: {
+          highlightId: string | null;
+          externalId: string | null;
+          readwiseUrl: string | null;
+          color: string | null;
+          highlightedAt: string | null;
+          sourceUpdatedAt: string | null;
+          syncedAt: string | null;
+        } | null;
+        sourceItem: {
+          _id: string;
+          _type: "thing";
+          title: string | null;
+          kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+          creator: string | null;
+          url: string | null;
+          summary: string | null;
+          year: number | null;
+          image: {
+            asset: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+              };
+              media?: unknown;
+              hotspot?: SanityImageHotspot;
+              crop?: SanityImageCrop;
+              _type: "image";
+            } | null;
+            alt: string | null;
+            caption: string | null;
+            hotspot: null;
+            crop: null;
+          } | null;
+        } | null;
+        commentary: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs: Array<{
+            _key: string;
+            _type: "markExternalLink";
+            type?: "email" | "file" | "phone" | "url";
+            url?: string;
+            email?: string;
+            phone?: string;
+            file?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+              };
+              media?: unknown;
+              _type: "file";
+            };
+            link: null;
+          } | {
+            _key: string;
+            _type: "markInternalLink";
+            link: {
+              _id: string;
+              _type: "article";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "page";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "project";
+              title: string | null;
+              slug: Slug | null;
+            } | null;
+          } | {
+            label?: string;
+            text?: string;
+            _type: "popupText";
+            _key: string;
+            link: null;
+          }> | null;
+          level?: number;
+          _type: "block";
+          _key: string;
+        } | {
+          _key: string;
+          _type: "complexImage";
+          asset?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+          caption?: string;
+          width?: number;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "quoteBlock";
+          quote?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          };
+          context?: string;
+          showSource?: boolean;
+          showCommentary?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "referenceCollection";
+          title?: string;
+          introduction?: string;
+          source?: "filter" | "manual";
+          items?: Array<{
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "article";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "page";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "project";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "thing";
+          }>;
+          filter?: {
+            contentTypes?: Array<string>;
+            kinds?: Array<string>;
+            topics?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              _key: string;
+              [internalGroqTypeReferenceTo]?: "topic";
+            }>;
+            featuredOnly?: boolean;
+            includeHistorical?: boolean;
+            limit?: number;
+            order?: "manual" | "newest" | "title";
+          };
+          presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+          showFilters?: boolean;
+          showNotes?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "separator";
+          info?: string;
+          markDefs: null;
+        }> | null;
+      } | null;
+      context?: string;
+      showSource?: boolean;
+      showCommentary?: boolean;
       markDefs: Array<never>;
       items: null;
       filter: null;
@@ -5710,6 +14793,16 @@ export type PROJECT_QUERYResult = {
         featured: boolean | null;
         historical: null;
         sortOrder: null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: null;
+        sourceItem: null;
         image: null;
         cover: {
           alt: string | null;
@@ -5733,6 +14826,7 @@ export type PROJECT_QUERYResult = {
           slug: Slug | null;
           color: string | null;
         }> | null;
+        commentary: null;
       } | {
         _id: string;
         _type: "page";
@@ -5749,9 +14843,20 @@ export type PROJECT_QUERYResult = {
         featured: null;
         historical: null;
         sortOrder: null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: null;
+        sourceItem: null;
         image: null;
         cover: null;
         topics: null;
+        commentary: null;
       } | {
         _id: string;
         _type: "project";
@@ -5768,6 +14873,16 @@ export type PROJECT_QUERYResult = {
         featured: boolean | null;
         historical: boolean | null;
         sortOrder: null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: null;
+        sourceItem: null;
         image: null;
         cover: {
           alt: string | null;
@@ -5790,6 +14905,207 @@ export type PROJECT_QUERYResult = {
           title: string | null;
           slug: Slug | null;
           color: string | null;
+        }> | null;
+        commentary: null;
+      } | {
+        _id: string;
+        _type: "quote";
+        title: null;
+        slug: null;
+        kind: null;
+        creator: null;
+        url: null;
+        externalUrl: null;
+        summary: null;
+        excerpt: null;
+        year: null;
+        publishedAt: null;
+        featured: boolean | null;
+        historical: null;
+        sortOrder: number | null;
+        text: string | null;
+        attribution: string | null;
+        location: string | null;
+        locationType: string | null;
+        sourceUrl: string | null;
+        sourceNote: string | null;
+        origin: "manual" | "readwise" | null;
+        sourceState: "active" | "archived" | null;
+        readwise: {
+          userBookId: null;
+          highlightId: string | null;
+          externalId: string | null;
+          source: null;
+          sourceUrl: null;
+          readwiseUrl: string | null;
+          coverImageUrl: null;
+          color: string | null;
+          highlightedAt: string | null;
+          sourceUpdatedAt: string | null;
+          syncedAt: string | null;
+        } | null;
+        sourceItem: {
+          _id: string;
+          _type: "thing";
+          title: string | null;
+          kind: "album" | "article" | "book" | "film" | "game" | "music" | "other" | "tool" | "website" | null;
+          creator: string | null;
+          url: string | null;
+          summary: string | null;
+          year: number | null;
+        } | null;
+        image: null;
+        cover: null;
+        topics: Array<{
+          _id: string;
+          title: string | null;
+          slug: Slug | null;
+          color: string | null;
+        }> | null;
+        commentary: Array<{
+          children?: Array<{
+            marks?: Array<string>;
+            text?: string;
+            _type: "span";
+            _key: string;
+          }>;
+          style?: "blockquote" | "h1" | "h2" | "h3" | "normal";
+          listItem?: "bullet" | "number";
+          markDefs: Array<{
+            _key: string;
+            _type: "markExternalLink";
+            type?: "email" | "file" | "phone" | "url";
+            url?: string;
+            email?: string;
+            phone?: string;
+            file?: {
+              asset?: {
+                _ref: string;
+                _type: "reference";
+                _weak?: boolean;
+                [internalGroqTypeReferenceTo]?: "sanity.fileAsset";
+              };
+              media?: unknown;
+              _type: "file";
+            };
+            link: null;
+          } | {
+            _key: string;
+            _type: "markInternalLink";
+            link: {
+              _id: string;
+              _type: "article";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "page";
+              title: string | null;
+              slug: Slug | null;
+            } | {
+              _id: string;
+              _type: "project";
+              title: string | null;
+              slug: Slug | null;
+            } | null;
+          } | {
+            label?: string;
+            text?: string;
+            _type: "popupText";
+            _key: string;
+            link: null;
+          }> | null;
+          level?: number;
+          _type: "block";
+          _key: string;
+        } | {
+          _key: string;
+          _type: "complexImage";
+          asset?: {
+            asset?: {
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+            };
+            media?: unknown;
+            hotspot?: SanityImageHotspot;
+            crop?: SanityImageCrop;
+            _type: "image";
+          };
+          alt?: string;
+          caption?: string;
+          width?: number;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "quoteBlock";
+          quote?: {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          };
+          context?: string;
+          showSource?: boolean;
+          showCommentary?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "referenceCollection";
+          title?: string;
+          introduction?: string;
+          source?: "filter" | "manual";
+          items?: Array<{
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "article";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "page";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "project";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "quote";
+          } | {
+            _ref: string;
+            _type: "reference";
+            _weak?: boolean;
+            [internalGroqTypeReferenceTo]?: "thing";
+          }>;
+          filter?: {
+            contentTypes?: Array<string>;
+            kinds?: Array<string>;
+            topics?: Array<{
+              _ref: string;
+              _type: "reference";
+              _weak?: boolean;
+              _key: string;
+              [internalGroqTypeReferenceTo]?: "topic";
+            }>;
+            featuredOnly?: boolean;
+            includeHistorical?: boolean;
+            limit?: number;
+            order?: "manual" | "newest" | "title";
+          };
+          presentation?: "carousel" | "filterList" | "grid" | "list" | "mediaList" | "single";
+          showFilters?: boolean;
+          showNotes?: boolean;
+          markDefs: null;
+        } | {
+          _key: string;
+          _type: "separator";
+          info?: string;
+          markDefs: null;
         }> | null;
       } | {
         _id: string;
@@ -5807,6 +15123,28 @@ export type PROJECT_QUERYResult = {
         featured: boolean | null;
         historical: null;
         sortOrder: number | null;
+        text: null;
+        attribution: null;
+        location: null;
+        locationType: null;
+        sourceUrl: null;
+        sourceNote: null;
+        origin: null;
+        sourceState: null;
+        readwise: {
+          userBookId: string | null;
+          highlightId: null;
+          externalId: string | null;
+          source: string | null;
+          sourceUrl: string | null;
+          readwiseUrl: string | null;
+          coverImageUrl: string | null;
+          color: null;
+          highlightedAt: null;
+          sourceUpdatedAt: null;
+          syncedAt: string | null;
+        } | null;
+        sourceItem: null;
         image: {
           alt: string | null;
           caption: string | null;
@@ -5830,6 +15168,7 @@ export type PROJECT_QUERYResult = {
           slug: Slug | null;
           color: string | null;
         }> | null;
+        commentary: null;
       }> | null;
       filter: {
         contentTypes?: Array<string>;
@@ -5849,6 +15188,7 @@ export type PROJECT_QUERYResult = {
       showFilters?: boolean;
       showNotes?: boolean;
       markDefs: Array<never>;
+      quote: null;
     } | {
       _key: string;
       _type: "separator";
@@ -5856,10 +15196,12 @@ export type PROJECT_QUERYResult = {
       markDefs: Array<never>;
       items: null;
       filter: null;
+      quote: null;
     }> | null;
     links: null;
     items: null;
     filter: null;
+    quote: null;
   } | {
     _key: string;
     _type: "separator";
@@ -5869,6 +15211,7 @@ export type PROJECT_QUERYResult = {
     links: null;
     items: null;
     filter: null;
+    quote: null;
   }> | null;
   library: Array<{
     _id: string;
@@ -5886,6 +15229,17 @@ export type PROJECT_QUERYResult = {
     featured: boolean | null;
     historical: null;
     sortOrder: null;
+    text: null;
+    attribution: null;
+    location: null;
+    locationType: null;
+    sourceUrl: null;
+    sourceNote: null;
+    origin: null;
+    sourceState: null;
+    tags: null;
+    readwise: null;
+    sourceItem: null;
     image: null;
     cover: {
       alt: string | null;
@@ -5910,6 +15264,7 @@ export type PROJECT_QUERYResult = {
       color: string | null;
     }> | null;
     notes: null;
+    commentary: null;
   } | {
     _id: string;
     _type: "project";
@@ -5926,6 +15281,17 @@ export type PROJECT_QUERYResult = {
     featured: boolean | null;
     historical: boolean | null;
     sortOrder: null;
+    text: null;
+    attribution: null;
+    location: null;
+    locationType: null;
+    sourceUrl: null;
+    sourceNote: null;
+    origin: null;
+    sourceState: null;
+    tags: null;
+    readwise: null;
+    sourceItem: null;
     image: null;
     cover: {
       alt: string | null;
@@ -5950,6 +15316,7 @@ export type PROJECT_QUERYResult = {
       color: string | null;
     }> | null;
     notes: null;
+    commentary: null;
   } | {
     _id: string;
     _type: "thing";
@@ -5966,6 +15333,29 @@ export type PROJECT_QUERYResult = {
     featured: boolean | null;
     historical: null;
     sortOrder: number | null;
+    text: null;
+    attribution: null;
+    location: null;
+    locationType: null;
+    sourceUrl: null;
+    sourceNote: null;
+    origin: null;
+    sourceState: null;
+    tags: Array<string> | null;
+    readwise: {
+      userBookId: string | null;
+      highlightId: null;
+      externalId: string | null;
+      source: string | null;
+      sourceUrl: string | null;
+      readwiseUrl: string | null;
+      coverImageUrl: string | null;
+      color: null;
+      highlightedAt: null;
+      sourceUpdatedAt: null;
+      syncedAt: string | null;
+    } | null;
+    sourceItem: null;
     image: {
       alt: string | null;
       caption: string | null;
@@ -6068,6 +15458,20 @@ export type PROJECT_QUERYResult = {
       items: null;
     } | {
       _key: string;
+      _type: "quoteBlock";
+      quote?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "quote";
+      };
+      context?: string;
+      showSource?: boolean;
+      showCommentary?: boolean;
+      markDefs: null;
+      items: null;
+    } | {
+      _key: string;
       _type: "referenceCollection";
       title?: string;
       introduction?: string;
@@ -6113,6 +15517,19 @@ export type PROJECT_QUERYResult = {
         historical: boolean | null;
       } | {
         _id: string;
+        _type: "quote";
+        title: null;
+        slug: null;
+        kind: null;
+        creator: null;
+        url: null;
+        summary: null;
+        excerpt: null;
+        year: null;
+        featured: boolean | null;
+        historical: null;
+      } | {
+        _id: string;
         _type: "thing";
         title: string | null;
         slug: null;
@@ -6151,6 +15568,7 @@ export type PROJECT_QUERYResult = {
       markDefs: null;
       items: null;
     }> | null;
+    commentary: null;
   }>;
 } | null;
 
@@ -6290,12 +15708,12 @@ import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     "\n  *[_type == \"siteSettings\"][0]{\n    analytics{\n      enabled,\n      consentBanner{\n        headline,\n        description,\n        acceptAllLabel,\n        rejectAllLabel,\n        manageLabel,\n        saveLabel\n      },\n      consentCategories[]{\n        key,\n        label,\n        description,\n        required\n      },\n      plausible{\n        enabled,\n        domain,\n        proxyEnabled,\n        selfHostedUrl\n      },\n      posthog{\n        enabled,\n        projectKey,\n        host,\n        proxyEnabled\n      }\n    }\n  }\n": ANALYTICS_QUERYResult;
-    "\n  *[_type == \"article\" && slug.current == $slug][0]{\n    _id, _type, title, slug, excerpt, publishedAt, externalUrl,\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n}, topics[]->{_id, title, slug, color},\n    meta{title, description, keywords, ogImage{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n}, visibility},\n    body[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color}\n  },\n  filter{..., topics[]->{_id, title, slug, color}}\n}\n  }\n": ARTICLE_QUERYResult;
+    "\n  *[_type == \"article\" && slug.current == $slug][0]{\n    _id, _type, title, slug, excerpt, publishedAt, externalUrl,\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n}, topics[]->{_id, title, slug, color},\n    meta{title, description, keywords, ogImage{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n}, visibility},\n    body[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    text, attribution, location, locationType, sourceUrl, sourceNote,\n    origin, sourceState,\n    readwise{\n      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,\n      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt\n    },\n    sourceItem->{_id, _type, title, kind, creator, url, summary, year},\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color},\n    commentary[]{\n      ...,\n      markDefs[]{..., link->{_id, _type, title, slug}}\n    }\n  },\n  filter{..., topics[]->{_id, title, slug, color}},\n  quote->{\n  _id,\n  _type,\n  text,\n  attribution,\n  location,\n  locationType,\n  sourceUrl,\n  sourceNote,\n  origin,\n  sourceState,\n  featured,\n  sortOrder,\n  tags,\n  topics[]->{_id, title, slug, color},\n  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},\n  sourceItem->{\n    _id, _type, title, kind, creator, url, summary, year,\n    image{asset, alt, caption, hotspot, crop}\n  },\n  commentary[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}}\n  }\n}\n}\n  }\n": ARTICLE_QUERYResult;
     "\n  *[_type == \"footer\"][0]{\n    _id,\n    _type,\n    logo{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    mainNav[]{\n      type,\n      title,\n      reference->{\n        _id,\n        _type,\n        slug\n      },\n      externalLink{\n        type,\n        url,\n        email,\n        phone,\n        \"fileUrl\": file.asset->url\n      }\n    },\n    secondaryNav[]{\n      type,\n      title,\n      reference->{\n        _id,\n        _type,\n        slug\n      },\n      externalLink{\n        type,\n        url,\n        email,\n        phone,\n        \"fileUrl\": file.asset->url\n      }\n    },\n    socials[]{platform, url}\n  }\n": FOOTER_QUERYResult;
     "\n  *[_type == \"header\"][0]{\n    _id,\n    _type,\n    logo{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    nav[]{\n      type,\n      title,\n      reference->{\n        _id,\n        _type,\n        slug\n      },\n      externalLink{\n        type,\n        url,\n        email,\n        phone,\n        \"fileUrl\": file.asset->url\n      }\n    }\n  }\n": HEADER_QUERYResult;
-    "\n  *[_type == \"page\" && _id == \"homepage\"][0]{\n    _id,\n    _type,\n    title,\n    slug,\n    meta{\n      title,\n      description,\n      keywords,\n      ogImage{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n      visibility\n    },\n    contentMode,\n    showTableOfContents,\n    richText[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color}\n  },\n  filter{..., topics[]->{_id, title, slug, color}}\n},\n    components[]{\n  ...,\n  image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n  \"richBody\": body[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color}\n  },\n  filter{..., topics[]->{_id, title, slug, color}}\n},\n  links[]{\n    ...,\n    reference->{_id, _type, title, slug},\n    externalLink{..., \"fileUrl\": file.asset->url}\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n}, cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color},\n    notes[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color}\n  },\n  filter{..., topics[]->{_id, title, slug, color}}\n}\n  },\n  filter{..., topics[]->{_id, title, slug, color}}\n},\n    \"library\": *[\n      _type in [\"thing\", \"project\", \"article\"] &&\n      (meta.visibility == \"public\" || !defined(meta.visibility))\n    ]{\n  _id,\n  _type,\n  title,\n  slug,\n  kind,\n  creator,\n  url,\n  externalUrl,\n  summary,\n  excerpt,\n  year,\n  publishedAt,\n  featured,\n  historical,\n  sortOrder,\n  image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n  cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n  topics[]->{_id, title, slug, color},\n  notes[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}},\n    items[]->{_id, _type, title, slug, kind, creator, url, summary, excerpt, year, featured, historical}\n  }\n}\n  }\n": HOMEPAGE_QUERYResult;
-    "\n  *[_type == \"page\" && slug.current == $slug][0]{\n    _id,\n    _type,\n    title,\n    slug,\n    meta{\n      title,\n      description,\n      keywords,\n      ogImage{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n      visibility\n    },\n    contentMode,\n    showTableOfContents,\n    richText[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color}\n  },\n  filter{..., topics[]->{_id, title, slug, color}}\n},\n    components[]{\n  ...,\n  image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n  \"richBody\": body[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color}\n  },\n  filter{..., topics[]->{_id, title, slug, color}}\n},\n  links[]{\n    ...,\n    reference->{_id, _type, title, slug},\n    externalLink{..., \"fileUrl\": file.asset->url}\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n}, cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color},\n    notes[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color}\n  },\n  filter{..., topics[]->{_id, title, slug, color}}\n}\n  },\n  filter{..., topics[]->{_id, title, slug, color}}\n},\n    \"library\": *[\n      _type in [\"thing\", \"project\", \"article\"] &&\n      (meta.visibility == \"public\" || !defined(meta.visibility))\n    ]{\n  _id,\n  _type,\n  title,\n  slug,\n  kind,\n  creator,\n  url,\n  externalUrl,\n  summary,\n  excerpt,\n  year,\n  publishedAt,\n  featured,\n  historical,\n  sortOrder,\n  image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n  cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n  topics[]->{_id, title, slug, color},\n  notes[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}},\n    items[]->{_id, _type, title, slug, kind, creator, url, summary, excerpt, year, featured, historical}\n  }\n}\n  }\n": PAGE_QUERYResult;
-    "\n  *[_type == \"project\" && slug.current == $slug][0]{\n    _id, _type, title, slug, summary, url, year, historical,\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color},\n    meta{title, description, keywords, ogImage{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n}, visibility},\n    body[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color}\n  },\n  filter{..., topics[]->{_id, title, slug, color}}\n}, components[]{\n  ...,\n  image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n  \"richBody\": body[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color}\n  },\n  filter{..., topics[]->{_id, title, slug, color}}\n},\n  links[]{\n    ...,\n    reference->{_id, _type, title, slug},\n    externalLink{..., \"fileUrl\": file.asset->url}\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n}, cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color},\n    notes[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color}\n  },\n  filter{..., topics[]->{_id, title, slug, color}}\n}\n  },\n  filter{..., topics[]->{_id, title, slug, color}}\n},\n    \"library\": *[_type in [\"thing\", \"project\", \"article\"] && (meta.visibility == \"public\" || !defined(meta.visibility))]{\n  _id,\n  _type,\n  title,\n  slug,\n  kind,\n  creator,\n  url,\n  externalUrl,\n  summary,\n  excerpt,\n  year,\n  publishedAt,\n  featured,\n  historical,\n  sortOrder,\n  image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n  cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n  topics[]->{_id, title, slug, color},\n  notes[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}},\n    items[]->{_id, _type, title, slug, kind, creator, url, summary, excerpt, year, featured, historical}\n  }\n}\n  }\n": PROJECT_QUERYResult;
+    "\n  *[_type == \"page\" && _id == \"homepage\"][0]{\n    _id,\n    _type,\n    title,\n    slug,\n    meta{\n      title,\n      description,\n      keywords,\n      ogImage{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n      visibility\n    },\n    contentMode,\n    showTableOfContents,\n    richText[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    text, attribution, location, locationType, sourceUrl, sourceNote,\n    origin, sourceState,\n    readwise{\n      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,\n      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt\n    },\n    sourceItem->{_id, _type, title, kind, creator, url, summary, year},\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color},\n    commentary[]{\n      ...,\n      markDefs[]{..., link->{_id, _type, title, slug}}\n    }\n  },\n  filter{..., topics[]->{_id, title, slug, color}},\n  quote->{\n  _id,\n  _type,\n  text,\n  attribution,\n  location,\n  locationType,\n  sourceUrl,\n  sourceNote,\n  origin,\n  sourceState,\n  featured,\n  sortOrder,\n  tags,\n  topics[]->{_id, title, slug, color},\n  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},\n  sourceItem->{\n    _id, _type, title, kind, creator, url, summary, year,\n    image{asset, alt, caption, hotspot, crop}\n  },\n  commentary[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}}\n  }\n}\n},\n    components[]{\n  ...,\n  image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n  \"richBody\": body[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    text, attribution, location, locationType, sourceUrl, sourceNote,\n    origin, sourceState,\n    readwise{\n      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,\n      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt\n    },\n    sourceItem->{_id, _type, title, kind, creator, url, summary, year},\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color},\n    commentary[]{\n      ...,\n      markDefs[]{..., link->{_id, _type, title, slug}}\n    }\n  },\n  filter{..., topics[]->{_id, title, slug, color}},\n  quote->{\n  _id,\n  _type,\n  text,\n  attribution,\n  location,\n  locationType,\n  sourceUrl,\n  sourceNote,\n  origin,\n  sourceState,\n  featured,\n  sortOrder,\n  tags,\n  topics[]->{_id, title, slug, color},\n  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},\n  sourceItem->{\n    _id, _type, title, kind, creator, url, summary, year,\n    image{asset, alt, caption, hotspot, crop}\n  },\n  commentary[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}}\n  }\n}\n},\n  links[]{\n    ...,\n    reference->{_id, _type, title, slug},\n    externalLink{..., \"fileUrl\": file.asset->url}\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    text, attribution, location, locationType, sourceUrl, sourceNote,\n    origin, sourceState,\n    readwise{\n      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,\n      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt\n    },\n    sourceItem->{_id, _type, title, kind, creator, url, summary, year},\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n}, cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color},\n    notes[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    text, attribution, location, locationType, sourceUrl, sourceNote,\n    origin, sourceState,\n    readwise{\n      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,\n      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt\n    },\n    sourceItem->{_id, _type, title, kind, creator, url, summary, year},\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color},\n    commentary[]{\n      ...,\n      markDefs[]{..., link->{_id, _type, title, slug}}\n    }\n  },\n  filter{..., topics[]->{_id, title, slug, color}},\n  quote->{\n  _id,\n  _type,\n  text,\n  attribution,\n  location,\n  locationType,\n  sourceUrl,\n  sourceNote,\n  origin,\n  sourceState,\n  featured,\n  sortOrder,\n  tags,\n  topics[]->{_id, title, slug, color},\n  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},\n  sourceItem->{\n    _id, _type, title, kind, creator, url, summary, year,\n    image{asset, alt, caption, hotspot, crop}\n  },\n  commentary[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}}\n  }\n}\n}, commentary[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    text, attribution, location, locationType, sourceUrl, sourceNote,\n    origin, sourceState,\n    readwise{\n      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,\n      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt\n    },\n    sourceItem->{_id, _type, title, kind, creator, url, summary, year},\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color},\n    commentary[]{\n      ...,\n      markDefs[]{..., link->{_id, _type, title, slug}}\n    }\n  },\n  filter{..., topics[]->{_id, title, slug, color}},\n  quote->{\n  _id,\n  _type,\n  text,\n  attribution,\n  location,\n  locationType,\n  sourceUrl,\n  sourceNote,\n  origin,\n  sourceState,\n  featured,\n  sortOrder,\n  tags,\n  topics[]->{_id, title, slug, color},\n  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},\n  sourceItem->{\n    _id, _type, title, kind, creator, url, summary, year,\n    image{asset, alt, caption, hotspot, crop}\n  },\n  commentary[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}}\n  }\n}\n}\n  },\n  filter{..., topics[]->{_id, title, slug, color}},\n  quote->{\n  _id,\n  _type,\n  text,\n  attribution,\n  location,\n  locationType,\n  sourceUrl,\n  sourceNote,\n  origin,\n  sourceState,\n  featured,\n  sortOrder,\n  tags,\n  topics[]->{_id, title, slug, color},\n  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},\n  sourceItem->{\n    _id, _type, title, kind, creator, url, summary, year,\n    image{asset, alt, caption, hotspot, crop}\n  },\n  commentary[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}}\n  }\n}\n},\n    \"library\": *[\n      _type in [\"thing\", \"project\", \"article\"] &&\n      (meta.visibility == \"public\" || !defined(meta.visibility))\n    ]{\n  _id,\n  _type,\n  title,\n  slug,\n  kind,\n  creator,\n  url,\n  externalUrl,\n  summary,\n  excerpt,\n  year,\n  publishedAt,\n  featured,\n  historical,\n  sortOrder,\n  text,\n  attribution,\n  location,\n  locationType,\n  sourceUrl,\n  sourceNote,\n  origin,\n  sourceState,\n  tags,\n  readwise{\n    userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,\n    coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt\n  },\n  sourceItem->{\n    _id, _type, title, kind, creator, url, summary, year,\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n}\n  },\n  image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n  cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n  topics[]->{_id, title, slug, color},\n  notes[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}},\n    items[]->{_id, _type, title, slug, kind, creator, url, summary, excerpt, year, featured, historical}\n  },\n  commentary[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}}\n  }\n}\n  }\n": HOMEPAGE_QUERYResult;
+    "\n  *[_type == \"page\" && slug.current == $slug][0]{\n    _id,\n    _type,\n    title,\n    slug,\n    meta{\n      title,\n      description,\n      keywords,\n      ogImage{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n      visibility\n    },\n    contentMode,\n    showTableOfContents,\n    richText[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    text, attribution, location, locationType, sourceUrl, sourceNote,\n    origin, sourceState,\n    readwise{\n      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,\n      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt\n    },\n    sourceItem->{_id, _type, title, kind, creator, url, summary, year},\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color},\n    commentary[]{\n      ...,\n      markDefs[]{..., link->{_id, _type, title, slug}}\n    }\n  },\n  filter{..., topics[]->{_id, title, slug, color}},\n  quote->{\n  _id,\n  _type,\n  text,\n  attribution,\n  location,\n  locationType,\n  sourceUrl,\n  sourceNote,\n  origin,\n  sourceState,\n  featured,\n  sortOrder,\n  tags,\n  topics[]->{_id, title, slug, color},\n  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},\n  sourceItem->{\n    _id, _type, title, kind, creator, url, summary, year,\n    image{asset, alt, caption, hotspot, crop}\n  },\n  commentary[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}}\n  }\n}\n},\n    components[]{\n  ...,\n  image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n  \"richBody\": body[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    text, attribution, location, locationType, sourceUrl, sourceNote,\n    origin, sourceState,\n    readwise{\n      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,\n      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt\n    },\n    sourceItem->{_id, _type, title, kind, creator, url, summary, year},\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color},\n    commentary[]{\n      ...,\n      markDefs[]{..., link->{_id, _type, title, slug}}\n    }\n  },\n  filter{..., topics[]->{_id, title, slug, color}},\n  quote->{\n  _id,\n  _type,\n  text,\n  attribution,\n  location,\n  locationType,\n  sourceUrl,\n  sourceNote,\n  origin,\n  sourceState,\n  featured,\n  sortOrder,\n  tags,\n  topics[]->{_id, title, slug, color},\n  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},\n  sourceItem->{\n    _id, _type, title, kind, creator, url, summary, year,\n    image{asset, alt, caption, hotspot, crop}\n  },\n  commentary[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}}\n  }\n}\n},\n  links[]{\n    ...,\n    reference->{_id, _type, title, slug},\n    externalLink{..., \"fileUrl\": file.asset->url}\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    text, attribution, location, locationType, sourceUrl, sourceNote,\n    origin, sourceState,\n    readwise{\n      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,\n      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt\n    },\n    sourceItem->{_id, _type, title, kind, creator, url, summary, year},\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n}, cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color},\n    notes[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    text, attribution, location, locationType, sourceUrl, sourceNote,\n    origin, sourceState,\n    readwise{\n      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,\n      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt\n    },\n    sourceItem->{_id, _type, title, kind, creator, url, summary, year},\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color},\n    commentary[]{\n      ...,\n      markDefs[]{..., link->{_id, _type, title, slug}}\n    }\n  },\n  filter{..., topics[]->{_id, title, slug, color}},\n  quote->{\n  _id,\n  _type,\n  text,\n  attribution,\n  location,\n  locationType,\n  sourceUrl,\n  sourceNote,\n  origin,\n  sourceState,\n  featured,\n  sortOrder,\n  tags,\n  topics[]->{_id, title, slug, color},\n  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},\n  sourceItem->{\n    _id, _type, title, kind, creator, url, summary, year,\n    image{asset, alt, caption, hotspot, crop}\n  },\n  commentary[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}}\n  }\n}\n}, commentary[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    text, attribution, location, locationType, sourceUrl, sourceNote,\n    origin, sourceState,\n    readwise{\n      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,\n      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt\n    },\n    sourceItem->{_id, _type, title, kind, creator, url, summary, year},\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color},\n    commentary[]{\n      ...,\n      markDefs[]{..., link->{_id, _type, title, slug}}\n    }\n  },\n  filter{..., topics[]->{_id, title, slug, color}},\n  quote->{\n  _id,\n  _type,\n  text,\n  attribution,\n  location,\n  locationType,\n  sourceUrl,\n  sourceNote,\n  origin,\n  sourceState,\n  featured,\n  sortOrder,\n  tags,\n  topics[]->{_id, title, slug, color},\n  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},\n  sourceItem->{\n    _id, _type, title, kind, creator, url, summary, year,\n    image{asset, alt, caption, hotspot, crop}\n  },\n  commentary[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}}\n  }\n}\n}\n  },\n  filter{..., topics[]->{_id, title, slug, color}},\n  quote->{\n  _id,\n  _type,\n  text,\n  attribution,\n  location,\n  locationType,\n  sourceUrl,\n  sourceNote,\n  origin,\n  sourceState,\n  featured,\n  sortOrder,\n  tags,\n  topics[]->{_id, title, slug, color},\n  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},\n  sourceItem->{\n    _id, _type, title, kind, creator, url, summary, year,\n    image{asset, alt, caption, hotspot, crop}\n  },\n  commentary[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}}\n  }\n}\n},\n    \"library\": *[\n      _type in [\"thing\", \"project\", \"article\"] &&\n      (meta.visibility == \"public\" || !defined(meta.visibility))\n    ]{\n  _id,\n  _type,\n  title,\n  slug,\n  kind,\n  creator,\n  url,\n  externalUrl,\n  summary,\n  excerpt,\n  year,\n  publishedAt,\n  featured,\n  historical,\n  sortOrder,\n  text,\n  attribution,\n  location,\n  locationType,\n  sourceUrl,\n  sourceNote,\n  origin,\n  sourceState,\n  tags,\n  readwise{\n    userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,\n    coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt\n  },\n  sourceItem->{\n    _id, _type, title, kind, creator, url, summary, year,\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n}\n  },\n  image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n  cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n  topics[]->{_id, title, slug, color},\n  notes[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}},\n    items[]->{_id, _type, title, slug, kind, creator, url, summary, excerpt, year, featured, historical}\n  },\n  commentary[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}}\n  }\n}\n  }\n": PAGE_QUERYResult;
+    "\n  *[_type == \"project\" && slug.current == $slug][0]{\n    _id, _type, title, slug, summary, url, year, historical,\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color},\n    meta{title, description, keywords, ogImage{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n}, visibility},\n    body[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    text, attribution, location, locationType, sourceUrl, sourceNote,\n    origin, sourceState,\n    readwise{\n      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,\n      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt\n    },\n    sourceItem->{_id, _type, title, kind, creator, url, summary, year},\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color},\n    commentary[]{\n      ...,\n      markDefs[]{..., link->{_id, _type, title, slug}}\n    }\n  },\n  filter{..., topics[]->{_id, title, slug, color}},\n  quote->{\n  _id,\n  _type,\n  text,\n  attribution,\n  location,\n  locationType,\n  sourceUrl,\n  sourceNote,\n  origin,\n  sourceState,\n  featured,\n  sortOrder,\n  tags,\n  topics[]->{_id, title, slug, color},\n  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},\n  sourceItem->{\n    _id, _type, title, kind, creator, url, summary, year,\n    image{asset, alt, caption, hotspot, crop}\n  },\n  commentary[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}}\n  }\n}\n}, components[]{\n  ...,\n  image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n  \"richBody\": body[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    text, attribution, location, locationType, sourceUrl, sourceNote,\n    origin, sourceState,\n    readwise{\n      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,\n      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt\n    },\n    sourceItem->{_id, _type, title, kind, creator, url, summary, year},\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color},\n    commentary[]{\n      ...,\n      markDefs[]{..., link->{_id, _type, title, slug}}\n    }\n  },\n  filter{..., topics[]->{_id, title, slug, color}},\n  quote->{\n  _id,\n  _type,\n  text,\n  attribution,\n  location,\n  locationType,\n  sourceUrl,\n  sourceNote,\n  origin,\n  sourceState,\n  featured,\n  sortOrder,\n  tags,\n  topics[]->{_id, title, slug, color},\n  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},\n  sourceItem->{\n    _id, _type, title, kind, creator, url, summary, year,\n    image{asset, alt, caption, hotspot, crop}\n  },\n  commentary[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}}\n  }\n}\n},\n  links[]{\n    ...,\n    reference->{_id, _type, title, slug},\n    externalLink{..., \"fileUrl\": file.asset->url}\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    text, attribution, location, locationType, sourceUrl, sourceNote,\n    origin, sourceState,\n    readwise{\n      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,\n      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt\n    },\n    sourceItem->{_id, _type, title, kind, creator, url, summary, year},\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n}, cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color},\n    notes[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    text, attribution, location, locationType, sourceUrl, sourceNote,\n    origin, sourceState,\n    readwise{\n      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,\n      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt\n    },\n    sourceItem->{_id, _type, title, kind, creator, url, summary, year},\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color},\n    commentary[]{\n      ...,\n      markDefs[]{..., link->{_id, _type, title, slug}}\n    }\n  },\n  filter{..., topics[]->{_id, title, slug, color}},\n  quote->{\n  _id,\n  _type,\n  text,\n  attribution,\n  location,\n  locationType,\n  sourceUrl,\n  sourceNote,\n  origin,\n  sourceState,\n  featured,\n  sortOrder,\n  tags,\n  topics[]->{_id, title, slug, color},\n  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},\n  sourceItem->{\n    _id, _type, title, kind, creator, url, summary, year,\n    image{asset, alt, caption, hotspot, crop}\n  },\n  commentary[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}}\n  }\n}\n}, commentary[]{\n  ...,\n  \"markDefs\": coalesce(markDefs, [])[]{\n    ...,\n    link->{\n      _id,\n      _type,\n      slug\n    }\n  },\n  items[]->{\n    _id, _type, title, slug, kind, creator, url, externalUrl,\n    summary, excerpt, year, publishedAt, featured, historical, sortOrder,\n    text, attribution, location, locationType, sourceUrl, sourceNote,\n    origin, sourceState,\n    readwise{\n      userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,\n      coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt\n    },\n    sourceItem->{_id, _type, title, kind, creator, url, summary, year},\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    topics[]->{_id, title, slug, color},\n    commentary[]{\n      ...,\n      markDefs[]{..., link->{_id, _type, title, slug}}\n    }\n  },\n  filter{..., topics[]->{_id, title, slug, color}},\n  quote->{\n  _id,\n  _type,\n  text,\n  attribution,\n  location,\n  locationType,\n  sourceUrl,\n  sourceNote,\n  origin,\n  sourceState,\n  featured,\n  sortOrder,\n  tags,\n  topics[]->{_id, title, slug, color},\n  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},\n  sourceItem->{\n    _id, _type, title, kind, creator, url, summary, year,\n    image{asset, alt, caption, hotspot, crop}\n  },\n  commentary[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}}\n  }\n}\n}\n  },\n  filter{..., topics[]->{_id, title, slug, color}},\n  quote->{\n  _id,\n  _type,\n  text,\n  attribution,\n  location,\n  locationType,\n  sourceUrl,\n  sourceNote,\n  origin,\n  sourceState,\n  featured,\n  sortOrder,\n  tags,\n  topics[]->{_id, title, slug, color},\n  readwise{highlightId, externalId, readwiseUrl, color, highlightedAt, sourceUpdatedAt, syncedAt},\n  sourceItem->{\n    _id, _type, title, kind, creator, url, summary, year,\n    image{asset, alt, caption, hotspot, crop}\n  },\n  commentary[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}}\n  }\n}\n},\n    \"library\": *[_type in [\"thing\", \"project\", \"article\"] && (meta.visibility == \"public\" || !defined(meta.visibility))]{\n  _id,\n  _type,\n  title,\n  slug,\n  kind,\n  creator,\n  url,\n  externalUrl,\n  summary,\n  excerpt,\n  year,\n  publishedAt,\n  featured,\n  historical,\n  sortOrder,\n  text,\n  attribution,\n  location,\n  locationType,\n  sourceUrl,\n  sourceNote,\n  origin,\n  sourceState,\n  tags,\n  readwise{\n    userBookId, highlightId, externalId, source, sourceUrl, readwiseUrl,\n    coverImageUrl, color, highlightedAt, sourceUpdatedAt, syncedAt\n  },\n  sourceItem->{\n    _id, _type, title, kind, creator, url, summary, year,\n    image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n}\n  },\n  image{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n  cover{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n  topics[]->{_id, title, slug, color},\n  notes[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}},\n    items[]->{_id, _type, title, slug, kind, creator, url, summary, excerpt, year, featured, historical}\n  },\n  commentary[]{\n    ...,\n    markDefs[]{..., link->{_id, _type, title, slug}}\n  }\n}\n  }\n": PROJECT_QUERYResult;
     "\n  *[_type == \"siteSettings\"][0]{\n    _id,\n    _type,\n    metaSettings{\n      siteTitle,\n      titleTemplate,\n      defaultDescription,\n      defaultKeywords,\n      defaultOgImage{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n}\n    },\n    favicon{\n      ...,\n      asset->{_id, url}\n    },\n    ogVisual{\n  alt,\n  caption,\n  width,\n  asset{\n    crop,\n    hotspot,\n    asset,\n    \"lqip\": asset->metadata.lqip\n  }\n},\n    socials[]{platform, url},\n    privacyPolicy->{_id, _type, title, slug, meta{visibility}},\n    imprint->{_id, _type, title, slug, meta{visibility}},\n    newsletter{enabled, groupId, privacyNote},\n    analytics{\n      enabled,\n      consentBanner{\n        headline,\n        description,\n        acceptAllLabel,\n        rejectAllLabel,\n        manageLabel,\n        saveLabel\n      },\n      consentCategories[]{\n        key,\n        label,\n        description,\n        required\n      },\n      plausible{\n        enabled,\n        domain,\n        proxyEnabled,\n        selfHostedUrl\n      },\n      posthog{\n        enabled,\n        projectKey,\n        host,\n        proxyEnabled\n      }\n    }\n  }\n": SITE_SETTINGS_QUERYResult;
     "\n  *[\n    _type in [\"page\", \"article\", \"project\"] &&\n    (meta.visibility == \"public\" || !defined(meta.visibility)) &&\n    !(slug.current in [\"about\", \"things\", \"writing\"])\n  ]{\n    \"url\": select(\n      _id == \"homepage\" => \"/\",\n      _type == \"article\" && defined(slug.current) => \"/writing/\" + slug.current,\n      _type == \"project\" && defined(slug.current) => \"/projects/\" + slug.current,\n      _type == \"page\" && defined(slug.current) => \"/\" + slug.current,\n      null\n    ),\n    _updatedAt\n  }[defined(url)]\n": SITEMAP_QUERYResult;
     "\n  *[_type == \"themeSettings\"][0]{\n    _id,\n    _type,\n    brandColor,\n    textColor,\n    backgroundColor\n  }\n": THEME_SETTINGS_QUERYResult;

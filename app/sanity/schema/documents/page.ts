@@ -82,6 +82,7 @@ export const page = defineType({
         { type: 'heroBlock' },
         { type: 'richTextBlock' },
         { type: 'referenceCollection' },
+        { type: 'quoteBlock' },
         { type: 'newsletterBlock' },
         { type: 'linkListBlock' },
         { type: 'complexImage' },

@@ -4,6 +4,7 @@ import type { HOMEPAGE_QUERYResult } from '@gen/sanity';
 import { stegaClean } from '@sanity/client/stega';
 import { toPlainText } from '@portabletext/react';
 import { ComplexImage } from '@/components/features/sanity/complex-image';
+import { QuoteReference } from '@/components/features/sanity/quote-reference';
 
 export type CollectionValue = NonNullable<
   NonNullable<HOMEPAGE_QUERYResult>['components']
@@ -13,6 +14,7 @@ export type ContentItem =
   | NonNullable<CollectionValue['items']>[number];
 
 function hrefFor(item: ContentItem) {
+  if (item._type === 'quote') return undefined;
   const slug = stegaClean(item.slug?.current || '');
   if (item._type === 'project' && slug) return `/projects/${slug}`;
   if (item._type === 'article' && slug) return `/writing/${slug}`;
@@ -57,8 +59,10 @@ function filterItems(value: CollectionValue, library: ContentItem[]) {
     );
   if (order === 'newest')
     items = [...items].sort((a, b) =>
-      String(b.publishedAt || b.year || '').localeCompare(
-        String(a.publishedAt || a.year || '')
+      String(
+        b.publishedAt || b.readwise?.highlightedAt || b.year || ''
+      ).localeCompare(
+        String(a.publishedAt || a.readwise?.highlightedAt || a.year || '')
       )
     );
   if (order === 'manual')
@@ -77,6 +81,11 @@ function Item({
   showNotes?: boolean | null;
   presentation: string;
 }) {
+  if (item._type === 'quote') {
+    return (
+      <QuoteReference quote={item} showSource showCommentary={showNotes} />
+    );
+  }
   const href = hrefFor(item);
   const external = href?.startsWith('http');
   const title = item.title || 'Untitled';
@@ -113,6 +122,7 @@ function Item({
     </>
   );
   const artwork = item.image || item.cover;
+  const remoteCover = item.readwise?.coverImageUrl;
   const content =
     presentation === 'mediaList' ? (
       <div className="grid grid-cols-[4.5rem_minmax(0,1fr)] gap-5 sm:grid-cols-[6rem_minmax(0,1fr)] sm:gap-7">
@@ -125,6 +135,14 @@ function Item({
               className="h-full w-full"
               figureClassName="h-full"
               imgClassName="h-full w-full object-cover"
+            />
+          ) : remoteCover ? (
+            <img
+              src={remoteCover}
+              alt=""
+              loading="lazy"
+              referrerPolicy="no-referrer"
+              className="h-full w-full object-cover"
             />
           ) : (
             <div className="flex h-full items-end p-2 text-[0.62rem] font-semibold uppercase tracking-[0.12em] text-foreground/35">

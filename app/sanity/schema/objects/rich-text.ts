@@ -45,5 +45,6 @@ export const richText = defineType({
     { type: 'complexImage' },
     { type: 'separator' },
     { type: 'referenceCollection' },
+    { type: 'quoteBlock' },
   ],
 });

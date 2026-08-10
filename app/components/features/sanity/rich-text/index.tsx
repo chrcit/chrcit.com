@@ -19,6 +19,10 @@ import {
   type CollectionValue,
   type ContentItem,
 } from '@/components/features/sanity/content-collection';
+import {
+  QuoteReference,
+  type QuoteValue,
+} from '@/components/features/sanity/quote-reference';
 
 type PageRichText = NonNullable<NonNullable<PAGE_QUERYResult>['richText']>;
 type HomepageRichText = NonNullable<
@@ -59,6 +63,14 @@ type PopupValue = {
   _key?: string;
   label?: string;
   text?: string;
+};
+type QuoteBlockValue = {
+  _type: 'quoteBlock';
+  _key?: string;
+  quote?: QuoteValue | null;
+  context?: string | null;
+  showSource?: boolean | null;
+  showCommentary?: boolean | null;
 };
 
 function headingId(value: Parameters<typeof toPlainText>[0]) {
@@ -165,6 +177,16 @@ export function RichText({ value, library }: Props) {
         <div className="not-prose -mx-[min(4vw,2rem)]">
           <ContentCollection value={value} library={library} />
         </div>
+      ),
+      quoteBlock: ({
+        value,
+      }: PortableTextTypeComponentProps<QuoteBlockValue>) => (
+        <QuoteReference
+          quote={value.quote}
+          context={value.context}
+          showSource={value.showSource}
+          showCommentary={value.showCommentary}
+        />
       ),
     },
   };
