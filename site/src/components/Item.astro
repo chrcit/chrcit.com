@@ -1,0 +1,16 @@
+---
+import { getEntry } from "astro:content";
+import ItemCard from "./ItemCard.astro";
+import ItemRow from "./ItemRow.astro";
+
+interface Props {
+  ref: string;
+  variant?: "card" | "row";
+}
+
+const { ref, variant = "card" } = Astro.props;
+const item = await getEntry("items", ref);
+if (!item) throw new Error(`<Item> — no item found for ref "${ref}"`);
+---
+
+{variant === "row" ? <ItemRow item={item} /> : <ItemCard item={item} />}

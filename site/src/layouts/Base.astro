@@ -1,0 +1,50 @@
+---
+import "@fontsource-variable/inter-tight";
+import "../styles/global.css";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Christian Cito — chrcit.com",
+  description = "Christian Cito. Product engineer, director at Arthouse, Vienna.",
+} = Astro.props;
+
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="topbar">
+        <a href="/">chrcit.com</a>
+        <span>Vienna, AT</span>
+      </div>
+
+      <slot />
+
+      <footer>
+        <span>© {year} Christian Cito</span>
+        <nav class="legal">
+          <a href="/imprint">Imprint</a>
+          <a href="/privacy">Privacy</a>
+        </nav>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+---
+import { Image } from "astro:assets";
+import { ditherFor } from "../utils/dither";
+
+interface Props {
+  title: string;
+  image?: ImageMetadata;
+  isIcon?: boolean;
+}
+
+const { title, image, isIcon = false } = Astro.props;
+---
+
+<span class={`i-thumb ${ditherFor(title)}`} aria-hidden="true">
+  {title.charAt(0)}
+  {image && <Image src={image} alt="" width={128} class={isIcon ? "icon" : ""} loading="lazy" />}
+</span>

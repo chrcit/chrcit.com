@@ -1,0 +1,45 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import ItemRow from "../components/ItemRow.astro";
+
+const tools = (await getCollection("items")).filter((i) => i.data.category === "tool");
+
+const groupOrder = ["Gear", "Stack", "Dev Tools", "Productivity"];
+const groups = groupOrder
+  .map((name) => ({
+    name,
+    items: tools
+      .filter((t) => t.data.group === name)
+      .sort((a, b) => a.data.title.localeCompare(b.data.title)),
+  }))
+  .filter((g) => g.items.length > 0);
+---
+
+<Base title="Uses — chrcit.com" description="Gear, stack, and software I use.">
+  <main class="page">
+    <section class="tile">
+      <div class="tile-label"><span>Uses</span><span class="num">{tools.length} items</span></div>
+      <h1 class="page-title">Uses</h1>
+      <p class="page-note">The gear, the stack, and the software. Updated when something earns its place or loses it.</p>
+    </section>
+
+    {
+      groups.map((group, i) => (
+        <section class="tile">
+          <div class="tile-label">
+            <span>{group.name}</span>
+            <span class="num">{String(i + 1).padStart(2, "0")}</span>
+          </div>
+          <ul class="items">
+            {group.items.map((item) => (
+              <li>
+                <ItemRow item={item} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </main>
+</Base>

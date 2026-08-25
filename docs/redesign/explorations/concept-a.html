@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Christian Cito — Concept A: Ledger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f4f1e9;
+    --paper-dim: #ece8dd;
+    --ink: #1b1813;
+    --ink-soft: #5c564b;
+    --accent: #b5341c;
+    --rule: 1.5px solid var(--ink);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { -webkit-font-smoothing: antialiased; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Archivo", sans-serif;
+    font-weight: 450;
+    line-height: 1.45;
+  }
+
+  ::selection { background: var(--ink); color: var(--paper); }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------- dither utilities (stepped ordered dots, no soft gradients) ---------- */
+  .dt-1 { background-image: radial-gradient(circle at 3px 3px, var(--ink) .7px, transparent .78px); background-size: 6px 6px; }
+  .dt-2 { background-image: radial-gradient(circle at 2.5px 2.5px, var(--ink) 1.05px, transparent 1.13px); background-size: 5px 5px; }
+  .dt-3 { background-image: radial-gradient(circle at 2.5px 2.5px, var(--ink) 1.5px, transparent 1.58px); background-size: 5px 5px; }
+  .dt-4 { background-image: repeating-conic-gradient(var(--ink) 0% 25%, transparent 0% 50%); background-size: 4px 4px; }
+  .dt-5 { background-color: var(--ink); background-image: radial-gradient(circle at 2.5px 2.5px, var(--paper) 1.05px, transparent 1.13px); background-size: 5px 5px; }
+  .dt-6 { background: var(--ink); }
+
+  .dither-band { display: flex; height: 14px; }
+  .dither-band > span { flex: 1; }
+
+  .wrap { max-width: 1060px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- masthead ---------- */
+  header.masthead { padding: 56px 0 28px; }
+  .masthead-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 12px;
+    font-weight: 650;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 20px;
+    font-variant-numeric: tabular-nums;
+  }
+  h1.name {
+    font-weight: 880;
+    font-stretch: 122%;
+    font-size: clamp(3rem, 10.5vw, 8.25rem);
+    line-height: .92;
+    letter-spacing: -.025em;
+    text-transform: uppercase;
+  }
+  .lede {
+    margin-top: 22px;
+    max-width: 56ch;
+    font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+    font-weight: 500;
+    line-height: 1.5;
+  }
+  .lede em { font-style: normal; color: var(--accent); }
+
+  /* ---------- sections ---------- */
+  section { margin-top: 64px; }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    border-bottom: var(--rule);
+    padding-bottom: 10px;
+    margin-bottom: 0;
+  }
+  .section-num {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: .14em;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  .section-title {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+  }
+  .section-note {
+    margin-left: auto;
+    font-size: 12px;
+    font-weight: 550;
+    letter-spacing: .06em;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- ledger rows ---------- */
+  .rows { list-style: none; }
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 8px 24px;
+    padding: 18px 8px;
+    border-bottom: 1px solid color-mix(in srgb, var(--ink) 28%, transparent);
+    transition: background-color .12s linear;
+  }
+  .row:hover { background-color: var(--paper-dim); }
+  a.row:hover { background-image: radial-gradient(circle at 3px 3px, color-mix(in srgb, var(--ink) 22%, transparent) .7px, transparent .78px); background-size: 6px 6px; }
+
+  .row .primary { font-size: 1.15rem; font-weight: 700; letter-spacing: -.01em; }
+  .row .primary .org { font-weight: 500; color: var(--ink-soft); }
+  .row .secondary { font-size: .92rem; font-weight: 500; color: var(--ink-soft); }
+  .row .go {
+    font-size: .85rem;
+    font-weight: 750;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  a.row .go { color: var(--accent); }
+  a.row:hover .go { color: var(--ink); }
+  .go .arrow { display: inline-block; transition: transform .12s linear; }
+  a.row:hover .arrow { transform: translateX(4px); }
+
+  /* ---------- writing table ---------- */
+  .writing .row { grid-template-columns: 92px minmax(0, 1fr) auto; }
+  .writing .date {
+    font-size: .85rem;
+    font-weight: 650;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+  }
+  .writing .title { font-size: 1.05rem; font-weight: 650; letter-spacing: -.01em; }
+  .writing .kind {
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    border: 1px solid color-mix(in srgb, var(--ink) 35%, transparent);
+    padding: 3px 8px;
+    white-space: nowrap;
+  }
+  .writing .kind.annual { color: var(--accent); border-color: var(--accent); }
+
+  /* ---------- generic item card (ledger variant: card = ruled row) ---------- */
+  .item {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1.5fr) minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px 20px;
+    padding: 14px 8px;
+    border-bottom: 1px solid color-mix(in srgb, var(--ink) 28%, transparent);
+  }
+  .item:hover { background-color: var(--paper-dim); }
+  .item-thumb {
+    width: 64px;
+    height: 64px;
+    border: var(--rule);
+    display: grid;
+    place-items: center;
+    font-size: 1.5rem;
+    font-weight: 850;
+    font-stretch: 120%;
+    color: var(--ink);
+  }
+  .item-thumb.inv { color: var(--paper); }
+  .item-flag {
+    display: block;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 3px;
+  }
+  .item-title { font-size: 1.1rem; font-weight: 700; letter-spacing: -.01em; }
+  .item-meta { font-size: .9rem; font-weight: 500; color: var(--ink-soft); }
+  .item-note { font-size: .9rem; font-weight: 500; color: var(--ink-soft); }
+  .item-right { text-align: right; font-size: .9rem; font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+  .rating-bar {
+    margin-top: 6px;
+    width: 96px;
+    height: 8px;
+    border: 1px solid var(--ink);
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .rating-bar > i {
+    display: block;
+    height: 100%;
+    background-image: repeating-conic-gradient(var(--ink) 0% 25%, transparent 0% 50%);
+    background-size: 3px 3px;
+  }
+
+  /* ---------- elsewhere ---------- */
+  .elsewhere .row { grid-template-columns: minmax(0, 1fr) auto auto; }
+  .elsewhere .handle { font-size: .9rem; font-weight: 550; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+
+  /* ---------- footer ---------- */
+  footer { margin-top: 80px; }
+  footer .colophon {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    padding: 18px 0 40px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 720px) {
+    .row, .writing .row, .item, .elsewhere .row {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+    .row .secondary, .item-note, .elsewhere .handle { grid-column: 1 / -1; }
+    .item { grid-template-columns: 56px minmax(0, 1fr) auto; }
+    .item-thumb { width: 56px; height: 56px; grid-row: 1; grid-column: 1; }
+    .item > div:nth-child(2) { grid-row: 1; grid-column: 2; }
+    .item-note { grid-row: 2; grid-column: 1 / -1; padding-left: 76px; }
+    .item-right { grid-row: 1; grid-column: 3; }
+    .masthead-meta { flex-direction: column; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- top dither band: solid ink dissolving into paper -->
+<div class="dither-band" aria-hidden="true">
+  <span class="dt-6"></span><span class="dt-6"></span><span class="dt-5"></span><span class="dt-4"></span><span class="dt-4"></span><span class="dt-3"></span><span class="dt-2"></span><span class="dt-1"></span><span></span><span></span><span></span><span></span>
+</div>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="masthead-meta">
+      <span>chrcit.com — personal index</span>
+      <span>Vienna, AT — 48.2082° N, 16.3738° E</span>
+    </div>
+    <h1 class="name">Christian<br>Cito</h1>
+    <p class="lede">Product engineer. I build digital products, run a studio, and keep records of what I read and use. This site is the index; <em>the work lives at Arthouse</em>.</p>
+  </header>
+
+  <!-- 01 — the router -->
+  <section id="do">
+    <div class="section-head">
+      <span class="section-num">01</span>
+      <span class="section-title">What I do</span>
+      <span class="section-note">the short version, with exits</span>
+    </div>
+    <ul class="rows">
+      <li>
+        <a class="row" href="https://madebyarthouse.com">
+          <span class="primary">Director <span class="org">— Arthouse, creative engineering studio</span></span>
+          <span class="secondary">Strategy, software, systems. This is where work gets booked.</span>
+          <span class="go">Book work <span class="arrow">→</span></span>
+        </a>
+      </li>
+      <li>
+        <a class="row" href="https://hausgemacht.org">
+          <span class="primary">Software &amp; systems <span class="org">— hausgemacht</span></span>
+          <span class="secondary">Infrastructure for a feminist techno collective. Board member.</span>
+          <span class="go">Visit <span class="arrow">→</span></span>
+        </a>
+      </li>
+      <li>
+        <a class="row" href="https://rebased.wtf">
+          <span class="primary">Co-organizer <span class="org">— rebased.wtf</span></span>
+          <span class="secondary">A meetup about having fun with tech. Talks, drinks, no boring stuff.</span>
+          <span class="go">Visit <span class="arrow">→</span></span>
+        </a>
+      </li>
+      <li>
+        <a class="row" href="mailto:citochris@gmail.com">
+          <span class="primary">Email <span class="org">— citochris@gmail.com</span></span>
+          <span class="secondary">The direct line. Answered eventually, read always.</span>
+          <span class="go">Write <span class="arrow">→</span></span>
+        </a>
+      </li>
+      <li>
+        <a class="row" href="https://www.linkedin.com/in/chrcit">
+          <span class="primary">LinkedIn <span class="org">— the professional record</span></span>
+          <span class="secondary">If you need the résumé-shaped version.</span>
+          <span class="go">Connect <span class="arrow">→</span></span>
+        </a>
+      </li>
+      <li>
+        <a class="row" href="https://x.com/chrcit">
+          <span class="primary">X <span class="org">— @chrcit</span></span>
+          <span class="secondary">Occasional posts, mostly about building things.</span>
+          <span class="go">Follow <span class="arrow">→</span></span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <!-- 02 — writing -->
+  <section id="writing" class="writing">
+    <div class="section-head">
+      <span class="section-num">02</span>
+      <span class="section-title">Writing</span>
+      <span class="section-note">monthly, plus one per year</span>
+    </div>
+    <ul class="rows">
+      <li>
+        <a class="row" href="#">
+          <span class="date">2026-07</span>
+          <span class="title">Notes № 14 — Everything is maintenance</span>
+          <span class="kind">Monthly</span>
+        </a>
+      </li>
+      <li>
+        <a class="row" href="#">
+          <span class="date">2026-06</span>
+          <span class="title">Notes № 13 — The studio is a system</span>
+          <span class="kind">Monthly</span>
+        </a>
+      </li>
+      <li>
+        <a class="row" href="#">
+          <span class="date">2026-05</span>
+          <span class="title">Notes № 12 — Reading more, shipping less</span>
+          <span class="kind">Monthly</span>
+        </a>
+      </li>
+      <li>
+        <a class="row" href="#">
+          <span class="date">2026-01</span>
+          <span class="title">2025 in review</span>
+          <span class="kind annual">Annual</span>
+        </a>
+      </li>
+      <li>
+        <a class="row" href="#">
+          <span class="date">2025-12</span>
+          <span class="title">Notes № 11 — In defense of boring tools</span>
+          <span class="kind">Monthly</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <!-- 03 — books (item card, category: book) -->
+  <section id="books">
+    <div class="section-head">
+      <span class="section-num">03</span>
+      <span class="section-title">Books</span>
+      <span class="section-note">rated, not reviewed</span>
+    </div>
+
+    <article class="item">
+      <div class="item-thumb dt-4" aria-hidden="true">A</div>
+      <div>
+        <span class="item-flag">Book</span>
+        <h3 class="item-title">Antifragile</h3>
+        <p class="item-meta">Nassim Nicholas Taleb, 2012</p>
+      </div>
+      <p class="item-note">Systems that gain from disorder. Reread every few years, argue with it throughout.</p>
+      <div class="item-right">9/10<br><span class="rating-bar"><i style="width:90%"></i></span></div>
+    </article>
+
+    <article class="item">
+      <div class="item-thumb dt-3" aria-hidden="true">C</div>
+      <div>
+        <span class="item-flag">Book</span>
+        <h3 class="item-title">Capitalist Realism</h3>
+        <p class="item-meta">Mark Fisher, 2009</p>
+      </div>
+      <p class="item-note">Eighty-one pages. The shortest book that ever changed how I read the news.</p>
+      <div class="item-right">8/10<br><span class="rating-bar"><i style="width:80%"></i></span></div>
+    </article>
+
+    <article class="item">
+      <div class="item-thumb dt-5 inv" aria-hidden="true">M</div>
+      <div>
+        <span class="item-flag">Book</span>
+        <h3 class="item-title">The Mind Illuminated</h3>
+        <p class="item-meta">Culadasa &amp; Matthew Immergut, 2015</p>
+      </div>
+      <p class="item-note">A meditation manual written like an engineering spec. Ten stages, no mysticism.</p>
+      <div class="item-right">10/10<br><span class="rating-bar"><i style="width:100%"></i></span></div>
+    </article>
+  </section>
+
+  <!-- 04 — tools (item card, category: tool) -->
+  <section id="tools">
+    <div class="section-head">
+      <span class="section-num">04</span>
+      <span class="section-title">Tools</span>
+      <span class="section-note">the uses page, abridged</span>
+    </div>
+
+    <article class="item">
+      <div class="item-thumb dt-2" aria-hidden="true">R</div>
+      <div>
+        <span class="item-flag">Tool</span>
+        <h3 class="item-title">Raycast</h3>
+        <p class="item-meta">raycast.com — launcher</p>
+      </div>
+      <p class="item-note">Launcher, clipboard history, window management. Replaced five apps on day one.</p>
+      <div class="item-right"><a class="go" href="https://raycast.com" style="color:var(--accent)">Visit <span class="arrow">→</span></a></div>
+    </article>
+
+    <article class="item">
+      <div class="item-thumb dt-4" aria-hidden="true">O</div>
+      <div>
+        <span class="item-flag">Tool</span>
+        <h3 class="item-title">Obsidian</h3>
+        <p class="item-meta">obsidian.md — notes</p>
+      </div>
+      <p class="item-note">Notes as plain files on disk. Will outlive the app, which is the point.</p>
+      <div class="item-right"><a class="go" href="https://obsidian.md" style="color:var(--accent)">Visit <span class="arrow">→</span></a></div>
+    </article>
+
+    <article class="item">
+      <div class="item-thumb dt-3" aria-hidden="true">T</div>
+      <div>
+        <span class="item-flag">Tool</span>
+        <h3 class="item-title">Things</h3>
+        <p class="item-meta">culturedcode.com — tasks</p>
+      </div>
+      <p class="item-note">Opinionated in the right places. The only task list that survived the decade.</p>
+      <div class="item-right"><a class="go" href="https://culturedcode.com/things/" style="color:var(--accent)">Visit <span class="arrow">→</span></a></div>
+    </article>
+  </section>
+
+  <!-- 05 — elsewhere -->
+  <section id="elsewhere" class="elsewhere">
+    <div class="section-head">
+      <span class="section-num">05</span>
+      <span class="section-title">Elsewhere</span>
+      <span class="section-note">all @chrcit</span>
+    </div>
+    <ul class="rows">
+      <li><a class="row" href="https://github.com/chrcit"><span class="primary">GitHub</span><span class="handle">github.com/chrcit</span><span class="go"><span class="arrow">→</span></span></a></li>
+      <li><a class="row" href="https://instagram.com/chrcit"><span class="primary">Instagram</span><span class="handle">instagram.com/chrcit</span><span class="go"><span class="arrow">→</span></span></a></li>
+      <li><a class="row" href="https://youtube.com/@chrcit"><span class="primary">YouTube</span><span class="handle">youtube.com/@chrcit</span><span class="go"><span class="arrow">→</span></span></a></li>
+      <li><a class="row" href="https://twitch.tv/chrcit"><span class="primary">Twitch</span><span class="handle">twitch.tv/chrcit</span><span class="go"><span class="arrow">→</span></span></a></li>
+    </ul>
+  </section>
+
+  <footer>
+    <div class="dither-band" aria-hidden="true" style="margin-bottom:0">
+      <span></span><span></span><span></span><span></span><span class="dt-1"></span><span class="dt-2"></span><span class="dt-3"></span><span class="dt-4"></span><span class="dt-4"></span><span class="dt-5"></span><span class="dt-6"></span><span class="dt-6"></span>
+    </div>
+    <div class="colophon">
+      <span>© 2026 Christian Cito — Vienna</span>
+      <span>Set in Archivo. Two inks, some dots.</span>
+      <span>No tracking, no cookies, no dark mode.</span>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

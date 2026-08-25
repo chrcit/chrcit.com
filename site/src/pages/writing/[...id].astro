@@ -1,0 +1,39 @@
+---
+import { getCollection, render } from "astro:content";
+import { Image } from "astro:assets";
+import Base from "../../layouts/Base.astro";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("posts");
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const date = post.data.publishedAt.toISOString().slice(0, 10);
+const kind = post.data.kind === "annual" ? "Year in review" : "Notes";
+---
+
+<Base title={`${post.data.title} — chrcit.com`} description={post.data.description}>
+  <main class="page">
+    <article class="tile">
+      <div class="tile-label">
+        <span>{kind}</span>
+        <span class="num">{date}</span>
+      </div>
+      <h1 class="page-title">{post.data.title}</h1>
+      {
+        post.data.image && (
+          <p style="margin-top: 16px;">
+            <Image src={post.data.image} alt="" style="border: var(--rule); max-width: 100%; height: auto;" />
+          </p>
+        )
+      }
+      <div class="prose" style="margin-top: 24px;">
+        <Content />
+      </div>
+      <a class="tile-more" href="/writing">All writing →</a>
+    </article>
+  </main>
+</Base>

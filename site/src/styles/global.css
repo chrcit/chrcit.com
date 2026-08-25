@@ -1,0 +1,581 @@
+/* DITHER — Concept C "Mosaic" ported from docs/redesign/explorations/concept-c.html.
+   Tokens, tile geometry and hover interactions are locked; do not tune without flagging. */
+
+:root {
+  --paper: #f3f0e7;
+  --ink: #191611;
+  --ink-soft: #615a4e;
+  --accent: #b5341c;
+  --rule: 1.5px solid var(--ink);
+  --gap: 10px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--paper);
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Inter Tight Variable", "Inter Tight", sans-serif;
+  font-weight: 450;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* film grain over everything, very quiet */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ---------- dither utilities (hover fills + image fallbacks) ---------- */
+.dt-2 {
+  background-image: radial-gradient(circle at 2.5px 2.5px, var(--ink) 1.05px, transparent 1.13px);
+  background-size: 5px 5px;
+}
+.dt-3 {
+  background-image: radial-gradient(circle at 2.5px 2.5px, var(--ink) 1.5px, transparent 1.58px);
+  background-size: 5px 5px;
+}
+.dt-4 {
+  background-image: repeating-conic-gradient(var(--ink) 0% 25%, transparent 0% 50%);
+  background-size: 4px 4px;
+}
+.dt-5 {
+  background-color: var(--ink);
+  background-image: radial-gradient(circle at 2.5px 2.5px, var(--paper) 1.05px, transparent 1.13px);
+  background-size: 5px 5px;
+}
+.dot-hover:hover {
+  background-image: radial-gradient(circle at 3px 3px, color-mix(in srgb, var(--ink) 22%, transparent) 0.7px, transparent 0.78px);
+  background-size: 6px 6px;
+}
+
+/* sticky-bottom page frame */
+.wrap {
+  max-width: 1120px;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 20px 20px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------- top bar ---------- */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding: 6px 2px 16px;
+  font-variant-numeric: tabular-nums;
+}
+.topbar a:hover {
+  color: var(--ink);
+}
+
+/* ---------- mosaic grid ---------- */
+.mosaic {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: minmax(96px, auto);
+  grid-auto-flow: dense;
+  gap: var(--gap);
+  margin-bottom: var(--gap);
+}
+
+.tile {
+  border: var(--rule);
+  background: var(--paper);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.span-2 {
+  grid-column: span 2;
+}
+.span-3 {
+  grid-column: span 3;
+}
+.span-4 {
+  grid-column: span 4;
+}
+.tall-2 {
+  grid-row: span 2;
+}
+
+.tile-label {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.tile-label .num {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.tile-label a.num:hover {
+  color: var(--ink);
+}
+
+/* ---------- lead tile: name + what I do ---------- */
+.tile-lead h1 {
+  font-size: clamp(2.6rem, 5.4vw, 4.6rem);
+  font-weight: 840;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.router {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.router li {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.router li + li {
+  border-top: 1px solid color-mix(in srgb, var(--ink) 25%, transparent);
+}
+.router details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.router summary {
+  list-style: none;
+  cursor: pointer;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 6px;
+  margin: 0 -6px;
+}
+.router summary::-webkit-details-marker {
+  display: none;
+}
+.router summary:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+.router summary:hover .r-plus {
+  color: var(--paper);
+}
+.r-title {
+  font-size: 1.12rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.r-plus {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--accent);
+  transition: transform 0.15s linear;
+}
+.router details[open] .r-plus {
+  transform: rotate(45deg);
+}
+.r-desc {
+  padding: 2px 6px 12px;
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  max-width: 46ch;
+}
+.r-desc a {
+  color: var(--accent);
+  font-weight: 700;
+  white-space: nowrap;
+}
+.r-desc a:hover {
+  color: var(--ink);
+}
+
+/* ---------- writing tile ---------- */
+.posts {
+  list-style: none;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.posts li {
+  flex: 1;
+  display: flex;
+}
+.posts li + li {
+  border-top: 1px solid color-mix(in srgb, var(--ink) 25%, transparent);
+}
+.posts a {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  padding: 9px 6px;
+  margin: 0 -6px;
+}
+.posts a:hover .p-title {
+  color: var(--accent);
+}
+.p-date {
+  font-size: 0.78rem;
+  font-weight: 650;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+.p-title {
+  font-size: 0.98rem;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+.tile-more {
+  display: block;
+  margin-top: auto;
+  padding-top: 12px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.tile-more:hover {
+  color: var(--ink);
+}
+
+/* ---------- generic item row (mosaic variant) ---------- */
+.items {
+  list-style: none;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.items li {
+  flex: 1;
+  display: flex;
+}
+.items li + li {
+  border-top: 1px solid color-mix(in srgb, var(--ink) 25%, transparent);
+}
+.item-row {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+  padding: 8px 6px;
+  margin: 0 -6px;
+}
+a.item-row:hover .i-title {
+  color: var(--accent);
+}
+.i-thumb {
+  width: 40px;
+  height: 40px;
+  border: var(--rule);
+  display: grid;
+  place-items: center;
+  font-size: 1.05rem;
+  font-weight: 840;
+  letter-spacing: -0.02em;
+  position: relative;
+  overflow: hidden;
+}
+/* real cover/icon sits on top of the dither-initial fallback */
+.i-thumb img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: var(--paper);
+}
+.i-thumb img.icon {
+  object-fit: contain;
+  padding: 5px;
+}
+.i-thumb.inv {
+  color: var(--paper);
+}
+.i-title {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+.i-meta {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  font-weight: 500;
+  margin-top: 1px;
+  display: block;
+}
+.i-right {
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  color: var(--ink);
+}
+.i-right.link {
+  color: var(--accent);
+  font-size: 1rem;
+}
+
+/* ---------- item card (archive variant, anatomy from concept-a) ---------- */
+.item-card {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) auto;
+  gap: 8px 16px;
+  align-items: center;
+  padding: 14px 6px;
+  margin: 0 -6px;
+}
+.item-card .i-thumb {
+  width: 64px;
+  height: 64px;
+  font-size: 1.5rem;
+}
+.item-card .i-title {
+  font-size: 1.1rem;
+}
+.item-card .i-flag {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 3px;
+}
+.item-card .i-note {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  margin-top: 3px;
+  display: block;
+  max-width: 62ch;
+}
+.rating-bar {
+  margin-top: 6px;
+  width: 96px;
+  height: 8px;
+  border: 1px solid var(--ink);
+  display: inline-block;
+  vertical-align: middle;
+}
+.rating-bar > i {
+  display: block;
+  height: 100%;
+  background-image: repeating-conic-gradient(var(--ink) 0% 25%, transparent 0% 50%);
+  background-size: 3px 3px;
+}
+
+/* ---------- socials tile ---------- */
+.social-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0;
+  flex: 1;
+}
+.social-grid a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  margin: -1px;
+  border: 1px solid color-mix(in srgb, var(--ink) 30%, transparent);
+  font-size: 0.92rem;
+  font-weight: 650;
+}
+.social-grid a:hover {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.social-grid a .at {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+.social-grid a:hover .at {
+  color: color-mix(in srgb, var(--paper) 60%, transparent);
+}
+
+/* ---------- footer (sticky bottom) ---------- */
+footer {
+  margin-top: auto;
+  border: var(--rule);
+  border-bottom: 0;
+  padding: 14px 18px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  display: flex;
+  justify-content: space-between;
+  gap: 8px 24px;
+  flex-wrap: wrap;
+}
+footer a:hover {
+  color: var(--ink);
+}
+footer .legal {
+  display: flex;
+  gap: 18px;
+}
+
+/* ---------- subpages: single-column stack in the same language ---------- */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  margin-bottom: var(--gap);
+}
+.page-title {
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  font-weight: 840;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+.page-note {
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  max-width: 56ch;
+  margin-top: 10px;
+}
+
+/* ---------- prose (post pages, legal pages) ---------- */
+.prose {
+  max-width: 68ch;
+  font-size: 1.02rem;
+  line-height: 1.6;
+}
+.prose > * + * {
+  margin-top: 1em;
+}
+.prose h2 {
+  font-size: 1.35rem;
+  font-weight: 780;
+  letter-spacing: -0.015em;
+  margin-top: 1.8em;
+  padding-top: 0.9em;
+  border-top: 1px solid color-mix(in srgb, var(--ink) 25%, transparent);
+}
+.prose h3 {
+  font-size: 1.1rem;
+  font-weight: 720;
+  letter-spacing: -0.01em;
+  margin-top: 1.6em;
+}
+.prose a {
+  color: var(--accent);
+  font-weight: 650;
+}
+.prose a:hover {
+  color: var(--ink);
+}
+.prose ul,
+.prose ol {
+  padding-left: 1.4em;
+}
+.prose li + li {
+  margin-top: 0.3em;
+}
+.prose blockquote {
+  border-left: var(--rule);
+  padding-left: 1em;
+  color: var(--ink-soft);
+}
+.prose img {
+  max-width: 100%;
+  border: var(--rule);
+}
+.prose hr {
+  border: 0;
+  border-top: 1px solid color-mix(in srgb, var(--ink) 25%, transparent);
+  margin: 2em 0;
+}
+.prose code {
+  font-size: 0.9em;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 900px) {
+  .mosaic {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .span-3,
+  .span-4 {
+    grid-column: span 2;
+  }
+  .tall-2 {
+    grid-row: span 1;
+  }
+  .social-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 560px) {
+  .mosaic {
+    grid-template-columns: 1fr;
+  }
+  .span-2,
+  .span-3,
+  .span-4 {
+    grid-column: span 1;
+  }
+  .social-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .social-grid a .at {
+    display: none;
+  }
+  .item-card {
+    grid-template-columns: 56px minmax(0, 1fr) auto;
+  }
+  .item-card .i-thumb {
+    width: 56px;
+    height: 56px;
+  }
+}

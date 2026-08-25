@@ -1,0 +1,16 @@
+---
+title: "Notes № 2 — The archive is the argument"
+description: Why the books and tools lists survived every rewrite.
+publishedAt: 2026-07-01
+kind: notes
+---
+
+import Item from "../../components/Item.astro";
+
+Every version of this site has kept the same two lists: books I've rated and tools I use. Projects sections came and went. The lists stayed.
+
+The reason is simple. Work samples age and get NDA'd. A decade of recorded judgment doesn't. If you want to know how I evaluate things, the [books](/books) page is more honest than any case study I could write.
+
+The system behind it is one generic item with a category flag. Books and tools today; films and music when I get to them. Nothing autoloads — an item shows up where I put it, or it doesn't show up at all. Like this:
+
+<Item ref="books/antifragile" />

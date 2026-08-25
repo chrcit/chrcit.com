@@ -8,3 +8,6 @@ astro-legacy/dist/
 # React Router
 /.react-router/
 /build/
+
+# Astro (DITHER redesign)
+site/dist/

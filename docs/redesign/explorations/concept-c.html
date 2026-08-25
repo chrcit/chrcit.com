@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Christian Cito — Concept C: Mosaic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@100..900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f3f0e7;
+    --ink: #191611;
+    --ink-soft: #615a4e;
+    --accent: #b5341c;
+    --rule: 1.5px solid var(--ink);
+    --gap: 10px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: "Inter Tight", sans-serif;
+    font-weight: 450;
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection { background: var(--ink); color: var(--paper); }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* film grain over everything, very quiet */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 50;
+    opacity: .05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- dither utilities (hover fills + image fallbacks) ---------- */
+  .dt-2 { background-image: radial-gradient(circle at 2.5px 2.5px, var(--ink) 1.05px, transparent 1.13px); background-size: 5px 5px; }
+  .dt-3 { background-image: radial-gradient(circle at 2.5px 2.5px, var(--ink) 1.5px, transparent 1.58px); background-size: 5px 5px; }
+  .dt-4 { background-image: repeating-conic-gradient(var(--ink) 0% 25%, transparent 0% 50%); background-size: 4px 4px; }
+  .dt-5 { background-color: var(--ink); background-image: radial-gradient(circle at 2.5px 2.5px, var(--paper) 1.05px, transparent 1.13px); background-size: 5px 5px; }
+  .dot-hover:hover { background-image: radial-gradient(circle at 3px 3px, color-mix(in srgb, var(--ink) 22%, transparent) .7px, transparent .78px); background-size: 6px 6px; }
+
+  /* sticky-bottom page frame */
+  .wrap {
+    max-width: 1120px;
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 20px 20px 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---------- top bar ---------- */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    padding: 6px 2px 16px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- mosaic grid ---------- */
+  .mosaic {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: minmax(96px, auto);
+    grid-auto-flow: dense;
+    gap: var(--gap);
+  }
+
+  .tile {
+    border: var(--rule);
+    background: var(--paper);
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .span-2 { grid-column: span 2; }
+  .span-3 { grid-column: span 3; }
+  .span-4 { grid-column: span 4; }
+  .tall-2 { grid-row: span 2; }
+
+  .tile-label {
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .tile-label .num { color: var(--accent); font-variant-numeric: tabular-nums; }
+
+  /* ---------- lead tile: name + what I do ---------- */
+  .tile-lead h1 {
+    font-size: clamp(2.6rem, 5.4vw, 4.6rem);
+    font-weight: 840;
+    letter-spacing: -.035em;
+    line-height: .95;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .router { list-style: none; display: flex; flex-direction: column; flex: 1; }
+  .router li { flex: 1; display: flex; flex-direction: column; }
+  .router li + li { border-top: 1px solid color-mix(in srgb, var(--ink) 25%, transparent); }
+  .router details { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+  .router summary {
+    list-style: none;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 6px;
+    margin: 0 -6px;
+  }
+  .router summary::-webkit-details-marker { display: none; }
+  .router summary:hover { background: var(--ink); color: var(--paper); }
+  .router summary:hover .r-plus { color: var(--paper); }
+  .r-title { font-size: 1.12rem; font-weight: 700; letter-spacing: -.01em; }
+  .r-plus {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--accent);
+    transition: transform .15s linear;
+  }
+  .router details[open] .r-plus { transform: rotate(45deg); }
+  .r-desc {
+    padding: 2px 6px 12px;
+    font-size: .92rem;
+    color: var(--ink-soft);
+    max-width: 46ch;
+  }
+  .r-desc a {
+    color: var(--accent);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .r-desc a:hover { color: var(--ink); }
+
+  /* ---------- writing tile ---------- */
+  .posts { list-style: none; flex: 1; display: flex; flex-direction: column; }
+  .posts li { flex: 1; display: flex; }
+  .posts li + li { border-top: 1px solid color-mix(in srgb, var(--ink) 25%, transparent); }
+  .posts a {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    padding: 9px 6px;
+    margin: 0 -6px;
+  }
+  .posts a:hover .p-title { color: var(--accent); }
+  .p-date { font-size: .78rem; font-weight: 650; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  .p-title { font-size: .98rem; font-weight: 650; letter-spacing: -.01em; }
+  .tile-more {
+    display: block;
+    margin-top: auto;
+    padding-top: 12px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .tile-more:hover { color: var(--ink); }
+
+  /* ---------- generic item card (mosaic variant: category tile of compact item rows) ---------- */
+  .items { list-style: none; flex: 1; display: flex; flex-direction: column; }
+  .items li { flex: 1; display: flex; }
+  .items li + li { border-top: 1px solid color-mix(in srgb, var(--ink) 25%, transparent); }
+  .item-row {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 40px minmax(0, 1fr) auto;
+    gap: 12px;
+    align-items: center;
+    padding: 8px 6px;
+    margin: 0 -6px;
+  }
+  a.item-row:hover .i-title { color: var(--accent); }
+  .i-thumb {
+    width: 40px;
+    height: 40px;
+    border: var(--rule);
+    display: grid;
+    place-items: center;
+    font-size: 1.05rem;
+    font-weight: 840;
+    letter-spacing: -.02em;
+    position: relative;
+    overflow: hidden;
+  }
+  /* real cover/icon sits on top of the dither-initial fallback */
+  .i-thumb img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: var(--paper);
+  }
+  .i-thumb img.icon { object-fit: contain; padding: 5px; }
+  .i-thumb.inv { color: var(--paper); }
+  .i-title { font-size: 1rem; font-weight: 700; letter-spacing: -.01em; line-height: 1.15; }
+  .i-meta { font-size: .82rem; color: var(--ink-soft); font-weight: 500; margin-top: 1px; display: block; }
+  .i-right {
+    font-size: .85rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    color: var(--ink);
+  }
+  .i-right.link { color: var(--accent); font-size: 1rem; }
+
+  /* ---------- socials tile ---------- */
+  .social-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 0;
+    flex: 1;
+  }
+  .social-grid a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 12px;
+    margin: -1px;
+    border: 1px solid color-mix(in srgb, var(--ink) 30%, transparent);
+    font-size: .92rem;
+    font-weight: 650;
+  }
+  .social-grid a:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .social-grid a .at { font-size: .75rem; font-weight: 500; color: var(--ink-soft); }
+  .social-grid a:hover .at { color: color-mix(in srgb, var(--paper) 60%, transparent); }
+
+  /* ---------- footer (sticky bottom) ---------- */
+  footer {
+    margin-top: auto;
+    border: var(--rule);
+    border-bottom: 0;
+    padding: 14px 18px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+  }
+  .mosaic { margin-bottom: var(--gap); }
+
+  @media (max-width: 900px) {
+    .mosaic { grid-template-columns: repeat(2, 1fr); }
+    .span-3, .span-4 { grid-column: span 2; }
+    .tall-2 { grid-row: span 1; }
+    .social-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .mosaic { grid-template-columns: 1fr; }
+    .span-2, .span-3, .span-4 { grid-column: span 1; }
+    .social-grid { grid-template-columns: 1fr 1fr; }
+    .social-grid a .at { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="topbar">
+    <span>chrcit.com</span>
+    <span>Vienna, AT</span>
+  </div>
+
+  <main class="mosaic">
+
+    <!-- lead: name + what I do -->
+    <section class="tile span-3 tall-2 tile-lead" id="do">
+      <h1>Christian Cito</h1>
+      <div class="tile-label"><span>What I do</span><span class="num">01</span></div>
+      <ul class="router">
+        <li>
+          <details>
+            <summary><span class="r-title">Director at Arthouse</span><span class="r-plus">+</span></summary>
+            <p class="r-desc">Creative engineering studio. Strategy, software, systems — this is where work gets booked. <a href="https://madebyarthouse.com">madebyarthouse.com →</a></p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary><span class="r-title">Software &amp; systems at hausgemacht</span><span class="r-plus">+</span></summary>
+            <p class="r-desc">Infrastructure and board duty for a feminist techno collective. <a href="https://hausgemacht.org">hausgemacht.org →</a></p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary><span class="r-title">Co-organizer of rebased.wtf</span><span class="r-plus">+</span></summary>
+            <p class="r-desc">A meetup about having fun with tech. Talks, drinks, no boring stuff. <a href="https://rebased.wtf">rebased.wtf →</a></p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary><span class="r-title">Sometimes writer</span><span class="r-plus">+</span></summary>
+            <p class="r-desc">Monthly notes, one review per year. Kept on this site. <a href="#writing">All writing →</a></p>
+          </details>
+        </li>
+      </ul>
+    </section>
+
+    <!-- writing -->
+    <section class="tile tall-2" id="writing">
+      <div class="tile-label"><span>Writing</span><span class="num">02</span></div>
+      <ul class="posts">
+        <li><a href="#" class="dot-hover"><span class="p-date">2026-07</span><span class="p-title">Notes № 14 — Everything is maintenance</span></a></li>
+        <li><a href="#" class="dot-hover"><span class="p-date">2026-06</span><span class="p-title">Notes № 13 — The studio is a system</span></a></li>
+        <li><a href="#" class="dot-hover"><span class="p-date">2026-05</span><span class="p-title">Notes № 12 — Reading more, shipping less</span></a></li>
+        <li><a href="#" class="dot-hover"><span class="p-date">2026-01</span><span class="p-title">2025 in review</span></a></li>
+      </ul>
+      <a class="tile-more" href="#">All writing →</a>
+    </section>
+
+    <!-- books: one tile, three items -->
+    <section class="tile span-2" id="books">
+      <div class="tile-label"><span>Books</span><span class="num">03 — random sample</span></div>
+      <ul class="items">
+        <li>
+          <a class="item-row dot-hover" href="#">
+            <span class="i-thumb dt-4" aria-hidden="true">A<img src="https://covers.openlibrary.org/b/isbn/9781400067824-M.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+            <span>
+              <span class="i-title">Antifragile</span>
+              <span class="i-meta">Nassim Nicholas Taleb, 2012</span>
+            </span>
+            <span class="i-right">9/10</span>
+          </a>
+        </li>
+        <li>
+          <a class="item-row dot-hover" href="#">
+            <span class="i-thumb dt-3" aria-hidden="true">C<img src="https://covers.openlibrary.org/b/isbn/9781846943171-M.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+            <span>
+              <span class="i-title">Capitalist Realism</span>
+              <span class="i-meta">Mark Fisher, 2009</span>
+            </span>
+            <span class="i-right">8/10</span>
+          </a>
+        </li>
+        <li>
+          <a class="item-row dot-hover" href="#">
+            <span class="i-thumb dt-5 inv" aria-hidden="true">M<img src="https://covers.openlibrary.org/b/isbn/9781501156984-M.jpg" alt="" loading="lazy" onerror="this.remove()"></span>
+            <span>
+              <span class="i-title">The Mind Illuminated</span>
+              <span class="i-meta">Culadasa &amp; Immergut, 2015</span>
+            </span>
+            <span class="i-right">10/10</span>
+          </a>
+        </li>
+      </ul>
+      <a class="tile-more" href="#">All books →</a>
+    </section>
+
+    <!-- tools: one tile, three items -->
+    <section class="tile span-2" id="tools">
+      <div class="tile-label"><span>Tools</span><span class="num">04 — random sample</span></div>
+      <ul class="items">
+        <li>
+          <a class="item-row dot-hover" href="https://raycast.com">
+            <span class="i-thumb dt-2" aria-hidden="true">R<img class="icon" src="https://www.google.com/s2/favicons?domain=raycast.com&amp;sz=128" alt="" loading="lazy" onerror="this.remove()"></span>
+            <span>
+              <span class="i-title">Raycast</span>
+              <span class="i-meta">Launcher — replaced five apps on day one</span>
+            </span>
+            <span class="i-right link">→</span>
+          </a>
+        </li>
+        <li>
+          <a class="item-row dot-hover" href="https://obsidian.md">
+            <span class="i-thumb dt-4" aria-hidden="true">O<img class="icon" src="https://www.google.com/s2/favicons?domain=obsidian.md&amp;sz=128" alt="" loading="lazy" onerror="this.remove()"></span>
+            <span>
+              <span class="i-title">Obsidian</span>
+              <span class="i-meta">Notes as plain files — will outlive the app</span>
+            </span>
+            <span class="i-right link">→</span>
+          </a>
+        </li>
+        <li>
+          <a class="item-row dot-hover" href="https://culturedcode.com/things/">
+            <span class="i-thumb dt-3" aria-hidden="true">T<img class="icon" src="https://www.google.com/s2/favicons?domain=culturedcode.com&amp;sz=128" alt="" loading="lazy" onerror="this.remove()"></span>
+            <span>
+              <span class="i-title">Things</span>
+              <span class="i-meta">Tasks — the only list that survived the decade</span>
+            </span>
+            <span class="i-right link">→</span>
+          </a>
+        </li>
+      </ul>
+      <a class="tile-more" href="#">All tools →</a>
+    </section>
+
+    <!-- socials -->
+    <section class="tile span-4" id="elsewhere">
+      <div class="tile-label"><span>Elsewhere</span><span class="num">all @chrcit</span></div>
+      <div class="social-grid">
+        <a href="https://github.com/chrcit"><span>GitHub</span><span class="at">@chrcit</span></a>
+        <a href="https://instagram.com/chrcit"><span>Instagram</span><span class="at">@chrcit</span></a>
+        <a href="https://www.linkedin.com/in/chrcit"><span>LinkedIn</span><span class="at">@chrcit</span></a>
+        <a href="https://x.com/chrcit"><span>X</span><span class="at">@chrcit</span></a>
+        <a href="https://twitch.tv/chrcit"><span>Twitch</span><span class="at">@chrcit</span></a>
+        <a href="https://youtube.com/@chrcit"><span>YouTube</span><span class="at">@chrcit</span></a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span>© 2026 Christian Cito</span>
+  </footer>
+
+</div>
+
+</body>
+</html>

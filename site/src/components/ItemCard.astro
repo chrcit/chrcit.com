@@ -1,0 +1,44 @@
+---
+import type { CollectionEntry } from "astro:content";
+import ItemThumb from "./ItemThumb.astro";
+
+interface Props {
+  item: CollectionEntry<"items">;
+}
+
+const { item } = Astro.props;
+const { title, category, author, year, rating, url, meta, description, group, cover, icon } =
+  item.data;
+
+const flag = category === "book" ? "Book" : (group ?? "Tool");
+const metaLine = category === "book" ? [author, year].filter(Boolean).join(", ") : meta;
+const note = category === "book" ? description : undefined;
+const image = category === "book" ? cover : icon;
+const Tag = url ? "a" : "div";
+const linkProps = url ? { href: url, target: "_blank", rel: "noopener" } : {};
+---
+
+<Tag class="item-card dot-hover" {...linkProps}>
+  <ItemThumb title={title} image={image} isIcon={category === "tool"} />
+  <span>
+    <span class="i-flag">{flag}</span>
+    <span class="i-title">{title}</span>
+    {metaLine && <span class="i-meta">{metaLine}</span>}
+    {note && <span class="i-note">{note}</span>}
+  </span>
+  {
+    category === "book" && rating != null ? (
+      <span class="i-right">
+        {rating}/10
+        <br />
+        <span class="rating-bar">
+          <i style={`width:${rating * 10}%`} />
+        </span>
+      </span>
+    ) : url ? (
+      <span class="i-right link">→</span>
+    ) : (
+      <span class="i-right" />
+    )
+  }
+</Tag>

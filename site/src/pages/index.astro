@@ -1,0 +1,146 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../layouts/Base.astro";
+import ItemRow from "../components/ItemRow.astro";
+import { socials } from "../data/socials";
+
+const posts = (await getCollection("posts")).sort(
+  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
+);
+
+const items = await getCollection("items");
+
+// Build-time random samples — re-rolled on each build, never at runtime.
+const sample = <T,>(arr: T[], n: number) =>
+  [...arr].sort(() => Math.random() - 0.5).slice(0, n);
+
+const bookSample = sample(
+  items.filter((i) => i.data.category === "book"),
+  3,
+);
+const toolSample = sample(
+  items.filter((i) => i.data.category === "tool" && i.data.url),
+  3,
+);
+
+const postDate = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+---
+
+<Base>
+  <main class="mosaic">
+    <!-- lead: name + what I do -->
+    <section class="tile span-3 tall-2 tile-lead" id="do">
+      <h1>Christian Cito</h1>
+      <div class="tile-label"><span>What I do</span><span class="num">01</span></div>
+      <ul class="router">
+        <li>
+          <details>
+            <summary><span class="r-title">Director at Arthouse</span><span class="r-plus">+</span></summary>
+            <p class="r-desc">
+              Creative engineering studio. Strategy, software, systems — this is where work gets
+              booked. <a href="https://madebyarthouse.com">madebyarthouse.com →</a>
+            </p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>
+              <span class="r-title">Software &amp; systems at hausgemacht</span><span class="r-plus">+</span>
+            </summary>
+            <p class="r-desc">
+              Infrastructure and board duty for a feminist techno collective. <a
+                href="https://hausgemacht.org">hausgemacht.org →</a
+              >
+            </p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary>
+              <span class="r-title">Co-organizer of rebased.wtf</span><span class="r-plus">+</span>
+            </summary>
+            <p class="r-desc">
+              A meetup about having fun with tech. Talks, drinks, no boring stuff. <a
+                href="https://rebased.wtf">rebased.wtf →</a
+              >
+            </p>
+          </details>
+        </li>
+        <li>
+          <details>
+            <summary><span class="r-title">Sometimes writer</span><span class="r-plus">+</span></summary>
+            <p class="r-desc">
+              Monthly notes, one review per year. Kept on this site. <a href="/writing"
+                >All writing →</a
+              >
+            </p>
+          </details>
+        </li>
+      </ul>
+    </section>
+
+    <!-- writing -->
+    <section class="tile tall-2" id="writing">
+      <div class="tile-label"><span>Writing</span><span class="num">02</span></div>
+      <ul class="posts">
+        {
+          posts.slice(0, 4).map((post) => (
+            <li>
+              <a href={`/writing/${post.id}`} class="dot-hover">
+                <span class="p-date">{postDate(post.data.publishedAt)}</span>
+                <span class="p-title">{post.data.title}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a class="tile-more" href="/writing">All writing →</a>
+    </section>
+
+    <!-- books: one tile, three items -->
+    <section class="tile span-2" id="books">
+      <div class="tile-label"><span>Books</span><span class="num">03 — random sample</span></div>
+      <ul class="items">
+        {
+          bookSample.map((item) => (
+            <li>
+              <ItemRow item={item} />
+            </li>
+          ))
+        }
+      </ul>
+      <a class="tile-more" href="/books">All books →</a>
+    </section>
+
+    <!-- tools: one tile, three items -->
+    <section class="tile span-2" id="tools">
+      <div class="tile-label"><span>Tools</span><span class="num">04 — random sample</span></div>
+      <ul class="items">
+        {
+          toolSample.map((item) => (
+            <li>
+              <ItemRow item={item} />
+            </li>
+          ))
+        }
+      </ul>
+      <a class="tile-more" href="/uses">All tools →</a>
+    </section>
+
+    <!-- socials -->
+    <section class="tile span-4" id="elsewhere">
+      <div class="tile-label"><span>Elsewhere</span><span class="num">all @chrcit</span></div>
+      <div class="social-grid">
+        {
+          socials.map((s) => (
+            <a href={s.url} target="_blank" rel="noopener">
+              <span>{s.name}</span>
+              <span class="at">{s.handle}</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+</Base>

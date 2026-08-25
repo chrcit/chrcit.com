@@ -1,0 +1,39 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+
+const posts = (await getCollection("posts")).sort(
+  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
+);
+
+const postDate = (d: Date) =>
+  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+---
+
+<Base title="Writing — chrcit.com" description="Monthly notes and one review per year.">
+  <main class="page">
+    <section class="tile">
+      <div class="tile-label"><span>Writing</span><span class="num">{posts.length} posts</span></div>
+      <h1 class="page-title">Writing</h1>
+      <p class="page-note">Monthly notes, one review per year. Dated, so the neglect shows.</p>
+    </section>
+
+    <section class="tile">
+      <ul class="posts">
+        {
+          posts.map((post) => (
+            <li>
+              <a href={`/writing/${post.id}`} class="dot-hover">
+                <span class="p-date">
+                  {postDate(post.data.publishedAt)}
+                  {post.data.kind === "annual" ? " — year in review" : ""}
+                </span>
+                <span class="p-title">{post.data.title}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </main>
+</Base>
