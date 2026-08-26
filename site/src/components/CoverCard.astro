@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import { ditherFor } from "../utils/dither";
+
+interface Props {
+  item: CollectionEntry<"items">;
+}
+
+const { item } = Astro.props;
+const { title, author, year, rating, url, cover } = item.data;
+const Tag = url ? "a" : "div";
+const linkProps = url ? { href: url, target: "_blank", rel: "noopener" } : {};
+const metaLine = [author, year].filter(Boolean).join(", ");
+---
+
+<Tag class="cover-card" {...linkProps}>
+  <span class={`cover-frame ${ditherFor(title)}`}>
+    {
+      cover ? (
+        <Image src={cover} alt="" width={560} height={840} fit="cover" loading="eager" />
+      ) : (
+        <span class="cover-fallback">{title.charAt(0)}</span>
+      )
+    }
+  </span>
+  <span class="cover-title">{title}</span>
+  {metaLine && <span class="cover-meta">{metaLine}</span>}
+  {rating != null && <span class="cover-score">{rating}/10</span>}
+</Tag>

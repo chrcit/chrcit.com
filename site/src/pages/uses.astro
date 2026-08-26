@@ -5,15 +5,30 @@ import ItemRow from "../components/ItemRow.astro";
 
 const tools = (await getCollection("items")).filter((i) => i.data.category === "tool");
 
-const groupOrder = ["Gear", "Stack", "Dev Tools", "Productivity"];
-const groups = groupOrder
-  .map((name) => ({
-    name,
+const groupOrder = [
+  { key: "Gear", label: "Gear" },
+  { key: "Stack", label: "Tech Stack" },
+  { key: "Dev Tools", label: "Dev Tools" },
+  { key: "Productivity", label: "Productivity" },
+];
+
+const groupedKeys = new Set(groupOrder.map((g) => g.key));
+const groups = [
+  ...groupOrder.map(({ key, label }) => ({
+    name: label,
     items: tools
-      .filter((t) => t.data.group === name)
+      .filter((t) => t.data.group === key)
       .sort((a, b) => a.data.title.localeCompare(b.data.title)),
-  }))
-  .filter((g) => g.items.length > 0);
+  })),
+  ...[...new Set(tools.map((t) => t.data.group).filter((g): g is string => !!g && !groupedKeys.has(g)))]
+    .sort()
+    .map((name) => ({
+      name,
+      items: tools
+        .filter((t) => t.data.group === name)
+        .sort((a, b) => a.data.title.localeCompare(b.data.title)),
+    })),
+].filter((g) => g.items.length > 0);
 ---
 
 <Base title="Uses — chrcit.com" description="Gear, stack, and software I use.">
@@ -21,17 +36,19 @@ const groups = groupOrder
     <section class="tile">
       <div class="tile-label"><span>Uses</span><span class="num">{tools.length} items</span></div>
       <h1 class="page-title">Uses</h1>
-      <p class="page-note">The gear, the stack, and the software. Updated when something earns its place or loses it.</p>
+      <p class="page-note">
+        The gear, the stack, and the software. Grouped the way I actually think about them.
+        Updated when something earns its place or loses it.
+      </p>
     </section>
 
     {
-      groups.map((group, i) => (
+      groups.map((group) => (
         <section class="tile">
-          <div class="tile-label">
-            <span>{group.name}</span>
-            <span class="num">{String(i + 1).padStart(2, "0")}</span>
-          </div>
-          <ul class="items">
+          <h2 class="group-title" id={group.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}>
+            {group.name}
+          </h2>
+          <ul class="items items-split">
             {group.items.map((item) => (
               <li>
                 <ItemRow item={item} />

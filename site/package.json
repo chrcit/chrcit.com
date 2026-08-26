@@ -7,13 +7,22 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "embeds:capture": "node scripts/capture-embeds.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.3.12",
+    "@astrojs/react": "^4.4.2",
     "@astrojs/sitemap": "^3.6.0",
     "@fontsource-variable/inter-tight": "^5.2.10",
-    "astro": "^5.16.0"
+    "astro": "^5.16.0",
+    "motion": "^12.26.2",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.8",
+    "@types/react-dom": "^19.2.3"
   },
   "allowScripts": {
     "sharp@0.34.5": true,

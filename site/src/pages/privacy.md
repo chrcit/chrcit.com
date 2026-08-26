@@ -10,11 +10,12 @@ The privacy of our website visitors is very important to us. Therefore, you shou
 
 As a visitor to this site:
 
-- no personal information is stored
-- no information, such as cookies, is stored in the browser
-- no information is shared with, sent to or sold to third parties (e.g. advertising companies)
+- no personal information is stored by us
+- no cookies are set
+- nothing is sold or used for advertising
 - no information about personal and behavioral trends is collected and analyzed
-- no information is monetized
+- the Vienna clock runs in your browser only
+- current weather for Vienna is requested from Open-Meteo in your browser (see below)
 
 ## Complete privacy policy
 
@@ -50,6 +51,10 @@ When you visit our website, we initially collect some personal data. The followi
 - Language and version of the browser software
 
 This data collection is initially for technical reasons so that our website can be displayed in your browser.
+
+#### Vienna weather
+
+The top of the site shows the current time in Vienna (computed in your browser, no network) and the current temperature. The temperature is requested directly from Open-Meteo (`api.open-meteo.com`) by your browser. We do not store that request. Open-Meteo may see your IP address as part of serving the forecast. No cookies are set by this site for weather. Details: [Open-Meteo](https://open-meteo.com/).
 
 #### Website statistics
 

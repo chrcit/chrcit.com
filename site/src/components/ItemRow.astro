@@ -4,22 +4,38 @@ import ItemThumb from "./ItemThumb.astro";
 
 interface Props {
   item: CollectionEntry<"items">;
+  subtitle?: "meta" | "group";
 }
 
-const { item } = Astro.props;
-const { title, category, author, year, rating, url, meta, cover, icon } = item.data;
+const { item, subtitle = "meta" } = Astro.props;
+const { title, category, author, year, rating, url, meta, group, cover, icon } = item.data;
 
-const metaLine = category === "book" ? [author, year].filter(Boolean).join(", ") : meta;
+const groupLabel: Record<string, string> = {
+  Gear: "Gear",
+  Stack: "Tech Stack",
+  "Dev Tools": "Dev Tools",
+  Productivity: "Productivity",
+};
+
+const metaLine =
+  category === "book"
+    ? [author, year].filter(Boolean).join(", ")
+    : subtitle === "group"
+      ? group
+        ? (groupLabel[group] ?? group)
+        : undefined
+      : meta;
 const image = category === "book" ? cover : icon;
 const Tag = url ? "a" : "div";
 const linkProps = url ? { href: url, target: "_blank", rel: "noopener" } : {};
+const catClass = category === "tool" && subtitle === "group";
 ---
 
 <Tag class="item-row dot-hover" {...linkProps}>
   <ItemThumb title={title} image={image} isIcon={category === "tool"} />
   <span>
     <span class="i-title">{title}</span>
-    {metaLine && <span class="i-meta">{metaLine}</span>}
+    {metaLine && <span class:list={["i-meta", catClass && "i-cat"]}>{metaLine}</span>}
   </span>
   {
     category === "book" && rating != null ? (

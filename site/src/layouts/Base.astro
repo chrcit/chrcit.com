@@ -1,6 +1,8 @@
 ---
 import "@fontsource-variable/inter-tight";
 import "../styles/global.css";
+import Elsewhere from "../components/Elsewhere.astro";
+import ViennaNow from "../components/ViennaNow.astro";
 
 interface Props {
   title?: string;
@@ -33,17 +35,24 @@ const year = new Date().getFullYear();
     <div class="wrap">
       <div class="topbar">
         <a href="/">chrcit.com</a>
-        <span>Vienna, AT</span>
+        <span class="locale">
+          <span>Vienna, AT</span>
+          <ViennaNow />
+        </span>
       </div>
 
       <slot />
 
       <footer>
-        <span>© {year} Christian Cito</span>
-        <nav class="legal">
-          <a href="/imprint">Imprint</a>
-          <a href="/privacy">Privacy</a>
-        </nav>
+        <Elsewhere />
+        <div class="footer-bar">
+          <span>© {year} Christian Cito</span>
+          <nav class="legal">
+            <a href="/colophon">Colophon</a>
+            <a href="/imprint">Imprint</a>
+            <a href="/privacy">Privacy</a>
+          </nav>
+        </div>
       </footer>
     </div>
   </body>

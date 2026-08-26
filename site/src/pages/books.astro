@@ -1,11 +1,31 @@
 ---
 import { getCollection } from "astro:content";
 import Base from "../layouts/Base.astro";
-import ItemCard from "../components/ItemCard.astro";
+import CoverCard from "../components/CoverCard.astro";
 
-const books = (await getCollection("items"))
-  .filter((i) => i.data.category === "book")
-  .sort((a, b) => (b.data.rating ?? 0) - (a.data.rating ?? 0) || a.data.title.localeCompare(b.data.title));
+const books = await getCollection("items").then((items) =>
+  items.filter((i) => i.data.category === "book"),
+);
+
+const genreOrder = [
+  "Politics, History, and Economics",
+  "Self-Development",
+  "Meditation",
+  "Entertainment",
+  "Fiction",
+];
+
+const groups = genreOrder
+  .map((name) => ({
+    name,
+    items: books
+      .filter((b) => b.data.genre === name)
+      .sort(
+        (a, b) =>
+          (b.data.rating ?? 0) - (a.data.rating ?? 0) || a.data.title.localeCompare(b.data.title),
+      ),
+  }))
+  .filter((g) => g.items.length > 0);
 ---
 
 <Base title="Books — chrcit.com" description="Books I've read, rated out of 10.">
@@ -13,21 +33,31 @@ const books = (await getCollection("items"))
     <section class="tile">
       <div class="tile-label"><span>Books</span><span class="num">{books.length} rated</span></div>
       <h1 class="page-title">Books</h1>
+      <blockquote class="page-quote">
+        <p>
+          Of all the things written, I love only what a person has written with his own blood.
+          Write with blood, and you will experience that blood is spirit.
+        </p>
+        <footer>Friedrich Nietzsche, <cite>The Gay Science</cite></footer>
+      </blockquote>
       <p class="page-note">
-        Everything I've rated, best first. The rating is the review.
+        Favorites, grouped how I keep them. Rated out of 10. The rating is the review.
       </p>
     </section>
 
-    <section class="tile">
-      <ul class="items">
-        {
-          books.map((item) => (
-            <li>
-              <ItemCard item={item} />
-            </li>
-          ))
-        }
-      </ul>
-    </section>
+    {
+      groups.map((group) => (
+        <section class="tile">
+          <h2 class="group-title" id={group.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}>
+            {group.name}
+          </h2>
+          <div class="cover-rail">
+            {group.items.map((item) => (
+              <CoverCard item={item} />
+            ))}
+          </div>
+        </section>
+      ))
+    }
   </main>
 </Base>

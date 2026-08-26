@@ -1,0 +1,28 @@
+---
+import embeds from "../../data/embeds.json";
+
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+const videoId = id.match(/(?:v=|youtu\.be\/)([\w-]{11})/)?.[1] ?? id.replace(/[?&].*$/, "");
+const video = (embeds.youtube as Record<string, {
+  id: string;
+  url: string;
+  title: string;
+  thumb: string;
+}>)[videoId];
+const url = video?.url ?? `https://www.youtube.com/watch?v=${videoId}`;
+---
+
+<a class="embed embed-yt" href={url} target="_blank" rel="noopener">
+  <span class="embed-thumb">
+    {video?.thumb && <img src={video.thumb} alt="" width="1280" height="720" />}
+    <span class="embed-play" aria-hidden="true">▶</span>
+  </span>
+  <span class="embed-caption">
+    <span class="embed-kind">YouTube</span>
+    <span class="embed-name">{video?.title ?? "Watch on YouTube"}</span>
+  </span>
+</a>

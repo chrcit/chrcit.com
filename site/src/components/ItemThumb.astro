@@ -11,7 +11,7 @@ interface Props {
 const { title, image, isIcon = false } = Astro.props;
 ---
 
-<span class={`i-thumb ${ditherFor(title)}`} aria-hidden="true">
+<span class={`i-thumb ${isIcon ? "is-icon" : "is-cover"} ${ditherFor(title)}`} aria-hidden="true">
   {title.charAt(0)}
-  {image && <Image src={image} alt="" width={128} class={isIcon ? "icon" : ""} loading="lazy" />}
+  {image && <Image src={image} alt="" width={256} class={isIcon ? "icon" : ""} loading="lazy" />}
 </span>

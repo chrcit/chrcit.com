@@ -1,0 +1,117 @@
+---
+import embeds from "../../data/embeds.json";
+
+interface Props {
+  id: string;
+}
+
+const { id } = Astro.props;
+const status = id.match(/(\d{10,})/)?.[1] ?? id;
+const tweet = (
+  embeds.tweets as Record<
+    string,
+    {
+      id: string;
+      url: string;
+      text: string;
+      name: string;
+      handle: string;
+      date: string;
+      avatar: string | null;
+      media: string[];
+      video?: boolean;
+      likes?: number;
+      retweets?: number;
+      replies?: number;
+      views?: number | null;
+    }
+  >
+)[status];
+
+const url = tweet?.url ?? `https://x.com/i/status/${status}`;
+
+const fmt = (n?: number | null) => {
+  if (n == null || n === 0) return "0";
+  if (n < 1000) return String(n);
+  if (n < 10000) return `${(n / 1000).toFixed(1).replace(/\.0$/, "")}K`;
+  if (n < 1_000_000) return `${Math.round(n / 1000)}K`;
+  return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`;
+};
+---
+
+{
+  tweet ? (
+    <article class="embed embed-tweet">
+      <a class="embed-tweet-link" href={url} target="_blank" rel="noopener">
+        <span class="embed-head">
+          {tweet.avatar && (
+            <img class="embed-avatar" src={tweet.avatar} alt="" width="48" height="48" />
+          )}
+          <span class="embed-who">
+            <span class="embed-name">{tweet.name}</span>
+            <span class="embed-handle">
+              @{tweet.handle}
+              <span aria-hidden="true"> · </span>
+              {tweet.date}
+            </span>
+          </span>
+          <span class="embed-bird" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z" />
+            </svg>
+          </span>
+        </span>
+        <p class="embed-text">{tweet.text}</p>
+        {
+          tweet.media.length > 0 && (
+            <span class:list={["embed-media-grid", tweet.media.length > 1 && "is-multi"]}>
+              {tweet.media.map((src) => (
+                <span class="embed-media-frame">
+                  <img src={src} alt="" />
+                  {tweet.video && <span class="embed-play" aria-hidden="true">▶</span>}
+                </span>
+              ))}
+            </span>
+          )
+        }
+        <span class="embed-stats">
+          <span title="Replies">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+              <path d="M21 12a9 9 0 0 1-13.5 7.8L3 21l1.3-4A9 9 0 1 1 21 12z" />
+            </svg>
+            {fmt(tweet.replies)}
+          </span>
+          <span title="Reposts">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+              <path d="M17 1l4 4-4 4" />
+              <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+              <path d="M7 23l-4-4 4-4" />
+              <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+            </svg>
+            {fmt(tweet.retweets)}
+          </span>
+          <span title="Likes">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+              <path d="M12 21s-7-4.6-9.3-8.2C.7 9.7 2.2 6 6 6c2 0 3.4 1.1 4 2.1C10.6 7.1 12 6 14 6c3.8 0 5.3 3.7 3.3 6.8C19 16.4 12 21 12 21z" />
+            </svg>
+            {fmt(tweet.likes)}
+          </span>
+          {
+            tweet.views != null && (
+              <span title="Views">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                  <path d="M4 19V9M10 19V5M16 19v-7M22 19V3" />
+                </svg>
+                {fmt(tweet.views)}
+              </span>
+            )
+          }
+        </span>
+      </a>
+    </article>
+  ) : (
+    <a class="embed embed-fallback" href={url} target="_blank" rel="noopener">
+      View on Twitter →
+    </a>
+  )
+}

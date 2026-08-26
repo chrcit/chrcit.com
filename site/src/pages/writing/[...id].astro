@@ -2,6 +2,10 @@
 import { getCollection, render } from "astro:content";
 import { Image } from "astro:assets";
 import Base from "../../layouts/Base.astro";
+import TableOfContents from "../../components/TableOfContents.astro";
+import Tweet from "../../components/embeds/Tweet.astro";
+import YouTube from "../../components/embeds/YouTube.astro";
+import Instagram from "../../components/embeds/Instagram.astro";
 
 export async function getStaticPaths() {
   const posts = await getCollection("posts");
@@ -9,7 +13,7 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
 
 const date = post.data.publishedAt.toISOString().slice(0, 10);
 const kind = post.data.kind === "annual" ? "Year in review" : "Notes";
@@ -17,7 +21,7 @@ const kind = post.data.kind === "annual" ? "Year in review" : "Notes";
 
 <Base title={`${post.data.title} — chrcit.com`} description={post.data.description}>
   <main class="page">
-    <article class="tile">
+    <article class="tile article">
       <div class="tile-label">
         <span>{kind}</span>
         <span class="num">{date}</span>
@@ -25,15 +29,17 @@ const kind = post.data.kind === "annual" ? "Year in review" : "Notes";
       <h1 class="page-title">{post.data.title}</h1>
       {
         post.data.image && (
-          <p style="margin-top: 16px;">
-            <Image src={post.data.image} alt="" style="border: var(--rule); max-width: 100%; height: auto;" />
-          </p>
+          <div class="article-hero">
+            <Image src={post.data.image} alt="" width={1280} height={720} />
+          </div>
         )
       }
-      <div class="prose" style="margin-top: 24px;">
-        <Content />
+      <div class="article-body">
+        <div class="prose">
+          <Content components={{ Tweet, YouTube, Instagram }} />
+        </div>
+        <TableOfContents headings={headings} />
       </div>
-      <a class="tile-more" href="/writing">All writing →</a>
     </article>
   </main>
 </Base>

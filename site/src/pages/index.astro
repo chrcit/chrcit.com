@@ -1,146 +1,132 @@
 ---
 import { getCollection } from "astro:content";
+import { getImage } from "astro:assets";
 import Base from "../layouts/Base.astro";
-import ItemRow from "../components/ItemRow.astro";
-import { socials } from "../data/socials";
-
-const posts = (await getCollection("posts")).sort(
-  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
-);
+import Roles from "../components/Roles.tsx";
+import SampleList, { type SampleItem } from "../components/SampleList.tsx";
 
 const items = await getCollection("items");
 
-// Build-time random samples — re-rolled on each build, never at runtime.
 const sample = <T,>(arr: T[], n: number) =>
   [...arr].sort(() => Math.random() - 0.5).slice(0, n);
 
-const bookSample = sample(
-  items.filter((i) => i.data.category === "book"),
-  3,
-);
-const toolSample = sample(
-  items.filter((i) => i.data.category === "tool" && i.data.url),
-  3,
+const groupLabel: Record<string, string> = {
+  Gear: "Gear",
+  Stack: "Tech Stack",
+  "Dev Tools": "Dev Tools",
+  Productivity: "Productivity",
+};
+
+const booksAll: SampleItem[] = await Promise.all(
+  items
+    .filter((i) => i.data.category === "book")
+    .map(async (i) => {
+      const img = i.data.cover
+        ? await getImage({ src: i.data.cover, width: 160, height: 240 })
+        : null;
+      return {
+        id: i.id,
+        title: i.data.title,
+        meta: [i.data.author, i.data.year].filter(Boolean).join(", "),
+        rating: i.data.rating ?? null,
+        url: i.data.url ?? null,
+        image: img?.src ?? null,
+        kind: "book" as const,
+      };
+    }),
 );
 
-const postDate = (d: Date) =>
-  `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+const toolsAll: SampleItem[] = await Promise.all(
+  items
+    .filter((i) => i.data.category === "tool" && i.data.url)
+    .map(async (i) => {
+      const img = i.data.icon
+        ? await getImage({ src: i.data.icon, width: 160, height: 160 })
+        : null;
+      return {
+        id: i.id,
+        title: i.data.title,
+        meta: i.data.group ? (groupLabel[i.data.group] ?? i.data.group) : undefined,
+        rating: null,
+        url: i.data.url ?? null,
+        image: img?.src ?? null,
+        kind: "tool" as const,
+      };
+    }),
+);
+
+const bookSample = sample(booksAll, 3);
+const toolSample = sample(toolsAll, 3);
+
+const photos = [
+  { role: "default", src: "/images/portrait-dither.png", alt: "Christian Cito" },
+  { role: "arthouse", src: "/images/roles/arthouse.png", alt: "" },
+  { role: "hausgemacht", src: "/images/roles/hausgemacht.png", alt: "" },
+  { role: "rebased", src: "/images/roles/rebased.png", alt: "" },
+  { role: "writer", src: "/images/roles/writer.png", alt: "" },
+];
 ---
 
 <Base>
   <main class="mosaic">
-    <!-- lead: name + what I do -->
-    <section class="tile span-3 tall-2 tile-lead" id="do">
-      <h1>Christian Cito</h1>
-      <div class="tile-label"><span>What I do</span><span class="num">01</span></div>
-      <ul class="router">
-        <li>
-          <details>
-            <summary><span class="r-title">Director at Arthouse</span><span class="r-plus">+</span></summary>
-            <p class="r-desc">
-              Creative engineering studio. Strategy, software, systems — this is where work gets
-              booked. <a href="https://madebyarthouse.com">madebyarthouse.com →</a>
-            </p>
-          </details>
-        </li>
-        <li>
-          <details>
-            <summary>
-              <span class="r-title">Software &amp; systems at hausgemacht</span><span class="r-plus">+</span>
-            </summary>
-            <p class="r-desc">
-              Infrastructure and board duty for a feminist techno collective. <a
-                href="https://hausgemacht.org">hausgemacht.org →</a
-              >
-            </p>
-          </details>
-        </li>
-        <li>
-          <details>
-            <summary>
-              <span class="r-title">Co-organizer of rebased.wtf</span><span class="r-plus">+</span>
-            </summary>
-            <p class="r-desc">
-              A meetup about having fun with tech. Talks, drinks, no boring stuff. <a
-                href="https://rebased.wtf">rebased.wtf →</a
-              >
-            </p>
-          </details>
-        </li>
-        <li>
-          <details>
-            <summary><span class="r-title">Sometimes writer</span><span class="r-plus">+</span></summary>
-            <p class="r-desc">
-              Monthly notes, one review per year. Kept on this site. <a href="/writing"
-                >All writing →</a
-              >
-            </p>
-          </details>
-        </li>
-      </ul>
+    <section class="tile tile-photo col-photo" id="role-photo">
+      {
+        photos.map((p, i) => (
+          <img
+            src={p.src}
+            alt={p.alt}
+            width="720"
+            height="1080"
+            data-role={p.role}
+            class={i === 0 ? "is-active" : undefined}
+            aria-hidden={i === 0 ? "false" : "true"}
+          />
+        ))
+      }
+      <span class="photo-spot" aria-hidden="true"></span>
     </section>
 
-    <!-- writing -->
-    <section class="tile tall-2" id="writing">
-      <div class="tile-label"><span>Writing</span><span class="num">02</span></div>
-      <ul class="posts">
-        {
-          posts.slice(0, 4).map((post) => (
-            <li>
-              <a href={`/writing/${post.id}`} class="dot-hover">
-                <span class="p-date">{postDate(post.data.publishedAt)}</span>
-                <span class="p-title">{post.data.title}</span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-      <a class="tile-more" href="/writing">All writing →</a>
+    <section class="tile col-lead tile-lead" id="do">
+      <h1 class="lead-copy">
+        Hi, I'm Christian Cito. I write code, create products, run teams, organise
+        communities and sometimes do some writing.
+      </h1>
+      <Roles client:load />
     </section>
 
-    <!-- books: one tile, three items -->
     <section class="tile span-2" id="books">
-      <div class="tile-label"><span>Books</span><span class="num">03 — random sample</span></div>
-      <ul class="items">
-        {
-          bookSample.map((item) => (
-            <li>
-              <ItemRow item={item} />
-            </li>
-          ))
-        }
-      </ul>
-      <a class="tile-more" href="/books">All books →</a>
+      <SampleList
+        client:load
+        label="Favorite Books"
+        items={booksAll}
+        initial={bookSample}
+        moreHref="/books"
+        moreLabel="All books →"
+      />
     </section>
 
-    <!-- tools: one tile, three items -->
     <section class="tile span-2" id="tools">
-      <div class="tile-label"><span>Tools</span><span class="num">04 — random sample</span></div>
-      <ul class="items">
-        {
-          toolSample.map((item) => (
-            <li>
-              <ItemRow item={item} />
-            </li>
-          ))
-        }
-      </ul>
-      <a class="tile-more" href="/uses">All tools →</a>
-    </section>
-
-    <!-- socials -->
-    <section class="tile span-4" id="elsewhere">
-      <div class="tile-label"><span>Elsewhere</span><span class="num">all @chrcit</span></div>
-      <div class="social-grid">
-        {
-          socials.map((s) => (
-            <a href={s.url} target="_blank" rel="noopener">
-              <span>{s.name}</span>
-              <span class="at">{s.handle}</span>
-            </a>
-          ))
-        }
-      </div>
+      <SampleList
+        client:load
+        label="Favorite Tools"
+        items={toolsAll}
+        initial={toolSample}
+        moreHref="/uses"
+        moreLabel="All tools →"
+      />
     </section>
   </main>
 </Base>
+
+<script>
+  const photo = document.getElementById("role-photo");
+  if (photo) {
+    const move = (e: PointerEvent) => {
+      const r = photo.getBoundingClientRect();
+      photo.style.setProperty("--mx", `${e.clientX - r.left}px`);
+      photo.style.setProperty("--my", `${e.clientY - r.top}px`);
+    };
+    photo.addEventListener("pointermove", move);
+    photo.addEventListener("pointerenter", move);
+  }
+</script>

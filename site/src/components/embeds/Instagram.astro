@@ -1,0 +1,132 @@
+---
+import embeds from "../../data/embeds.json";
+
+interface Props {
+  url?: string;
+  id?: string;
+}
+
+const { url: rawUrl, id: rawId } = Astro.props;
+const shortcode =
+  rawId ??
+  rawUrl?.match(/instagram\.com\/(?:p|reel)\/([^/?]+)/)?.[1] ??
+  "";
+const post = (
+  embeds.instagram as Record<
+    string,
+    {
+      id: string;
+      url: string;
+      title: string;
+      handle?: string;
+      caption?: string;
+      likes?: number;
+      image: string | null;
+      images?: string[];
+    }
+  >
+)[shortcode];
+const href = post?.url ?? rawUrl ?? `https://www.instagram.com/p/${shortcode}/`;
+const slides = (post?.images && post.images.length ? post.images : post?.image ? [post.image] : []).filter(
+  Boolean,
+) as string[];
+const handle = post?.handle || post?.title || "instagram";
+const likes = post?.likes ?? 0;
+const caption = post?.caption ?? "";
+const fmt = (n: number) => {
+  if (n < 1000) return String(n);
+  if (n < 10000) return `${(n / 1000).toFixed(1).replace(/\.0$/, "")}K`;
+  return `${Math.round(n / 1000)}K`;
+};
+---
+
+<article class="embed embed-ig" data-ig={slides.length > 1 ? "carousel" : "single"}>
+  <a class="ig-head" href={href} target="_blank" rel="noopener">
+    <span class="ig-avatar" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+        <rect width="20" height="20" x="2" y="2" rx="5" />
+        <circle cx="12" cy="12" r="4" />
+        <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" stroke="none" />
+      </svg>
+    </span>
+    <span class="embed-who">
+      <span class="embed-name">{handle}</span>
+      <span class="embed-handle">Instagram</span>
+    </span>
+  </a>
+  {
+    slides.length > 0 && (
+      <div class="ig-stage" data-ig-carousel={slides.length > 1 ? "true" : undefined}>
+        <div class="ig-track">
+          {slides.map((src, i) => (
+            <div class="ig-slide">
+              <img src={src} alt="" />
+            </div>
+          ))}
+        </div>
+        {slides.length > 1 && (
+          <>
+            <button type="button" class="ig-nav ig-prev" aria-label="Previous photo">
+              ‹
+            </button>
+            <button type="button" class="ig-nav ig-next" aria-label="Next photo">
+              ›
+            </button>
+            <div class="ig-dots" aria-hidden="true">
+              {slides.map((_, i) => (
+                <i data-i={i} class={i === 0 ? "is-on" : undefined} />
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    )
+  }
+  <div class="ig-foot">
+    <div class="ig-actions" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+        <path d="M12 21s-7-4.6-9.3-8.2C.7 9.7 2.2 6 6 6c2 0 3.4 1.1 4 2.1C10.6 7.1 12 6 14 6c3.8 0 5.3 3.7 3.3 6.8C19 16.4 12 21 12 21z" />
+      </svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+        <path d="M21 12a9 9 0 0 1-13.5 7.8L3 21l1.3-4A9 9 0 1 1 21 12z" />
+      </svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+        <path d="M4 12v8l16-8L4 4z" />
+      </svg>
+    </div>
+    {likes > 0 && <p class="ig-likes">{fmt(likes)} likes</p>}
+    {
+      caption && (
+        <p class="ig-caption">
+          <strong>{handle}</strong> {caption}
+        </p>
+      )
+    }
+    <a class="ig-more" href={href} target="_blank" rel="noopener">
+      View on Instagram →
+    </a>
+  </div>
+</article>
+
+<script>
+  document.querySelectorAll("[data-ig-carousel]").forEach((stage) => {
+    const root = stage as HTMLElement;
+    const track = root.querySelector(".ig-track") as HTMLElement | null;
+    const dots = [...root.querySelectorAll(".ig-dots i")];
+    const n = root.querySelectorAll(".ig-slide").length;
+    let i = 0;
+    const go = (next: number) => {
+      i = (next + n) % n;
+      if (track) track.style.transform = `translateX(${-i * 100}%)`;
+      dots.forEach((d, di) => d.classList.toggle("is-on", di === i));
+    };
+    root.querySelector(".ig-prev")?.addEventListener("click", (e) => {
+      e.preventDefault();
+      go(i - 1);
+    });
+    root.querySelector(".ig-next")?.addEventListener("click", (e) => {
+      e.preventDefault();
+      go(i + 1);
+    });
+  });
+</script>

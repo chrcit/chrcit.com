@@ -1,0 +1,21 @@
+---
+import { socials } from "../data/socials";
+import SocialIcon from "./SocialIcon.astro";
+---
+
+<div class="elsewhere" id="elsewhere">
+  <div class="tile-label"><span>Elsewhere</span></div>
+  <div class="social-grid">
+    {
+      socials.map((s) => (
+        <a href={s.url} target="_blank" rel="noopener">
+          <span class="s-brand">
+            <SocialIcon name={s.name} />
+            <span>{s.name}</span>
+          </span>
+          <span class="at">{s.handle}</span>
+        </a>
+      ))
+    }
+  </div>
+</div>
