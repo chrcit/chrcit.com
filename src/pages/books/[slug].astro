@@ -70,6 +70,11 @@ const showNav = topics.length >= 4;
       </div>
     </article>
 
+    <section class="tile">
+      <h2 class="page-title">Highlights</h2>
+      {topics.length === 0 && <p class="highlight-empty">No highlights saved for this one.</p>}
+    </section>
+
     {
       showNav && (
         <nav class="tile topic-nav" aria-label="Topics">
@@ -86,18 +91,9 @@ const showNav = topics.length >= 4;
     }
 
     {
-      topics.length === 0 && (
-        <section class="tile">
-          <h2 class="group-title">Highlights</h2>
-          <p class="highlight-empty">No highlights saved for this one.</p>
-        </section>
-      )
-    }
-
-    {
       topics.map((topic) => (
         <section class="tile" id={topicId(topic.name)}>
-          <h2 class="group-title">{topic.name}</h2>
+          <h3 class="group-title">{topic.name}</h3>
           <ul class="highlights">
             {topic.highlights.map((h) => (
               <li>

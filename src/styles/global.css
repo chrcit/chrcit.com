@@ -1161,14 +1161,19 @@ a.cover-card:active .cover-frame {
   border-top: var(--hair);
 }
 .highlights blockquote {
-  border: 0;
-  padding: 0;
   margin: 0;
-  font-size: 1.05rem;
+  padding: 4px 0 4px 16px;
+  border-left: var(--rule);
+  font-size: 1.08rem;
   line-height: 1.55;
+  font-weight: 500;
+  font-style: italic;
   color: var(--ink);
   white-space: pre-line;
-  max-width: 68ch;
+  max-width: 62ch;
+}
+.tile:has(> .page-title + .highlight-empty) .page-title {
+  padding-bottom: 8px;
 }
 .highlight-note {
   margin-top: 12px;
@@ -1191,7 +1196,7 @@ a.cover-card:active .cover-frame {
 }
 .highlight-empty {
   margin: 0;
-  padding: 28px var(--tile-pad) 32px;
+  padding: 0 var(--tile-pad) 28px;
   color: var(--ink-soft);
   font-size: 1.02rem;
   line-height: 1.45;
