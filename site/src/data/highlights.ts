@@ -100,6 +100,40 @@ export const highlightsBySlug: Record<string, BookHighlights> = {
       },
     ],
   },
+  "black-swan": {
+    topics: [
+      {
+        name: "Mediocristan and Extremistan",
+        highlights: [
+          { text: "Mediocristan is where we must endure the tyranny of the collective, the routine, the obvious, and the predicted; Extremistan is where we are subjected to the tyranny of the singular, the accidental, the unseen, and the unpredicted.", note: null },
+          { text: "In Extremistan, inequalities are such that one single observation can disproportionately impact the aggregate, or the total.", note: null },
+        ],
+      },
+      {
+        name: "Narrative fallacy",
+        highlights: [
+          { text: "The way to avoid the ills of the narrative fallacy is to favor experimentation over storytelling, experience over history, and clinical knowledge over theories.", note: null },
+          { text: "Mistaking a naïve observation of the past as something definitive or representative of the future is the one and only cause of our inability to understand the Black Swan.", note: null },
+          { text: "Categorizing is necessary for humans, but it becomes pathological when the category is seen as definitive, preventing people from considering the fuzziness of boundaries, let alone revising their categories.", note: null },
+        ],
+      },
+      {
+        name: "Forecasts and noise",
+        highlights: [
+          { text: "What is surprising is not the magnitude of our forecast errors, but our absence of awareness of it.", note: null },
+          { text: "The more information you give someone, the more hypotheses they will formulate along the way, and the worse off they will be. They see more random noise and mistake it for information.", note: null },
+          { text: "The Platonic fold is the explosive boundary where the Platonic mind-set enters in contact with messy reality, where the gap between what you know and what you think you know becomes dangerously wide. It is here that the Black Swan is produced.", note: null },
+        ],
+      },
+      {
+        name: "Asymmetry of swans",
+        highlights: [
+          { text: "In general, positive Black Swans take time to show their effect while negative ones happen very quickly—it is much easier and much faster to destroy than to build.", note: null },
+          { text: "The payoff of a human venture is, in general, inversely proportional to what it is expected to be.", note: null },
+        ],
+      },
+    ],
+  },
   "brave-new-world": {
     topics: [
       {
@@ -216,19 +250,24 @@ export const highlightsBySlug: Record<string, BookHighlights> = {
         ],
       },
       {
-        name: "Prefrontal cortex and novelty",
+        name: "Brain and spreading activation",
         highlights: [
           { text: "The brain is always mapping the outside world and creating different replicas inside of itself. Everything that happens to you every day leaves an imprint on the brain, even if only temporarily.", note: null },
           { text: "Flow happens because of triggering the brain's spreading activation mechanism.", note: null },
           { text: "Do you know what the difference is between ideas and thoughts, or between sensations and emotions? It's their duration. Ideas and sensations are near-instant and pass quickly, while thoughts and emotions remain long enough to enter our conscious mind, and can be sustained for hours or days. The difference in duration is explained by a phenomenon called action potential.", note: null },
           { text: "Spreading activation is like the chain reaction of a nuclear explosion. It creates a positive (self-sustaining) feedback loop that keeps going for some time. This is why you often have many good ideas in a row, but then it stops, and homeostasis is restored.", note: null },
-          { text: "Run or bike to new places where you get lost. It forces you to focus on finding your way back, thereby breaking routine thinking and using your brain more.", note: null },
           { text: "CHAPTER 6 An Overview of the Human Brain", note: null },
           { text: "7 Fundamentals Facts from Neuroscience about the Human Brain The brain didn’t evolve to think. You don’t get smarter than necessary. The four main factors that influence us. The process by which the brain builds itself Why change is so hard for the brain Why we have big brains Male vs female brains", note: null },
           { text: "Seasoned meditators have significantly “stronger” (more active) insulas and prefrontal cortices than the average person does, because they regularly practice focusing their intent.", note: null },
           { text: "The brain constantly “recreates” the outside world and its perception of the body by constructing internal representations called interoceptive maps. Eventually, the brain has etched into itself a corresponding neural representation of every commonly-occurring thing or experience in our lives.", note: null },
           { text: "The brain doesn’t work in a linear 1+1=2 fashion, instead it might better be described as some form of highly complex self-organizing system, that takes in information and spits out something different. The brain consists of many higher order hierarchies, like successful synergy effects in business: 2+ 2 = 7", note: null },
           { text: "You don't need to memorize how these parts of the brain work, but you should know what cognitive functions they are associated with in daily life: PFC = concentration, mental focus, introspection, behavioral modification, motivation, willpower and discipline and decision-making. Neocortex = the analyzing part of your brain that enforces duality and distinctions (mental models). RAS & pattern recognition = how you filter and interpret information, determining what you pay attention to. Amygdala = emotions, empathy, reactivity to threat, fight-or-flight response, adrenaline, freezing and panicking. Brain's reward system = determines what you’re motivated to do by default. It keeps you in place through your addictions, causing you to repeat or stop behavior depending on emotional feedback.", note: null },
+        ],
+      },
+      {
+        name: "Novelty and the PFC",
+        highlights: [
+          { text: "Run or bike to new places where you get lost. It forces you to focus on finding your way back, thereby breaking routine thinking and using your brain more.", note: null },
           { text: "There are 4 main ways to stay mentally engaged: novelty, variation, randomness, and goal-orientation. Maximize for these parameters, and you’ll keep learning all throughout life and continue to improve even in old age.", note: null },
           { text: "For years, I have cultivated small ways to exercise my PFC throughout the day, like when I’m confronted with a stoplight. I don’t stop by habit, like most people do. I only stop if I see a moving vehicle. It seems like a small thing, and it is—in itself—but when you stack it up with 10+ similar habits, it makes a big difference over time.", note: null },
           { text: "When you’re consciously experiencing, thinking, analyzing, reflecting or strategizing, you are using the prefrontal cortex. When this is not the case—which is most of the time—you are merely processing information and repeating existing thought patterns.", note: null },
@@ -249,7 +288,7 @@ export const highlightsBySlug: Record<string, BookHighlights> = {
         ],
       },
       {
-        name: "Allostasis, body, and stress",
+        name: "Body on",
         highlights: [
           { text: "Motivation (and concentration) requires that you have a consistent routine for activating the brain and the body.", note: null },
           { text: "When your body is “ON” you are using the sympathetic nervous system, whose purpose is to energize and take action. When your body is “OFF” you’re using the parasympathetic nervous system, whose purpose is to rest and conserve energy.", note: null },
@@ -267,6 +306,11 @@ export const highlightsBySlug: Record<string, BookHighlights> = {
           { text: "The pessimist philosopher Arthur Schopenhauer said that a person should swallow a frog first thing in the morning. Because then the rest of the day could only get better. I've never swallowed a frog, but I have started eating raw lemons first thing in the morning. If you can begin the day by activating the brain and body, or Breaking out of Homeostasis in some way, you’ll usually get into a new head space and have a fun and creative day.", note: null },
           { text: "Once you’ve activated the brain or the body, it will often stay activated through the spreading activation. Your thoughts and emotions correspond to each other via bidirectional communication. The fastest way to change your thinking is by changing your mood, and the fastest way to change your mood is through physical activity, not thinking.", note: null },
           { text: "Take cold showers. Good for Breaking out of Homeostasis (changing temperatures) and developing pain tolerance (if you take very cold water on your head).", note: null },
+        ],
+      },
+      {
+        name: "Allostasis and stress",
+        highlights: [
           { text: "Stress is not seen as a bad thing in physiology, only as an adaptive or maladaptive process.", note: null },
           { text: "Your ability to maintain allostasis and deal with stressors depends largely on the following factors, arranged in order of urgency: The quality of your breathing. (Breathe deeply into the abdomen; not the chest.) The quantity and quality of your sleep over the past few days. Restoration and intermittent recovery from short breaks. Your diet. (Frequency, portion size, and nutrition quality.) The general fitness of your brain and body (your baseline of hormonal levels, neurotransmitters and the amount of muscle you have). Your homeostasis (the degree to which you have adapted to the stressor in question).", note: null },
           { text: "The goal is to become better at maintaining allostasis, and the way you do it is a 3-part process: First, you want to become fitter and healthier. Second, you want to overcome challenges and Break out of Homeostasis regularly. Third, you want to eliminate unnecessary stress.", note: null },
@@ -510,17 +554,27 @@ export const highlightsBySlug: Record<string, BookHighlights> = {
   "flow": {
     topics: [
       {
-        name: "Attention and flow",
+        name: "What flow is",
         highlights: [
           { text: "The optimal state of inner experience is one in which there is order in consciousness. This happens when psychic energy—or attention—is invested in realistic goals, and when skills match the opportunities for action. The pursuit of a goal brings order in awareness because a person must concentrate attention on the task at hand and momentarily forget everything else. These periods of struggling to overcome challenges are what people find to be the most enjoyable times of their lives (chapter 3). A person who has achieved control over psychic energy and has invested it in consciously chosen goals cannot help but grow into a more complex being. By stretching skills, by reaching toward higher challenges, such a person becomes an increasingly extraordinary individual.", note: null },
           { text: "The best moments usually occur when a person’s body or mind is stretched to its limits in a voluntary effort to accomplish something difficult and worthwhile. Optimal experience is thus something that we make happen.", note: null },
           { text: "Getting control of life is never easy, and sometimes it can be definitely painful. But in the long run optimal experiences add up to a sense of mastery—or perhaps better, a sense of participation in determining the content of life—that comes as close to what is usually meant by happiness as anything else we can conceivably imagine.", note: null },
+        ],
+      },
+      {
+        name: "Attention as psychic energy",
+        highlights: [
           { text: "Everything we experience—joy or pain, interest or boredom—is represented in the mind as information. If we are able to control this information, we can decide what our lives will be like.", note: null },
           { text: "The mark of a person who is in control of consciousness is the ability to focus attention at will, to be oblivious to distractions, to concentrate for as long as it takes to achieve a goal, and not longer.", note: null },
           { text: "Each person allocates his or her limited attention either by focusing it intentionally like a beam of energy—as do E. and R. in the previous examples—or by diffusing it in desultory, random movements. The shape and content of life depend on how attention has been used. Entirely different realities will emerge depending on how it is invested. The names we use to describe personality traits—such as extrovert, high achiever, or paranoid—refer to the specific patterns people have used to structure their attention. At the same party, the extrovert will seek out and enjoy interactions with others, the high achiever will look for useful business contacts, and the paranoid will be on guard for signs of danger he must avoid. Attention can be invested in innumerable ways, ways that can make life either rich or miserable.", note: null },
           { text: "The “battle” is not really against the self, but against the entropy that brings disorder to consciousness. It is really a battle for the self; it is a struggle for establishing control over attention.", note: null },
           { text: "Whenever information disrupts consciousness by threatening its goals we have a condition of inner disorder, or psychic entropy, a disorganization of the self that impairs its effectiveness. Prolonged experiences of this kind can weaken the self to the point that it is no longer able to invest attention and pursue its goals.", note: null },
           { text: "Hundreds of times every day we are reminded of the vulnerability of our self. And every time this happens psychic energy is lost trying to restore order to consciousness.", note: null },
+        ],
+      },
+      {
+        name: "How flow grows",
+        highlights: [
           { text: "Complexity is the result of two broad psychological processes: differentiation and integration. Differentiation implies a movement toward uniqueness, toward separating oneself from others. Integration refers to its opposite: a union with other people, with ideas and entities beyond the self. A complex self is one that succeeds in combining these opposite tendencies.", note: null },
           { text: "It is this dynamic feature that explains why flow activities lead to growth and discovery. One cannot enjoy doing the same thing at the same level for long. We grow either bored or frustrated; and then the desire to enjoy ourselves again pushes us to stretch our skills, or to discover new opportunities for using them.", note: null },
           { text: "Even the simplest physical act becomes enjoyable when it is transformed so as to produce flow. The essential steps in this process are: (a) to set an overall goal, and as many subgoals as are realistically feasible; (b) to find ways of measuring progress in terms of the goals chosen; (c) to keep concentrating on what one is doing, and to keep making finer and finer distinctions in the challenges involved in the activity; (d) to develop the skills necessary to interact with the opportunities available; and (e) to keep raising the stakes if the activity becomes boring.", note: null },
@@ -553,8 +607,18 @@ export const highlightsBySlug: Record<string, BookHighlights> = {
           { text: "They also provide a welcome extension of the boundaries of the self, a feeling that one is involved in something great and powerful. The true believer also becomes part of the system in concrete terms, because his psychic energy will be focused and shaped by the goals and rules of his belief. But the true believer is not really interacting with the belief system; he usually lets his psychic energy be absorbed by it. From this submission nothing new can come; consciousness may attain a welcome order, but it will be an order imposed rather than achieved. At best the self of the true believer resembles a crystal: strong and beautifully symmetrical, but very slow to grow.", note: null },
           { text: "As Freud and many others before and after him have noted, civilization is built on the repression of individual desires.", note: null },
           { text: "The last great attempt to free consciousness from the domination of impulses and social controls was psychoanalysis; as Freud pointed out, the two tyrants that fought for control over the mind were the id and the superego, the first a servant of the genes, the second a lackey of society—both representing the “Other.” Opposed to them was the ego, which stood for the genuine needs of the self connected to its concrete environment.", note: null },
+        ],
+      },
+      {
+        name: "Genetic and social scripts",
+        highlights: [
           { text: "But when we follow the suggestions of genetic and social instructions without question we relinquish the control of consciousness and become helpless playthings of impersonal forces. The person who cannot resist food or alcohol, or whose mind is constantly focused on sex, is not free to direct his or her psychic energy.", note: null },
           { text: "If a person learns to enjoy and find meaning in the ongoing stream of experience, in the process of living itself, the burden of social controls automatically falls from one’s shoulders.", note: null },
+        ],
+      },
+      {
+        name: "Play and institutions",
+        highlights: [
           { text: "And as Dostoevsky among many others observed, if Christ had returned to preach his message of liberation in the Middle Ages, he would have been crucified again and again by the leaders of that very church whose worldly power was built on his name.", note: null },
           { text: "Agon includes games that have competition as their main feature, such as most sports and athletic events; alea is the class that includes all games of chance, from dice to bingo; ilinx, or vertigo, is the name he gives to activities that alter consciousness by scrambling ordinary perception, such as riding a merry-go-round or skydiving; and mimicry is the group of activities in which alternative realities are created, such as dance, theater, and the arts in general.", note: null },
           { text: "For example, modern nations create armed forces as a defense against enemies. Soon, however, an army develops its own needs, its own politics, to the point that the most successful soldier is not necessarily the one who defends the country best, but the one who obtains the most money for the army.", note: null },
@@ -603,7 +667,6 @@ export const highlightsBySlug: Record<string, BookHighlights> = {
           { text: "Many have commented lately about the fact that poets and playwrights as a group show unusually severe symptoms of depression and other affective disorders. Perhaps one reason they become full-time writers is that their consciousness is beset by entropy to an unusual degree; writing becomes a therapy for shaping some order among the confusion of feelings. It is possible that the only way writers can experience flow is by creating worlds of words in which they can act with abandon, erasing from the mind the existence of a troubling reality. Like any other flow activity, however, writing that becomes addictive becomes dangerous: it forces the writer to commit himself to a limited range of experiences, and forecloses other options for dealing with events. But when writing is used to control experience, without letting it control the mind, it is a tool of infinite subtlety and rich rewards.", note: null },
           { text: "People without an internalized symbolic system can all too easily become captives of the media. They are easily manipulated by demagogues, pacified by entertainers, and exploited by anyone who has something to sell. If we have become dependent on television, on drugs, and on facile calls to political or religious salvation, it is because we have so little to fall back on, so few internal rules to keep our mind from being taken over by those who claim to have the answers. Without the capacity to provide its own information, the mind drifts into randomness. It is within each person’s power to decide whether its order will be restored from the outside, in ways over which we have no control, or whether the order will be the result of an internal pattern that grows organically from our skills and knowledge.", note: null },
           { text: "Each biblical parable, for instance, tries to encode the hard-won experience of many individuals over unknown eons of time.", note: null },
-          { text: "Each biblical parable, for instance, tries to encode the hard-won experience", note: null },
         ],
       },
       {
@@ -717,6 +780,11 @@ export const highlightsBySlug: Record<string, BookHighlights> = {
           { text: "Capacity: Your generalized ability to get results and make things happen.\n\nNetwork: The sum of your friendships, collaborations, and mutual regard with others.\n\nSignal: How you appear to the outside world.\n\nAssets: Your tangible resources (we primarily cover the financial ones).", note: null },
           { text: "So, how do you improve your ability to effect results? We’ve divided these “levers” into four categories as a useful starting point —  Biochemistry Cognition Action Environment", note: null },
           { text: "You’re always creating effects. As you walk into a room, the social texture of that room changes. Every business you patronize, you create for them revenue that affects their profitability and numbers. The work you do makes ripples, sometimes larger or smaller, through the entire world around you.", note: null },
+        ],
+      },
+      {
+        name: "Off autopilot",
+        highlights: [
           { text: "You could, quite literally, re-architect just about any aspect of your life to be more enjoyable, meaningful, and interesting for you. But to do this, you need to start observing and noticing changes. You need to “get off autopilot.”", note: null },
           { text: "Anti-deliberateness often gets romanticized as spontaneity, but you can be deliberate about pursuing spontaneity… but most people who aren’t deliberate don’t wind up on the beach surfing all the time; they wind up in relative poverty, high stress, and with things just not going the way they want. You can build a life of relaxation, or experimentation, or leisure, or immense meaning — but it’s unlikely to just happen by accident.", note: null },
           { text: "You should operate with the assumption that you’re going to need to dramatically improve to get the kind of quality of life you want, and that the improvement will sometimes be painful, but always satisfying and worth it.", note: null },
@@ -838,6 +906,11 @@ export const highlightsBySlug: Record<string, BookHighlights> = {
           { text: "As with any exhaustible resource, having money sitting around, ready to be deployed towards the goal of your choice is, well, good. But the real benefit of having money the bank is optionality. We like to call this measure “dry gunpowder.”", note: null },
           { text: "Most advice along the lines of “money isn’t the meaning of life” comes prematurely and is said too often. The marginal utility of money doesn’t go to zero for quite a long time.", note: null },
           { text: "Basic strategies like having an emergency fund, having cash on hand, and getting insurance on things you couldn’t afford to have happen — these are key.", note: null },
+        ],
+      },
+      {
+        name: "Spending scripts",
+        highlights: [
           { text: "It is easy to grasp mentally, but hard to realize you’re doing it. Let’s not be too shy about saying this: if you’re following class scripts for your spending, you’re doing some insanely wasteful and harmful things to yourself. You’re overspending on stuff you don’t actually like and care about by a lot, and underspending on other stuff that could bring you much better results.", note: null },
           { text: "way. In Roman times, people who followed the Stoic philosophy — including very wealthy Stoics — would often go out of their way once a month to “slum it” and live incredibly inexpensively, eat the worst food, sleep outside, and so on. This served as a visceral reminder that the life we’re accustomed to is not necessarily the life we need.", note: null },
           { text: "Orwell’s point was this — the poor seem to be making poor decisions on how they spend their money and what food they eat, but the “peculiar evil” of being poor is that the worse off you are, the more you desperately want a small stimulation of ice cream or a minor drug to get away from the pain.", note: null },
@@ -1217,7 +1290,7 @@ export const highlightsBySlug: Record<string, BookHighlights> = {
         ],
       },
       {
-        name: "Energy body and effort",
+        name: "Energy body",
         highlights: [
           { text: "If strong anger arises, is it possible to find the quality of strength within the anger, and to tune into that, thus helping it to become a more wholesome emotion? If grief or sadness arise, what does it feel like they need right now? Sometimes in developing experience working with difficult emotions, we may have developed at the same time a habit to incline towards what is emotionally difficult at the expense of noticing and opening to the lovely. If it seems that emotions such as grief or sadness need more attention and care in the present, is it possible to do that without neglecting the sense of freedom and strength?", note: null },
           { text: "With more practice our skill grows and we find that it is in fact possible quite often to use the ‘letting go’ that insight brings to deliberately unblock the energies and the felt sense of the subtle body in this way. The pleasantness, openness, well-being, delightful and alive stillness, or joy that comes with this unblocking can be felt in the space and texture of the body sense. We can then tune into that. It is this tuning in to the frequency of the pleasant, and delicately attending to it, that ‘filters it out’ of the field of awareness, so that it begins to become more palpable and more prominent. Then we can rest in it, allowing it to spread throughout the body space. And if, as before, we continue to tune in to and focus on the felt sense of the energy of this well-being, gently intent on allowing and opening to an enjoyment of it, and encouraging the attention to become absorbed in it, to fill up with it, this can carry us to the threshold of some samādhi.", note: null },
@@ -1226,6 +1299,11 @@ export const highlightsBySlug: Record<string, BookHighlights> = {
           { text: "Likewise, one may experiment with imagining various luminous lines of energy in the body – for example, between the perineum and the crown of the head, or from the lower belly out through the legs – and sense how any such line of energy supports the whole body to feel upright, open, and energized. The imagination here may be visual or kinaesthetic, or a combination of the two. And it need not always follow exactly the anatomical contours of the physical body or its posture.", note: null },
           { text: "The imagination, too, can be skilfully employed in order to gently encourage this sense of pleasure or well-being in the subtle body. While simultaneously pervading the whole body space with an awareness sensitive to the texture and tone of the energy of that whole field, it is possible, for example, to imagine the subtle body as a body of radiant light; then to open to and explore what that feels like. Any image formed in this way does not necessarily need to appear in precise detail, or even completely distinctly. It is, rather, the energetic sense of pleasure or well-being which it supports that is primary, since this is what primarily supports the samādhi.", note: null },
           { text: "A deepening of refinement is in fact an essential aspect of the deepening of samādhi. There is a refining of both the perception of the object, and, correspondingly, of the attention itself.", note: null },
+        ],
+      },
+      {
+        name: "Effort",
+        highlights: [
           { text: "The attention can work in a way where it ‘moves toward’ that point and probes it, penetrating that small area of sensation, like an arrow or a laser beam. Alternatively, at other times, it can be more useful to encourage a more ‘receptive’ mode of working, to let the awareness ‘receive’ the breath sensations. Here the breath may be conceived of, and thus perceived, as ‘coming toward’ the awareness, as opposed to the other way around. Rather than being separate modes, these two constitute more the poles of a spectrum. Within this larger range, it can be very helpful to experiment with different stances of the attention. With a little practice, we can learn to feel and move our way along this continuum, sensing and responding to what seems helpful in any moment.", note: null },
           { text: "In any case, it is necessary to gradually learn to include in our awareness a sensitivity to our moment-to-moment level and quality of effort. This is part of the art of samādhi practice. Such sensitivity and responsiveness to the effort level is not something we ‘grow beyond’ and then forget about. In fact, it only gets more subtle. Nor should we expect to find, in any one meditation session, a balanced quality and level of effort and hope to keep it statically there, on ‘cruise control’, with the ‘effort dial’ set at ‘5’. Part of the refinement, and beauty too, of this art of samādhi practice is the moment-to-moment play of sensitivity and responsiveness as conditions change. Without this, like a stationary and unresponsive surfer, it’s just not much fun, and we simply get thrown off balance even by the gentlest waves.", note: null },
           { text: "Awareness of the whole body is one way this can be effected. Even if you are working with a method of breath meditation, for example, that involves a spatially narrow focus of attention as ‘foreground’, it is often beneficial to lightly maintain, as the ‘background’ to this ‘foreground’, a global awareness permeating fully and ‘filling out’ the whole body in an alive way. Among other advantages, this will automatically introduce more of a sense of space into the meditation, which can help to ease the contraction of tightness when it arises.", note: null },
@@ -1538,6 +1616,37 @@ export const highlightsBySlug: Record<string, BookHighlights> = {
       },
     ],
   },
+  "the-mind-illuminated": {
+    topics: [
+      {
+        name: "Intention and reprogramming",
+        highlights: [
+          { text: "Repeating simple tasks with a clear intention can reprogram unconscious mental processes. This can completely transform who you are as a person.", note: null },
+          { text: "This is the very essence of meditation: we reprogram unconscious mental processes by repeating basic tasks over and over with a clear intention.", note: null },
+          { text: "At every Stage, all “you” really do is patiently and persistently hold intentions to respond in specific ways to whatever happens during your meditation.", note: null },
+          { text: "This simple formula is at the heart of every Stage.", note: null },
+        ],
+      },
+      {
+        name: "Attention and awareness",
+        highlights: [
+          { text: "Attention analyzes experience, and peripheral awareness provides the context. When one or the other doesn’t do its job, we misinterpret, overreact, and make poor decisions.", note: null },
+          { text: "Mindfulness is the optimal interaction between attention and peripheral awareness.", note: null },
+          { text: "There are many ways you can lose mindfulness, but they all come down to not enough conscious power for an optimal interaction between attention and awareness.", note: null },
+          { text: "The antidote that calms monkey-mind is to become “grounded in the body.” This means expanding the space in which you allow attention to move to include the entire body and, if needed, the other senses as well.", note: null },
+          { text: "“When you have cultivated mindfulness, life becomes richer, more vivid, more satisfying, and you don’t take everything that happens so personally. Attention plays a more appropriate role within the greater context of a broad and powerful awareness. You’re fully present, happier, and at ease, because you’re not so easily caught up in the stories and melodramas the mind likes to concoct. Your powers of attention are used more appropriately and effectively to examine the world. You become more objective and clear-headed, and develop an enhanced awareness of the whole. When all these factors are ripe, you’re ready for profound Insight into the true nature of reality. These are the extraordinary benefits of mindfulness.” ― John Yates", note: null },
+        ],
+      },
+      {
+        name: "Practice",
+        highlights: [
+          { text: "What you need is a regular daily sitting practice of one to two hours per day in combination with some of the supplemental practices described in the appendices.", note: null },
+          { text: "Although pain and pleasure are an inevitable part of human life, suffering and happiness are entirely optional.", note: null },
+          { text: "“What we make of our life—the sum total of thoughts, emotions, words, and actions that fill the brief interval between birth and death—is our one great creative masterpiece.” ― Culadasa John Yates", note: null },
+        ],
+      },
+    ],
+  },
   "the-paleo-manifesto": {
     topics: [
       {
@@ -1660,6 +1769,41 @@ export const highlightsBySlug: Record<string, BookHighlights> = {
           { text: "Seemingly without realizing it, the authors made arguments that, when applied to endangered species, suggest that turning them into an economic resource might be an excellent way to ensure their survival.", note: null },
           { text: "The path to sustainability doesn’t lie in our past, but in our future. Rather than trying to turn the clock back, we have to turn the hands forward, faster. Instead of shrinking, we need to grow—to innovate and create. And we need to grow faster than we’ve ever grown before. The developing world is mostly", note: null },
           { text: "What exactly is the point of humanity living in some boring, utopian, supposedly sustainable stasis? Human beings are not fundamentally different from other species in our ability to experience pleasure or pain. What makes humanity so unique is what we are capable of accomplishing: culture, technology, exploration, creation. The situation calls for more conservation and more risk taking: more conservation of old habitats here on Earth, more risk taking as we push beyond Earth into new habitats. The challenge may seem daunting, but we can do what our ancestors did: take one small step after another until we arrive in a very different place. Risen apes or fallen angels, we walk tall with eyes forward—one foot firmly planted on the ground of what we are, the other reaching into the future of what we can become.", note: null },
+        ],
+      },
+    ],
+  },
+  "the-science-of-enlightenment": {
+    topics: [
+      {
+        name: "Concentration, clarity, equanimity",
+        highlights: [
+          { text: "I like to describe mindfulness as a threefold attentional skill set: concentration power, sensory clarity, and equanimity working together.", note: null },
+          { text: "Ordinary experience, when greeted with concentration, clarity, and equanimity catalyzes a process of insight and purification which culminates in the ability to have complete experiences whenever you want.", note: null },
+          { text: "When I say, “Have a complete experience of x,” it’s just a quick way of saying, “Experience x with so much concentration, clarity, and equanimity that there’s no time to coagulate x—or yourself—into a thing.” You and x become an integrated flow of energy and spaciousness.", note: null },
+          { text: "So there are actually four subskills to concentration: learning how to restrict attention to small sensory events, learning how to evenly cover large sensory events, learning how to sustain concentration on one thing for an extended period of time, and learning how to taste a momentary state of concentration with whatever randomly calls your attention.", note: null },
+          { text: "Equanimity is the ability to allow sensory experience to well up without suppression and to pass away without identifying with it.", note: null },
+        ],
+      },
+      {
+        name: "See In, Hear In, Feel In",
+        highlights: [
+          { text: "The three basic components of any emotional experience, then, are mental imagery, mental talk, and emotional-type body sensations. In order to have a quick way to describe things, I often refer to mental images as “See In,” mental talk as “Hear In,” and emotional-type body sensations as “Feel In.”", note: null },
+          { text: "The relative rest states—a blank mental screen, a defocused external gaze, physical relaxation, emotional neutrality, physical silence, mental quiet—may begin to pervade your sensory experience as the result of noticing vanishings.", note: null },
+        ],
+      },
+      {
+        name: "Enlightenment as plateau",
+        highlights: [
+          { text: "The ultimate personal goal of meditation is to achieve happiness independent of conditions.", note: null },
+          { text: "Enlightenment is not a peak from which you descend over time. It is a plateau from which you ascend, further and further as the months, years, and decades pass.", note: null },
+          { text: "Understanding the nonduality of spirit energy and ordinary experience is very important. We must watch how ordinary experience becomes waves of impermanence over and over—a hundred times, a thousand times, a hundred thousand times—before we really believe that all ordinary experience is impermanent. Eventually it sinks in: every statue dances.", note: null },
+        ],
+      },
+      {
+        name: "The three outs",
+        highlights: [
+          { text: "When we are involved in the path of love and service, we need self-care, a resource to avoid what I call the “three outs”: Burn-Out, when we lose energy and motivation to help; Bum-Out, when we suffer deeply when our efforts to help don’t work; and Freak-Out, when we respond in a distorted, perhaps even abusive way.", note: null },
         ],
       },
     ],

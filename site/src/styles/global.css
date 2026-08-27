@@ -217,6 +217,14 @@ body::after {
 .tile-label a.num:hover {
   color: var(--ink);
 }
+.tile-label-meta {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 14px;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.12em;
+}
 .tile-label.is-section {
   font-size: 13.5px;
   letter-spacing: 0.16em;
@@ -1148,8 +1156,8 @@ a.cover-card:active .cover-frame {
   margin: 0;
 }
 .highlights li + li {
-  margin-top: 18px;
-  padding-top: 18px;
+  margin-top: 22px;
+  padding-top: 22px;
   border-top: var(--hair);
 }
 .highlights blockquote {
@@ -1157,14 +1165,73 @@ a.cover-card:active .cover-frame {
   padding: 0;
   margin: 0;
   font-size: 1.05rem;
-  line-height: 1.5;
+  line-height: 1.55;
   color: var(--ink);
+  white-space: pre-line;
+  max-width: 68ch;
 }
 .highlight-note {
-  margin-top: 8px;
+  margin-top: 12px;
+  padding: 10px 0 2px 14px;
+  border-left: var(--rule);
+  color: var(--ink);
+  font-size: 0.95rem;
+  line-height: 1.45;
+  max-width: 62ch;
+  white-space: pre-line;
+}
+.highlight-note-label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
   color: var(--ink-soft);
-  font-size: 0.9rem;
-  line-height: 1.4;
+}
+.highlight-empty {
+  margin: 0;
+  padding: 28px var(--tile-pad) 32px;
+  color: var(--ink-soft);
+  font-size: 1.02rem;
+  line-height: 1.45;
+  max-width: 46ch;
+}
+.topic-nav {
+  padding: 0;
+}
+.topic-nav-list {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+}
+.topic-nav-list a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 12px var(--tile-pad);
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  border-right: var(--hair);
+  line-height: 1.2;
+}
+.topic-nav-list a:hover {
+  color: var(--accent);
+}
+.topic-nav-list a:last-child {
+  border-right: 0;
+}
+.topic-nav-count {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  font-weight: 650;
+  color: var(--accent);
+}
+.tile[id] {
+  scroll-margin-top: 18px;
 }
 @media (max-width: 560px) {
   .book-head {
@@ -1172,6 +1239,16 @@ a.cover-card:active .cover-frame {
   }
   .book-head .cover-frame {
     max-width: 180px;
+  }
+  .topic-nav-list {
+    flex-direction: column;
+  }
+  .topic-nav-list a {
+    border-right: 0;
+    border-bottom: var(--hair);
+  }
+  .topic-nav-list a:last-child {
+    border-bottom: 0;
   }
 }
 @media (hover: hover) and (pointer: fine) {

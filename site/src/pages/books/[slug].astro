@@ -13,10 +13,18 @@ export async function getStaticPaths() {
   });
 }
 
+const topicId = (name: string) =>
+  name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
+
 const { book, slug } = Astro.props;
 const { title, author, year, rating, description, url, cover } = book.data;
 const highlights = highlightsBySlug[slug];
 const topics = highlights?.topics.filter((t) => t.highlights.length > 0) ?? [];
+const highlightCount = topics.reduce((n, t) => n + t.highlights.length, 0);
+const showNav = topics.length >= 4;
 ---
 
 <Base title={`${title} | chrcit.com`} description={description ?? `Notes on ${title}.`}>
@@ -24,7 +32,16 @@ const topics = highlights?.topics.filter((t) => t.highlights.length > 0) ?? [];
     <article class="tile">
       <div class="tile-label">
         <a href="/books">← Books</a>
-        {rating != null && <span class="num">{rating}/10</span>}
+        <span class="tile-label-meta">
+          {rating != null && <span class="num">{rating}/10</span>}
+          {
+            highlightCount > 0 && (
+              <span>
+                {highlightCount} highlight{highlightCount === 1 ? "" : "s"}
+              </span>
+            )
+          }
+        </span>
       </div>
       <div class="book-head">
         <span class={`cover-frame ${ditherFor(title)}`}>
@@ -54,14 +71,43 @@ const topics = highlights?.topics.filter((t) => t.highlights.length > 0) ?? [];
     </article>
 
     {
-      topics.map((topic) => (
+      showNav && (
+        <nav class="tile topic-nav" aria-label="Topics">
+          <div class="topic-nav-list">
+            {topics.map((topic) => (
+              <a href={`#${topicId(topic.name)}`}>
+                {topic.name}
+                <span class="topic-nav-count">{topic.highlights.length}</span>
+              </a>
+            ))}
+          </div>
+        </nav>
+      )
+    }
+
+    {
+      topics.length === 0 && (
         <section class="tile">
+          <h2 class="group-title">Highlights</h2>
+          <p class="highlight-empty">No highlights saved for this one.</p>
+        </section>
+      )
+    }
+
+    {
+      topics.map((topic) => (
+        <section class="tile" id={topicId(topic.name)}>
           <h2 class="group-title">{topic.name}</h2>
           <ul class="highlights">
             {topic.highlights.map((h) => (
               <li>
                 <blockquote>{h.text}</blockquote>
-                {h.note && <p class="highlight-note">{h.note}</p>}
+                {h.note && (
+                  <p class="highlight-note">
+                    <span class="highlight-note-label">Note</span>
+                    {h.note}
+                  </p>
+                )}
               </li>
             ))}
           </ul>
