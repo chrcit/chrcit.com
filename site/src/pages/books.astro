@@ -28,21 +28,10 @@ const groups = genreOrder
   .filter((g) => g.items.length > 0);
 ---
 
-<Base title="Books — chrcit.com" description="Books I've read, rated out of 10.">
+<Base title="Some of my favourite books | chrcit.com" description="Some of my favourite books.">
   <main class="page">
     <section class="tile">
-      <div class="tile-label"><span>Books</span><span class="num">{books.length} rated</span></div>
-      <h1 class="page-title">Books</h1>
-      <blockquote class="page-quote">
-        <p>
-          Of all the things written, I love only what a person has written with his own blood.
-          Write with blood, and you will experience that blood is spirit.
-        </p>
-        <footer>Friedrich Nietzsche, <cite>The Gay Science</cite></footer>
-      </blockquote>
-      <p class="page-note">
-        Favorites, grouped how I keep them. Rated out of 10. The rating is the review.
-      </p>
+      <h1 class="page-title">Some of my favourite books</h1>
     </section>
 
     {
@@ -51,7 +40,7 @@ const groups = genreOrder
           <h2 class="group-title" id={group.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}>
             {group.name}
           </h2>
-          <div class="cover-rail">
+          <div class="cover-grid">
             {group.items.map((item) => (
               <CoverCard item={item} />
             ))}
@@ -59,5 +48,15 @@ const groups = genreOrder
         </section>
       ))
     }
+
+    <section class="tile">
+      <blockquote class="page-quote">
+        <p>
+          Of all the things written, I love only what a person has written with his own blood.
+          Write with blood, and you will experience that blood is spirit.
+        </p>
+        <footer>Friedrich Nietzsche, <cite>The Gay Science</cite></footer>
+      </blockquote>
+    </section>
   </main>
 </Base>

@@ -7,4 +7,10 @@ import react from "@astrojs/react";
 export default defineConfig({
   site: "https://chrcit.com",
   integrations: [mdx(), sitemap(), react()],
+  redirects: {
+    "/articles": "/",
+    "/writing": "/",
+    "/writing/2023-year-in-review": "/articles/2023-year-in-review",
+    "/projects": "/",
+  },
 });

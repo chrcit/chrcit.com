@@ -4,6 +4,7 @@ import { getImage } from "astro:assets";
 import Base from "../layouts/Base.astro";
 import Roles from "../components/Roles.tsx";
 import SampleList, { type SampleItem } from "../components/SampleList.tsx";
+import WeatherDither from "../components/WeatherDither.astro";
 
 const items = await getCollection("items");
 
@@ -22,14 +23,13 @@ const booksAll: SampleItem[] = await Promise.all(
     .filter((i) => i.data.category === "book")
     .map(async (i) => {
       const img = i.data.cover
-        ? await getImage({ src: i.data.cover, width: 160, height: 240 })
+        ? await getImage({ src: i.data.cover, width: 240, height: 360 })
         : null;
       return {
         id: i.id,
         title: i.data.title,
         meta: [i.data.author, i.data.year].filter(Boolean).join(", "),
-        rating: i.data.rating ?? null,
-        url: i.data.url ?? null,
+        url: `/${i.id}`,
         image: img?.src ?? null,
         kind: "book" as const,
       };
@@ -47,7 +47,6 @@ const toolsAll: SampleItem[] = await Promise.all(
         id: i.id,
         title: i.data.title,
         meta: i.data.group ? (groupLabel[i.data.group] ?? i.data.group) : undefined,
-        rating: null,
         url: i.data.url ?? null,
         image: img?.src ?? null,
         kind: "tool" as const,
@@ -55,41 +54,20 @@ const toolsAll: SampleItem[] = await Promise.all(
     }),
 );
 
-const bookSample = sample(booksAll, 3);
-const toolSample = sample(toolsAll, 3);
-
-const photos = [
-  { role: "default", src: "/images/portrait-dither.png", alt: "Christian Cito" },
-  { role: "arthouse", src: "/images/roles/arthouse.png", alt: "" },
-  { role: "hausgemacht", src: "/images/roles/hausgemacht.png", alt: "" },
-  { role: "rebased", src: "/images/roles/rebased.png", alt: "" },
-  { role: "writer", src: "/images/roles/writer.png", alt: "" },
-];
+const bookSample = sample(booksAll, 6);
+const toolSample = sample(toolsAll, 8);
 ---
 
 <Base>
   <main class="mosaic">
-    <section class="tile tile-photo col-photo" id="role-photo">
-      {
-        photos.map((p, i) => (
-          <img
-            src={p.src}
-            alt={p.alt}
-            width="720"
-            height="1080"
-            data-role={p.role}
-            class={i === 0 ? "is-active" : undefined}
-            aria-hidden={i === 0 ? "false" : "true"}
-          />
-        ))
-      }
-      <span class="photo-spot" aria-hidden="true"></span>
+    <section class="tile tile-photo col-photo">
+      <img src="/images/portrait-dither.png" alt="Christian Cito" width="780" height="1296" />
     </section>
 
     <section class="tile col-lead tile-lead" id="do">
       <h1 class="lead-copy">
-        Hi, I'm Christian Cito. I write code, create products, run teams, organise
-        communities and sometimes do some writing.
+        Hi, I'm <strong>Christian Cito</strong>. I write code, create products, run teams,
+        organise communities, and sometimes do some writing.
       </h1>
       <Roles client:load />
     </section>
@@ -115,18 +93,7 @@ const photos = [
         moreLabel="All tools →"
       />
     </section>
+
+    <WeatherDither />
   </main>
 </Base>
-
-<script>
-  const photo = document.getElementById("role-photo");
-  if (photo) {
-    const move = (e: PointerEvent) => {
-      const r = photo.getBoundingClientRect();
-      photo.style.setProperty("--mx", `${e.clientX - r.left}px`);
-      photo.style.setProperty("--my", `${e.clientY - r.top}px`);
-    };
-    photo.addEventListener("pointermove", move);
-    photo.addEventListener("pointerenter", move);
-  }
-</script>

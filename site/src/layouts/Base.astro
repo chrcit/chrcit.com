@@ -10,11 +10,13 @@ interface Props {
 }
 
 const {
-  title = "Christian Cito — chrcit.com",
+  title = "Christian Cito | chrcit.com",
   description = "Christian Cito. Product engineer, director at Arthouse, Vienna.",
 } = Astro.props;
 
 const year = new Date().getFullYear();
+const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://chrcit.com");
+const ogImage = new URL("/og-image.png", Astro.site ?? "https://chrcit.com");
 ---
 
 <!doctype html>
@@ -27,9 +29,16 @@ const year = new Date().getFullYear();
     <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="canonical" href={canonical.href} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:image" content={ogImage.href} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage.href} />
   </head>
   <body>
     <div class="wrap">

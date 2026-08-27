@@ -2,7 +2,7 @@
 title: "Skin in the Game"
 category: "book"
 author: "Nassim Nicholas Taleb"
-year: 2015
+year: 2018
 rating: 8
 url: "https://www.goodreads.com/book/show/36200141-skin-in-the-game"
 genre: "Politics, History, and Economics"

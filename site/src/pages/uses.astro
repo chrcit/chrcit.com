@@ -18,7 +18,7 @@ const groups = [
     name: label,
     items: tools
       .filter((t) => t.data.group === key)
-      .sort((a, b) => a.data.title.localeCompare(b.data.title)),
+      .sort((a, b) => (a.data.rank ?? 99) - (b.data.rank ?? 99) || a.data.title.localeCompare(b.data.title)),
   })),
   ...[...new Set(tools.map((t) => t.data.group).filter((g): g is string => !!g && !groupedKeys.has(g)))]
     .sort()
@@ -26,20 +26,15 @@ const groups = [
       name,
       items: tools
         .filter((t) => t.data.group === name)
-        .sort((a, b) => a.data.title.localeCompare(b.data.title)),
+        .sort((a, b) => (a.data.rank ?? 99) - (b.data.rank ?? 99) || a.data.title.localeCompare(b.data.title)),
     })),
 ].filter((g) => g.items.length > 0);
 ---
 
-<Base title="Uses — chrcit.com" description="Gear, stack, and software I use.">
+<Base title="Things I like to use | chrcit.com" description="Things I like to use.">
   <main class="page">
     <section class="tile">
-      <div class="tile-label"><span>Uses</span><span class="num">{tools.length} items</span></div>
-      <h1 class="page-title">Uses</h1>
-      <p class="page-note">
-        The gear, the stack, and the software. Grouped the way I actually think about them.
-        Updated when something earns its place or loses it.
-      </p>
+      <h1 class="page-title">Things I like to use</h1>
     </section>
 
     {

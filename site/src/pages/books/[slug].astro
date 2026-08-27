@@ -1,0 +1,72 @@
+---
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+import Base from "../../layouts/Base.astro";
+import { ditherFor } from "../../utils/dither";
+import { highlightsBySlug } from "../../data/highlights";
+
+export async function getStaticPaths() {
+  const books = (await getCollection("items")).filter((i) => i.data.category === "book");
+  return books.map((book) => {
+    const slug = book.id.replace(/^books\//, "");
+    return { params: { slug }, props: { book, slug } };
+  });
+}
+
+const { book, slug } = Astro.props;
+const { title, author, year, rating, description, url, cover } = book.data;
+const highlights = highlightsBySlug[slug];
+const topics = highlights?.topics.filter((t) => t.highlights.length > 0) ?? [];
+---
+
+<Base title={`${title} | chrcit.com`} description={description ?? `Notes on ${title}.`}>
+  <main class="page">
+    <article class="tile">
+      <div class="tile-label">
+        <a href="/books">← Books</a>
+        {rating != null && <span class="num">{rating}/10</span>}
+      </div>
+      <div class="book-head">
+        <span class={`cover-frame ${ditherFor(title)}`}>
+          {
+            cover ? (
+              <Image src={cover} alt={`Cover of ${title}`} width={400} height={600} fit="cover" />
+            ) : (
+              <span class="cover-fallback">{title.charAt(0)}</span>
+            )
+          }
+        </span>
+        <div class="book-copy">
+          <h1 class="page-title">{title}</h1>
+          <p class="book-meta">
+            {[author, year].filter(Boolean).join(", ")}
+          </p>
+          {description && <p class="book-desc">{description}</p>}
+          {
+            url && (
+              <a class="book-out" href={url} target="_blank" rel="noopener">
+                On Goodreads →
+              </a>
+            )
+          }
+        </div>
+      </div>
+    </article>
+
+    {
+      topics.map((topic) => (
+        <section class="tile">
+          <h2 class="group-title">{topic.name}</h2>
+          <ul class="highlights">
+            {topic.highlights.map((h) => (
+              <li>
+                <blockquote>{h.text}</blockquote>
+                {h.note && <p class="highlight-note">{h.note}</p>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+  </main>
+</Base>

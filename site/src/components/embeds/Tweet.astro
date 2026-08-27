@@ -75,36 +75,48 @@ const fmt = (n?: number | null) => {
           )
         }
         <span class="embed-stats">
-          <span title="Replies">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-              <path d="M21 12a9 9 0 0 1-13.5 7.8L3 21l1.3-4A9 9 0 1 1 21 12z" />
-            </svg>
-            {fmt(tweet.replies)}
-          </span>
-          <span title="Reposts">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-              <path d="M17 1l4 4-4 4" />
-              <path d="M3 11V9a4 4 0 0 1 4-4h14" />
-              <path d="M7 23l-4-4 4-4" />
-              <path d="M21 13v2a4 4 0 0 1-4 4H3" />
-            </svg>
-            {fmt(tweet.retweets)}
-          </span>
-          <span title="Likes">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-              <path d="M12 21s-7-4.6-9.3-8.2C.7 9.7 2.2 6 6 6c2 0 3.4 1.1 4 2.1C10.6 7.1 12 6 14 6c3.8 0 5.3 3.7 3.3 6.8C19 16.4 12 21 12 21z" />
-            </svg>
-            {fmt(tweet.likes)}
-          </span>
           {
-            tweet.views != null && (
+            tweet.replies ? (
+              <span title="Replies">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                  <path d="M21 12a9 9 0 0 1-13.5 7.8L3 21l1.3-4A9 9 0 1 1 21 12z" />
+                </svg>
+                {fmt(tweet.replies)}
+              </span>
+            ) : null
+          }
+          {
+            tweet.retweets ? (
+              <span title="Reposts">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                  <path d="M17 1l4 4-4 4" />
+                  <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+                  <path d="M7 23l-4-4 4-4" />
+                  <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+                </svg>
+                {fmt(tweet.retweets)}
+              </span>
+            ) : null
+          }
+          {
+            tweet.likes ? (
+              <span title="Likes">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                  <path d="M12 21s-7-4.6-9.3-8.2C.7 9.7 2.2 6 6 6c2 0 3.4 1.1 4 2.1C10.6 7.1 12 6 14 6c3.8 0 5.3 3.7 3.3 6.8C19 16.4 12 21 12 21z" />
+                </svg>
+                {fmt(tweet.likes)}
+              </span>
+            ) : null
+          }
+          {
+            tweet.views ? (
               <span title="Views">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
                   <path d="M4 19V9M10 19V5M16 19v-7M22 19V3" />
                 </svg>
                 {fmt(tweet.views)}
               </span>
-            )
+            ) : null
           }
         </span>
       </a>

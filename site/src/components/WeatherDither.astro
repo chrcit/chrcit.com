@@ -1,0 +1,633 @@
+---
+// Homepage mosaic tile: 1/4 sentence, 3/4 ordered-dither field.
+// A two-colour riso print (ink + accent spot) that happens to be listening to
+// Vienna's sky. Decorative, not a weather widget.
+//
+// The field is a WebGL fragment shader quantised to a dither cell grid. It falls
+// back to the static CSS halftone on .weather-field if WebGL is unavailable, and
+// renders a single frame on low-power devices.
+const dev = import.meta.env.DEV;
+const DEV_STATES = [
+  { label: "Clear", code: 0 },
+  { label: "Mainly", code: 1 },
+  { label: "Partly", code: 2 },
+  { label: "Overcast", code: 3 },
+  { label: "Fog", code: 45 },
+  { label: "Drizzle", code: 53 },
+  { label: "Rain", code: 63 },
+  { label: "Snow", code: 73 },
+  { label: "Storm", code: 95 },
+];
+---
+
+<section class="tile span-4 weather-row" data-weather-row aria-label="Vienna weather">
+  <div class="weather-copy">
+    <p data-weather-copy>The weather today in Vienna is loading.</p>
+  </div>
+  <div class="weather-field" data-weather-dither>
+    <canvas aria-hidden="true"></canvas>
+    {
+      dev && (
+        <div class="weather-dev" data-weather-dev>
+          {DEV_STATES.map((s) => (
+            <button type="button" data-wx-code={s.code}>
+              {s.label}
+            </button>
+          ))}
+          <button type="button" data-wx-night>
+            Night
+          </button>
+          <button type="button" data-wx-live>
+            Live
+          </button>
+          <input type="range" min="-12" max="36" value="18" data-wx-temp aria-label="Peak temperature" />
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<script>
+  type Sky = {
+    label: string;
+    haze: number;
+    clouds: number;
+    sun: number;
+    rain: number;
+    snow: number;
+    fog: number;
+    storm: number;
+  };
+
+  const sky = (label: string, p: Partial<Sky>): Sky => ({
+    label,
+    haze: 0.1,
+    clouds: 0.35,
+    sun: 0.5,
+    rain: 0,
+    snow: 0,
+    fog: 0,
+    storm: 0,
+    ...p,
+  });
+
+  const readSky = (code: number | null): Sky => {
+    if (code == null) return sky("settling", {});
+    if (code === 0) return sky("clear", { haze: 0.05, clouds: 0.06, sun: 1 });
+    if (code === 1) return sky("mainly clear", { haze: 0.07, clouds: 0.26, sun: 0.88 });
+    if (code === 2) return sky("partly cloudy", { haze: 0.1, clouds: 0.58, sun: 0.62 });
+    if (code === 3) return sky("overcast", { haze: 0.16, clouds: 0.96, sun: 0.1 });
+    if (code === 45 || code === 48)
+      return sky("foggy", { haze: 0.18, clouds: 0.4, sun: 0.2, fog: 0.72 });
+    if (code >= 51 && code <= 57)
+      return sky("drizzly", { haze: 0.13, clouds: 0.78, sun: 0.14, rain: 0.35 });
+    if ((code >= 71 && code <= 77) || code === 85 || code === 86)
+      return sky("snowy", { haze: 0.14, clouds: 0.86, sun: 0.16, snow: 1 });
+    if (code >= 95) return sky("stormy", { haze: 0.24, clouds: 1, sun: 0, rain: 1, storm: 1 });
+    return sky("rainy", { haze: 0.17, clouds: 0.9, sun: 0.08, rain: 0.75 });
+  };
+
+  const viennaHour = () => {
+    const parts = new Intl.DateTimeFormat("en-GB", {
+      timeZone: "Europe/Vienna",
+      hour: "2-digit",
+      hour12: false,
+    }).formatToParts(new Date());
+    return Number(parts.find((p) => p.type === "hour")?.value ?? "12");
+  };
+
+  const nightAt = (hour: number) => hour >= 21 || hour < 6;
+  const clamp01 = (n: number) => (n < 0 ? 0 : n > 1 ? 1 : n);
+
+  const readColor = (name: string, fallback: string) => {
+    const hex = (getComputedStyle(document.documentElement).getPropertyValue(name) || fallback)
+      .replace("#", "")
+      .trim();
+    const n = hex.length === 3 ? hex.replace(/./g, (c) => c + c) : hex;
+    return [
+      (parseInt(n.slice(0, 2), 16) || 0) / 255,
+      (parseInt(n.slice(2, 4), 16) || 0) / 255,
+      (parseInt(n.slice(4, 6), 16) || 0) / 255,
+    ];
+  };
+
+  const VERT = `
+    attribute vec2 aPos;
+    void main() { gl_Position = vec4(aPos, 0.0, 1.0); }
+  `;
+
+  const FRAG = `
+    #ifdef GL_FRAGMENT_PRECISION_HIGH
+    precision highp float;
+    #else
+    precision mediump float;
+    #endif
+
+    uniform vec2 uCells;
+    uniform float uCell;
+    uniform float uTime;
+    uniform float uDrift;
+    uniform float uHaze;
+    uniform float uClouds;
+    uniform float uSun;
+    uniform float uFog;
+    uniform float uRain;
+    uniform float uSnow;
+    uniform float uHeat;
+    uniform float uNight;
+    uniform float uFlash;
+    uniform float uCloudCount;
+    uniform vec3 uInk;
+    uniform vec3 uPaper;
+    uniform vec3 uAccent;
+    uniform vec3 uPointer;
+    uniform vec2 uPar;
+
+    float hash11(float n) { return fract(sin(n * 127.1) * 43758.5453); }
+
+    float bayer2(vec2 a) { a = floor(a); return fract(a.x * 0.5 + a.y * a.y * 0.75); }
+
+    // Offset by half a step so the darkest cell never thresholds at zero.
+    float bayer8(vec2 a) {
+      return bayer2(0.25 * a) * 0.0625 + bayer2(0.5 * a) * 0.25 + bayer2(a) + 0.0078125;
+    }
+
+    float lobe(vec2 p, vec2 c, float sc, vec3 L) {
+      float rr = L.z * sc;
+      vec2 d = (p - (c + L.xy * sc)) / rr;
+      return 1.0 - dot(d, d);
+    }
+
+    void main() {
+      vec2 cid = floor(gl_FragCoord.xy / uCell);
+      vec2 cp = vec2(cid.x, uCells.y - 1.0 - cid.y);
+      float ay = cp.y / uCells.y;
+      float ax = cp.x / uCells.y + sin(ay * 22.0 + uTime * 2.6) * 0.02 * uHeat;
+      vec2 p = vec2(ax, ay);
+      float aspect = uCells.x / uCells.y;
+      float span = aspect + 1.3;
+      // narrow frames (mobile) get proportionally smaller clouds
+      float fit = clamp(aspect / 2.9, 0.62, 1.0);
+
+      float cover = 0.0;
+      float shade = 0.0;
+      for (int i = 0; i < 9; i++) {
+        if (float(i) >= uCloudCount) break;
+        float fi = float(i);
+        // three depth layers: high clouds are small and slow, low ones big and fast
+        float layer = mod(fi, 3.0);
+        float sc = (0.2 + 0.07 * layer + 0.12 * hash11(fi + 5.1)) * fit;
+        float speed = 0.03 + 0.03 * layer;
+        float cx = mod((fi + 0.3 + 0.4 * hash11(fi)) / uCloudCount * span + uDrift * speed, span) - 0.65;
+        if (abs(p.x - cx) > sc) continue;
+        float cy = 0.2 + 0.46 * (layer + hash11(fi + 61.2)) / 3.0 + sin(uTime * 0.3 + fi) * 0.015;
+        vec2 c = vec2(cx, cy);
+        float m = lobe(p, c, sc, vec3(-0.58, 0.04, 0.30));
+        m = max(m, lobe(p, c, sc, vec3(-0.20, -0.10, 0.42)));
+        m = max(m, lobe(p, c, sc, vec3(0.24, -0.03, 0.36)));
+        m = max(m, lobe(p, c, sc, vec3(0.60, 0.07, 0.25)));
+        if (m <= 0.0) continue;
+        float base = cy + 0.20 * sc;
+        float cut = clamp(1.0 - max(p.y - base, 0.0) / (0.05 * sc), 0.0, 1.0);
+        float a = clamp(m * 4.0, 0.0, 1.0) * cut;
+        if (a > cover) {
+          cover = a;
+          shade = clamp((p.y - (cy - 0.30 * sc)) / (0.52 * sc), 0.0, 1.0);
+        }
+      }
+
+      float ceiling = clamp((uClouds - 0.72) / 0.28, 0.0, 1.0);
+      float wob = sin(ax * 1.9 + uDrift * 0.05 + sin(ay * 2.7) * 1.4) * 0.03;
+      float v = uHaze * (0.14 + 0.86 * pow(1.0 - ay, 1.7))
+        + wob
+        + ceiling * 0.22 * clamp((0.55 - ay) / 0.55, 0.0, 1.0)
+        + cover * (0.12 + 0.55 * shade);
+
+      float band = (0.05 + 0.18 * (0.5 + 0.5 * sin((ay * 7.5 - uTime * 0.05) * 6.2831853)))
+        * clamp(1.0 - ay * 0.5, 0.0, 1.0);
+      v = mix(v, band, uFog);
+      v -= uPointer.z * smoothstep(0.40, 0.0, distance(p, uPointer.xy)) * 0.26;
+
+      float th = bayer8(cid);
+      float occ = clamp(cover + ceiling * 0.9, 0.0, 1.0);
+      float inv = abs(uNight - uFlash);
+      vec3 fg = mix(uInk, uPaper, inv);
+      vec3 bg = mix(uPaper, uInk, inv);
+
+      float accent = 0.0;
+      if (uSun > 0.03 && occ < 0.5) {
+        float dr = mix(0.15, 0.115, uNight);
+        float halo = dr * 1.6;
+        vec2 sc2 = vec2(
+          aspect * 0.72 + sin(uTime * 0.09) * 0.06 + uPar.x * 0.12,
+          0.36 + cos(uTime * 0.07) * 0.05 + uPar.y * 0.06
+        );
+        float d = distance(p, sc2);
+        float disc = 0.0;
+        if (d < dr) {
+          disc = 1.0;
+          if (uNight > 0.5 && distance(p, sc2 - vec2(0.075, 0.045)) < dr * 0.94) disc = 0.0;
+        } else if (uSun > 0.35 && d < dr + halo) {
+          disc = (0.5 + 0.5 * sin((d - dr) * 46.0 - uTime * 1.1))
+            * (1.0 - (d - dr) / halo)
+            * mix(0.85, 0.4, uNight);
+        }
+        disc *= uSun * clamp(1.0 - occ * 1.9, 0.0, 1.0);
+        accent = step(th, disc) * step(0.07, disc);
+      }
+
+      float mark = 0.0;
+
+      if (uRain > 0.01) {
+        float g = floor(cp.x + cp.y * 0.5);
+        float lane = floor(g / 3.0);
+        float off = g - lane * 3.0;
+        float speed = (26.0 + hash11(lane + 11.3) * 34.0) * (0.6 + uRain * 0.7);
+        float cyc = uCells.y + 30.0;
+        float head = mod(uTime * speed + hash11(lane + 5.1) * cyc, cyc);
+        float dY = head - cp.y;
+        mark = max(mark, step(off, 0.5)
+          * step(hash11(lane + 3.7), 0.2 + 0.6 * uRain)
+          * step(0.0, dY) * step(dY, 2.0 + 9.0 * uRain));
+      }
+
+      if (uSnow > 0.01) {
+        float col = floor(cp.x / 11.0);
+        for (int k = 0; k < 3; k++) {
+          float fk = float(k) * 31.7;
+          float h1 = hash11(col + fk + 3.3);
+          float h2 = hash11(col + fk + 7.7);
+          float yy = mod(uTime * (4.0 + h2 * 6.0) + h1 * 400.0, uCells.y + 10.0);
+          float u = fract(h1 + sin(uTime * (0.4 + h2) + h1 * 12.0) * 0.06);
+          float cxp = col * 11.0 + 1.5 + u * 8.0;
+          float sz = h2 > 0.55 ? 1.2 : 0.7;
+          mark = max(mark, step(abs(cp.x - cxp), sz) * step(abs(cp.y - yy), sz));
+        }
+      }
+
+      if (uNight < 0.5 && uSun > 0.55 && uRain < 0.01 && uSnow < 0.01) {
+        for (int i = 0; i < 2; i++) {
+          float fi = float(i);
+          float cyc = mod(uDrift * 0.06 + fi * 0.24, 3.4);
+          if (cyc > 1.15) continue;
+          float bx = (cyc / 1.15) * (uCells.x + 8.0) - 4.0;
+          float by = (0.18 + fi * 0.11 + sin(uTime * 0.5 + fi) * 0.02) * uCells.y;
+          vec2 d = cp - floor(vec2(bx, by) + 0.5);
+          float axd = abs(d.x);
+          float flap = sin(uTime * 3.0 + fi * 2.0) > 0.0 ? 2.0 : 1.0;
+          float want = axd < 0.5 ? 0.0 : (axd < 1.5 ? -1.0 : -1.0 - flap);
+          mark = max(mark, step(axd, 2.5) * step(abs(d.y - want), 0.5));
+        }
+      }
+
+      vec3 col = bg;
+      if (accent > 0.5) col = uAccent;
+      else if (v > th) col = fg;
+      if (mark > 0.5) col = fg;
+      gl_FragColor = vec4(col, 1.0);
+    }
+  `;
+
+  const compile = (gl: WebGLRenderingContext, type: number, src: string) => {
+    const sh = gl.createShader(type);
+    if (!sh) return null;
+    gl.shaderSource(sh, src);
+    gl.compileShader(sh);
+    if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+      console.warn("[weather] shader:", gl.getShaderInfoLog(sh));
+      gl.deleteShader(sh);
+      return null;
+    }
+    return sh;
+  };
+
+  const row = document.querySelector<HTMLElement>("[data-weather-row]");
+  const copy = row?.querySelector<HTMLElement>("[data-weather-copy]");
+  const root = document.querySelector<HTMLElement>("[data-weather-dither]");
+  const canvas = root?.querySelector("canvas");
+
+  if (row && root && canvas) {
+    const gl = canvas.getContext("webgl", {
+      alpha: false,
+      antialias: false,
+      depth: false,
+      stencil: false,
+      powerPreference: "low-power",
+      preserveDrawingBuffer: false,
+    });
+    const vs = gl && compile(gl, gl.VERTEX_SHADER, VERT);
+    const fs = gl && compile(gl, gl.FRAGMENT_SHADER, FRAG);
+    const prog = gl && vs && fs ? gl.createProgram() : null;
+    if (gl && vs && fs && prog) {
+      gl.attachShader(prog, vs);
+      gl.attachShader(prog, fs);
+      gl.linkProgram(prog);
+    }
+
+    if (!gl || !prog || !gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+      // Leaves the static CSS halftone underneath in place.
+      canvas.remove();
+    } else {
+      gl.useProgram(prog);
+      const quad = gl.createBuffer();
+      gl.bindBuffer(gl.ARRAY_BUFFER, quad);
+      gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array([-1, -1, 3, -1, -1, 3]),
+        gl.STATIC_DRAW,
+      );
+      const aPos = gl.getAttribLocation(prog, "aPos");
+      gl.enableVertexAttribArray(aPos);
+      gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+      const u = (name: string) => gl.getUniformLocation(prog, name);
+      const U = {
+        cells: u("uCells"),
+        cell: u("uCell"),
+        time: u("uTime"),
+        drift: u("uDrift"),
+        haze: u("uHaze"),
+        clouds: u("uClouds"),
+        sun: u("uSun"),
+        fog: u("uFog"),
+        rain: u("uRain"),
+        snow: u("uSnow"),
+        heat: u("uHeat"),
+        night: u("uNight"),
+        flash: u("uFlash"),
+        cloudCount: u("uCloudCount"),
+        ink: u("uInk"),
+        paper: u("uPaper"),
+        accent: u("uAccent"),
+        pointer: u("uPointer"),
+        par: u("uPar"),
+      };
+
+      const ink = readColor("--ink", "#191611");
+      const paper = readColor("--paper", "#f3f0e7");
+      const accent = readColor("--accent", "#b5341c");
+      gl.uniform3fv(U.ink, ink);
+      gl.uniform3fv(U.paper, paper);
+      gl.uniform3fv(U.accent, accent);
+
+      const nav = navigator as Navigator & {
+        deviceMemory?: number;
+        connection?: { saveData?: boolean };
+        getBattery?: () => Promise<{
+          level: number;
+          charging: boolean;
+          addEventListener: (t: string, fn: () => void) => void;
+        }>;
+      };
+      const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const weakDevice =
+        (nav.hardwareConcurrency ?? 8) <= 4 ||
+        (nav.deviceMemory ?? 8) <= 4 ||
+        nav.connection?.saveData === true;
+
+      let code: number | null = null;
+      let hour = viennaHour();
+      let tempMax: number | null = null;
+      let override: { code?: number; night?: boolean } | null = null;
+      const live = { code: null as number | null, tempMax: null as number | null };
+
+      let clock = 12;
+      let drift = 12;
+      let wind = 1;
+      let hover = 0;
+      let gust = 0;
+      let parX = 0;
+      let parY = 0;
+      let pointX = 0;
+      let pointY = 0;
+      let normX = 0;
+      let normY = 0;
+      let pointA = 0;
+      let press = 0;
+      let last = 0;
+      let stamp = 0;
+      let flashUntil = -1;
+      let nextFlash = 4;
+      let raf = 0;
+      let running = false;
+      let visible = true;
+      let slow = 0;
+      let animate = !motion.matches && !weakDevice;
+
+      const sentence = () => {
+        const peak = tempMax != null ? `${Math.round(tempMax)}` : "—";
+        return `The weather today in Vienna is ${readSky(code).label} with temperatures peaking at ${peak}° Celsius.`;
+      };
+
+      // Warm days print coarse, cold days print fine.
+      const grain = () => 2 + clamp01(((tempMax ?? 14) + 6) / 36) * 1.2;
+
+      const draw = () => {
+        const dpr = Math.min(window.devicePixelRatio || 1, animate ? 2 : 3);
+        const w = Math.max(1, Math.round(root.clientWidth * dpr));
+        const h = Math.max(1, Math.round(root.clientHeight * dpr));
+        if (canvas.width !== w || canvas.height !== h) {
+          canvas.width = w;
+          canvas.height = h;
+          gl.viewport(0, 0, w, h);
+        }
+
+        const cell = Math.max(2, Math.round(grain() * dpr));
+        const s = readSky(code);
+        const night = override?.night ?? nightAt(hour);
+        const flash = s.storm > 0 && clock < flashUntil ? 1 : 0;
+
+        gl.uniform2f(U.cells, Math.ceil(w / cell), Math.ceil(h / cell));
+        gl.uniform1f(U.cell, cell);
+        gl.uniform1f(U.time, clock);
+        gl.uniform1f(U.drift, drift);
+        gl.uniform1f(U.haze, s.haze);
+        gl.uniform1f(U.clouds, s.clouds);
+        gl.uniform1f(U.sun, s.sun);
+        gl.uniform1f(U.fog, s.fog);
+        gl.uniform1f(U.rain, s.rain);
+        gl.uniform1f(U.snow, s.snow);
+        gl.uniform1f(U.heat, clamp01(((tempMax ?? 14) - 24) / 12));
+        gl.uniform1f(U.night, night ? 1 : 0);
+        gl.uniform1f(U.flash, flash);
+        gl.uniform1f(U.cloudCount, s.clouds < 0.15 ? 2 : s.clouds < 0.45 ? 4 : s.clouds < 0.8 ? 6 : 9);
+        gl.uniform3f(U.pointer, pointX, pointY, press);
+        gl.uniform2f(U.par, parX, parY);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+      };
+
+      const step = (now: number) => {
+        raf = requestAnimationFrame(step);
+        const dt = last ? (now - last) / 1000 : 0;
+        if (now - stamp < 66) return;
+        last = now;
+        stamp = now;
+        if (dt > 0.2) slow = Math.min(60, slow + 2);
+        else slow = Math.max(0, slow - 1);
+        if (slow >= 40) {
+          stop();
+          animate = false;
+          draw();
+          return;
+        }
+        const d = Math.min(0.25, dt);
+        clock += d;
+        gust *= 0.94;
+        hover += ((pointA ? 1.4 : 0) - hover) * 0.08;
+        wind = 1 + hover + gust;
+        drift += d * wind;
+        press += (pointA - press) * 0.12;
+        parX += ((pointA ? normX : 0) - parX) * 0.08;
+        parY += ((pointA ? normY : 0) - parY) * 0.08;
+        if (clock > nextFlash) {
+          flashUntil = clock + 0.16;
+          nextFlash = clock + 4 + Math.random() * 8;
+        }
+        draw();
+      };
+
+      const start = () => {
+        if (running || !animate || !visible || document.hidden) return;
+        running = true;
+        last = 0;
+        raf = requestAnimationFrame(step);
+      };
+      const stop = () => {
+        running = false;
+        cancelAnimationFrame(raf);
+      };
+
+      const render = () => {
+        if (copy) copy.textContent = sentence();
+        const s = readSky(code);
+        row.setAttribute(
+          "aria-label",
+          `The weather today in Vienna is ${s.label}${tempMax != null ? `, peaking at ${Math.round(tempMax)}° Celsius` : ""}`,
+        );
+        draw();
+      };
+
+      try {
+        const cached = JSON.parse(sessionStorage.getItem("chrcit-vienna-wx-2") || "null");
+        if (cached) {
+          if (typeof cached.code === "number") code = live.code = cached.code;
+          if (typeof cached.tempMax === "number") tempMax = live.tempMax = cached.tempMax;
+        }
+      } catch {
+        /* ignore */
+      }
+
+      render();
+      start();
+
+      window.addEventListener("vienna:now", ((e: CustomEvent) => {
+        if (typeof e.detail?.code === "number") live.code = e.detail.code;
+        if (typeof e.detail?.tempMax === "number") live.tempMax = e.detail.tempMax;
+        if (override) return;
+        code = live.code;
+        tempMax = live.tempMax;
+        hour = typeof e.detail?.hour === "number" ? e.detail.hour : viennaHour();
+        render();
+      }) as EventListener);
+
+      new ResizeObserver(() => draw()).observe(root);
+
+      new IntersectionObserver(
+        (entries) => {
+          visible = entries[0]?.isIntersecting ?? true;
+          if (visible) start();
+          else stop();
+        },
+        { rootMargin: "120px" },
+      ).observe(root);
+
+      document.addEventListener("visibilitychange", () => (document.hidden ? stop() : start()));
+
+      motion.addEventListener("change", () => {
+        animate = !motion.matches && !weakDevice;
+        if (animate) start();
+        else {
+          stop();
+          draw();
+        }
+      });
+
+      nav.getBattery?.().then((bat) => {
+        const check = () => {
+          const drained = bat.level <= 0.2 && !bat.charging;
+          animate = !motion.matches && !weakDevice && !drained;
+          if (animate) start();
+          else {
+            stop();
+            draw();
+          }
+        };
+        bat.addEventListener("levelchange", check);
+        bat.addEventListener("chargingchange", check);
+        check();
+      });
+
+      root.addEventListener("pointermove", (e) => {
+        if (!animate) return;
+        const b = root.getBoundingClientRect();
+        pointX = (e.clientX - b.left) / b.height;
+        pointY = (e.clientY - b.top) / b.height;
+        normX = ((e.clientX - b.left) / b.width - 0.5) * 2;
+        normY = ((e.clientY - b.top) / b.height - 0.5) * 2;
+        pointA = 1;
+      });
+      root.addEventListener("pointerleave", () => (pointA = 0));
+      root.addEventListener("pointerdown", () => {
+        if (!animate) return;
+        gust = Math.min(9, gust + 6);
+        if (readSky(code).storm > 0) flashUntil = clock + 0.18;
+      });
+
+      const panel = root.querySelector<HTMLElement>("[data-weather-dev]");
+      if (panel) {
+        const mark = (el: Element | null) => {
+          panel.querySelectorAll("[data-wx-code]").forEach((b) => b.classList.remove("is-on"));
+          el?.classList.add("is-on");
+        };
+        panel.querySelectorAll<HTMLButtonElement>("[data-wx-code]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const next = Number(btn.dataset.wxCode);
+            override = { ...(override ?? {}), code: next };
+            code = next;
+            mark(btn);
+            render();
+          });
+        });
+        panel.querySelector("[data-wx-night]")?.addEventListener("click", (e) => {
+          const btn = e.currentTarget as HTMLButtonElement;
+          const on = !btn.classList.contains("is-on");
+          btn.classList.toggle("is-on", on);
+          override = { ...(override ?? {}), night: on };
+          render();
+        });
+        panel.querySelector("[data-wx-temp]")?.addEventListener("input", (e) => {
+          tempMax = Number((e.currentTarget as HTMLInputElement).value);
+          override = override ?? {};
+          render();
+        });
+        panel.querySelector("[data-wx-live]")?.addEventListener("click", () => {
+          override = null;
+          mark(null);
+          panel.querySelector("[data-wx-night]")?.classList.remove("is-on");
+          code = live.code;
+          tempMax = live.tempMax;
+          hour = viennaHour();
+          render();
+        });
+
+        const params = new URLSearchParams(location.search);
+        const forced = params.get("wx");
+        if (forced != null) {
+          override = { code: Number(forced), night: params.get("night") === "1" };
+          code = Number(forced);
+          render();
+        }
+      }
+    }
+  }
+</script>

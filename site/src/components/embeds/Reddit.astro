@@ -1,0 +1,33 @@
+---
+interface Props {
+  url: string;
+  title: string;
+  author?: string;
+}
+
+const { url, title, author = "chrcit" } = Astro.props;
+const subreddit = url.match(/\/r\/([^/?#]+)/)?.[1];
+---
+
+<article class="embed embed-reddit">
+  <a class="embed-link" href={url} target="_blank" rel="noopener">
+    <span class="embed-head">
+      <span class="embed-snoo" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+          <circle cx="12" cy="14.5" r="7.5"></circle>
+          <path d="M12 7V4.6l2.4-1.1"></path>
+          <circle cx="15.7" cy="2.9" r="1.3"></circle>
+          <circle cx="9.4" cy="13.8" r="1.1" fill="currentColor" stroke="none"></circle>
+          <circle cx="14.6" cy="13.8" r="1.1" fill="currentColor" stroke="none"></circle>
+          <path d="M9 17.6c1.9 1.4 4.1 1.4 6 0"></path>
+        </svg>
+      </span>
+      <span class="embed-who">
+        <span class="embed-name">{subreddit ? `r/${subreddit}` : "Reddit"}</span>
+        <span class="embed-handle">u/{author}</span>
+      </span>
+    </span>
+    <p class="embed-text">{title}</p>
+    <span class="embed-more">Read on Reddit →</span>
+  </a>
+</article>

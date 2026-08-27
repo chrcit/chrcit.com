@@ -64,33 +64,73 @@
       return ICONS.rain;
     };
 
-    const applyWx = (temp, code) => {
+    const viennaHour = () => {
+      const parts = new Intl.DateTimeFormat("en-GB", {
+        timeZone: tz,
+        hour: "2-digit",
+        hour12: false,
+      }).formatToParts(new Date());
+      return Number(parts.find((p) => p.type === "hour")?.value ?? "12");
+    };
+
+    const emit = (payload) => {
+      window.dispatchEvent(
+        new CustomEvent("vienna:now", {
+          detail: {
+            code: typeof payload.code === "number" ? payload.code : null,
+            hour: viennaHour(),
+            temp: typeof payload.temp === "number" ? payload.temp : null,
+            tempMax: typeof payload.tempMax === "number" ? payload.tempMax : null,
+          },
+        }),
+      );
+    };
+
+    const applyWx = (temp, code, tempMax) => {
       if (!wxEl || !iconEl || !tempEl) return;
       const rounded = Math.round(temp);
       iconEl.innerHTML = iconFor(code);
       tempEl.textContent = `${rounded}°`;
       wxEl.hidden = false;
       wxEl.setAttribute("title", `Vienna ${rounded}°C`);
+      emit({ temp, code, tempMax });
     };
 
-    const KEY = "chrcit-vienna-wx";
+    const KEY = "chrcit-vienna-wx-2";
     const TTL = 20 * 60 * 1000;
     try {
       const cached = JSON.parse(sessionStorage.getItem(KEY) || "null");
-      if (cached && Date.now() - cached.at < TTL) applyWx(cached.temp, cached.code);
+      if (cached && Date.now() - cached.at < TTL) applyWx(cached.temp, cached.code, cached.tempMax);
     } catch (_) {}
 
     const url =
-      "https://api.open-meteo.com/v1/forecast?latitude=48.2082&longitude=16.3738&current=temperature_2m,weather_code&timezone=Europe%2FVienna";
+      "https://api.open-meteo.com/v1/forecast?latitude=48.2082&longitude=16.3738&current=temperature_2m,weather_code&daily=temperature_2m_max,weather_code&timezone=Europe%2FVienna&forecast_days=1";
     fetch(url, { referrerPolicy: "no-referrer" })
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((data) => {
         const temp = data && data.current && data.current.temperature_2m;
-        const code = data && data.current && data.current.weather_code;
+        const currentCode = data && data.current && data.current.weather_code;
+        const dailyCode =
+          data && data.daily && Array.isArray(data.daily.weather_code)
+            ? data.daily.weather_code[0]
+            : currentCode;
+        const tempMax =
+          data && data.daily && Array.isArray(data.daily.temperature_2m_max)
+            ? data.daily.temperature_2m_max[0]
+            : temp;
+        const code = typeof dailyCode === "number" ? dailyCode : currentCode;
         if (typeof temp !== "number" || typeof code !== "number") return;
-        applyWx(temp, code);
+        applyWx(temp, code, typeof tempMax === "number" ? tempMax : temp);
         try {
-          sessionStorage.setItem(KEY, JSON.stringify({ at: Date.now(), temp, code }));
+          sessionStorage.setItem(
+            KEY,
+            JSON.stringify({
+              at: Date.now(),
+              temp,
+              code,
+              tempMax: typeof tempMax === "number" ? tempMax : temp,
+            }),
+          );
         } catch (_) {}
       })
       .catch(() => {});

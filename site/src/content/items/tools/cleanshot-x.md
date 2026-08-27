@@ -4,4 +4,5 @@ category: "tool"
 group: "Productivity"
 url: "https://cleanshot.com"
 icon: "./icons/cleanshot-x.png"
+rank: 7
 ---

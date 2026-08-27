@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
 type Role = {
@@ -6,53 +6,49 @@ type Role = {
   title: string;
   favicon?: string;
   mark?: "pen";
-  body: string;
-  links: { href: string; label: string; external?: boolean }[];
+  body: React.ReactNode;
+  links?: { href: string; label: string; external?: boolean }[];
 };
 
 const ROLES: Role[] = [
   {
     id: "arthouse",
-    title: "Director, Strategist & Product Engineer at Arthouse Creative Engineering Studio",
+    title: "Director, Strategist & Product Engineer at Arthouse",
     favicon: "/images/favicons/arthouse.png",
-    body: "Creative engineering studio. Strategy, software, systems. This is where work gets booked.",
+    body: "Arthouse is a creative engineering studio. We create great (digital) experiences and work across software, design, strategy and creative production.",
     links: [{ href: "https://madebyarthouse.com", label: "madebyarthouse.com →", external: true }],
   },
   {
     id: "hausgemacht",
     title: "Member of the technical staff & board at hausgemacht",
     favicon: "/images/favicons/hausgemacht.png",
-    body: "Infrastructure and board duty for a feminist techno collective.",
+    body: "hausgemacht is a non-profit techno collective based in Vienna, Austria. We host raves and s+ parties with a focus on creating safeR space for FLINTA*, queer and all people.",
     links: [{ href: "https://hausgemacht.org", label: "hausgemacht.org →", external: true }],
   },
   {
     id: "rebased",
     title: "Co-Organizer of rebased.wtf meetup",
     favicon: "/images/favicons/rebased.png",
-    body: "A meetup about having fun with tech. Talks, drinks, no boring stuff.",
+    body: "rebased is a meetup in Vienna about having fun with tech.",
     links: [{ href: "https://rebased.wtf", label: "rebased.wtf →", external: true }],
   },
   {
     id: "writer",
-    title: "Sometimes I write stuff",
+    title: "Sometimes writer",
     mark: "pen",
-    body: "Monthly notes, one review per year. Kept on this site.",
-    links: [
-      { href: "/writing/2023-year-in-review", label: "2023 year in review →" },
-      { href: "https://x.com/chrcit", label: "Twitter →", external: true },
-    ],
+    body: (
+      <>
+        Trying to get back into it but I once wrote a{" "}
+        <a href="/articles/2023-year-in-review">2023 year in review</a> and used to be more
+        active on{" "}
+        <a href="https://x.com/chrcit" target="_blank" rel="noopener">
+          Twitter
+        </a>
+        .
+      </>
+    ),
   },
 ];
-
-function setPhoto(role: string) {
-  const root = document.getElementById("role-photo");
-  if (!root) return;
-  root.querySelectorAll<HTMLImageElement>("img").forEach((img) => {
-    const on = img.dataset.role === role;
-    img.classList.toggle("is-active", on);
-    img.setAttribute("aria-hidden", on ? "false" : "true");
-  });
-}
 
 function Summary({
   role,
@@ -106,11 +102,6 @@ export default function Roles() {
   const [rowH, setRowH] = useState(0);
   const [fromY, setFromY] = useState(0);
   const reduce = useReducedMotion();
-  const show = useCallback((role: string) => setPhoto(role), []);
-
-  useEffect(() => {
-    show(open ?? "default");
-  }, [open, show]);
 
   useEffect(() => {
     if (!open) return;
@@ -149,16 +140,12 @@ export default function Roles() {
           "--from-y": `${fromY}px`,
         } as React.CSSProperties
       }
-      onPointerLeave={() => {
-        if (!open) show("default");
-      }}
     >
       {ROLES.map((role) => (
         <div
           key={role.id}
           data-role={role.id}
           className="role"
-          onPointerEnter={() => show(role.id)}
           aria-hidden={open ? true : undefined}
           style={open === role.id ? { visibility: "hidden" } : undefined}
         >
@@ -183,17 +170,19 @@ export default function Roles() {
             transition={reduce ? { duration: 0 } : { duration: 0.18 }}
           >
             <p>{active.body}</p>
-            <p className="role-links">
-              {active.links.map((link) => (
-                <a
-                  key={link.href}
-                  href={link.href}
-                  {...(link.external ? { target: "_blank", rel: "noopener" } : {})}
-                >
-                  {link.label}
-                </a>
-              ))}
-            </p>
+            {active.links && active.links.length > 0 && (
+              <p className="role-links">
+                {active.links.map((link) => (
+                  <a
+                    key={link.href}
+                    href={link.href}
+                    {...(link.external ? { target: "_blank", rel: "noopener" } : {})}
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </p>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

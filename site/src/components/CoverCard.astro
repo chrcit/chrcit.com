@@ -8,23 +8,24 @@ interface Props {
 }
 
 const { item } = Astro.props;
-const { title, author, year, rating, url, cover } = item.data;
-const Tag = url ? "a" : "div";
-const linkProps = url ? { href: url, target: "_blank", rel: "noopener" } : {};
-const metaLine = [author, year].filter(Boolean).join(", ");
+const { title, author, rating, cover } = item.data;
+const slug = item.id.replace(/^books\//, "");
+const href = `/books/${slug}`;
 ---
 
-<Tag class="cover-card" {...linkProps}>
+<a class="cover-card" href={href}>
   <span class={`cover-frame ${ditherFor(title)}`}>
     {
       cover ? (
-        <Image src={cover} alt="" width={560} height={840} fit="cover" loading="eager" />
+        <Image src={cover} alt={title} width={400} height={600} fit="cover" loading="lazy" />
       ) : (
         <span class="cover-fallback">{title.charAt(0)}</span>
       )
     }
+    {rating != null && <span class="cover-score">{rating}/10</span>}
   </span>
-  <span class="cover-title">{title}</span>
-  {metaLine && <span class="cover-meta">{metaLine}</span>}
-  {rating != null && <span class="cover-score">{rating}/10</span>}
-</Tag>
+  <span class="cover-copy">
+    <span class="cover-title">{title}</span>
+    {author && <span class="cover-meta">{author}</span>}
+  </span>
+</a>

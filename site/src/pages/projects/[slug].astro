@@ -1,0 +1,45 @@
+---
+import { getCollection, render } from "astro:content";
+import { Image } from "astro:assets";
+import Base from "../../layouts/Base.astro";
+import TableOfContents from "../../components/TableOfContents.astro";
+import Tweet from "../../components/embeds/Tweet.astro";
+import YouTube from "../../components/embeds/YouTube.astro";
+import Reddit from "../../components/embeds/Reddit.astro";
+import ExternalLink from "../../components/ExternalLink.astro";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects.map((project) => ({
+    params: { slug: project.id },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props;
+const { Content, headings } = await render(project);
+---
+
+<Base title={`${project.data.title} | chrcit.com`} description={project.data.description}>
+  <main class="page">
+    <article class="tile article">
+      <div class="tile-label">
+        <span>Project</span>
+      </div>
+      <h1 class="page-title">{project.data.title}</h1>
+      {
+        project.data.image && (
+          <div class="article-hero">
+            <Image src={project.data.image} alt="" width={1280} height={720} />
+          </div>
+        )
+      }
+      <div class="article-body">
+        <div class="prose">
+          <Content components={{ Tweet, YouTube, Reddit, ExternalLink }} />
+        </div>
+        <TableOfContents headings={headings} />
+      </div>
+    </article>
+  </main>
+</Base>

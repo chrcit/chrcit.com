@@ -30,10 +30,10 @@ This website contains links to other websites for information purposes. These we
 Responsible person according to Art 4 Z 7 GDPR is:
 
 Christian Cito
-Favoritenstraße 44/10
-1040 Vienna
+Viktor-Christ-Gasse 10/103
+1050 Vienna
 
-E-Mail: [citochris@gmail.com](mailto:citochris@gmail.com)
+E-Mail: [christian.cito@madebyarthouse.com](mailto:christian.cito@madebyarthouse.com)
 
 ### Processing
 
@@ -101,7 +101,7 @@ If your personal data is processed, you are a data subject within the meaning of
 - Right to data portability
 - Right to object to processing
 
-These rights can be asserted simply by sending an email to citochris@gmail.com.
+These rights can be asserted simply by sending an email to christian.cito@madebyarthouse.com.
 
 We would like to point out that we do not store any personal data after your visit to our website or in the course of website statistics. Therefore, we cannot comply with requests for information, correction, deletion, restriction of processing, data portability or revocation in these cases.
 

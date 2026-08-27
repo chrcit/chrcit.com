@@ -4,8 +4,9 @@ title: Imprint
 description: Imprint
 ---
 
-Kontakt: [citochris@gmail.com](mailto:citochris@gmail.com)
+**Christian Cito**  
+Viktor-Christ-Gasse 10/103  
+1050 Vienna  
+Austria
 
-Christian Cito<br />
-Favoritenstraße 44/10,<br />
-1040 Wien
+**Contact:** [christian.cito@madebyarthouse.com](mailto:christian.cito@madebyarthouse.com)

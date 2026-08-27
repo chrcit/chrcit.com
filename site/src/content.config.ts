@@ -20,6 +20,8 @@ const items = defineCollection({
       description: z.string().optional(),
       // tools only: Gear / Stack / Dev Tools / Productivity
       group: z.string().optional(),
+      // lower = heavier / more important in the uses list
+      rank: z.number().optional(),
       genre: z.string().optional(),
       cover: image().optional(),
       icon: image().optional(),
@@ -39,4 +41,16 @@ const posts = defineCollection({
     }),
 });
 
-export const collections = { items, posts };
+const projects = defineCollection({
+  loader: glob({ pattern: "**/*.mdx", base: "./src/content/projects" }),
+  schema: ({ image }) =>
+    z.object({
+      title: z.string(),
+      description: z.string(),
+      order: z.number().optional(),
+      tags: z.array(z.string()).default([]),
+      image: image().optional(),
+    }),
+});
+
+export const collections = { items, posts, projects };

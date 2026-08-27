@@ -7,7 +7,7 @@ description: How this site is made.
 The source for this site is on [GitHub](https://github.com/chrcit/chrcit.com).
 Analytics: [Plausible](https://plausible.io/chrcit.com).
 
-Posts from X, YouTube, and Instagram are stored as static cards. No embed scripts, no extra cookies.
+Posts from Twitter, YouTube, and Instagram are stored as static cards. No embed scripts, no extra cookies.
 
 Vienna time is computed in the browser. Weather is fetched from [Open-Meteo](https://open-meteo.com/) in the browser, no API key, no cookies.
 

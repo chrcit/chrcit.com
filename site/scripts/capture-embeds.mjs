@@ -5,34 +5,53 @@
  *
  *   node scripts/capture-embeds.mjs
  */
-import { mkdirSync, writeFileSync, existsSync, readFileSync } from "node:fs";
+import { mkdirSync, writeFileSync, existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const outJson = join(root, "src/data/embeds.json");
 const pub = join(root, "public/images/embeds");
+const content = join(root, "src/content");
 
-const TWEETS = [
-  "1519797007904346115",
-  "1607794241467723778",
-  "1623636677158641665",
-  "1610738950292766728",
-  "1630996521738010634",
-  "1631688805915787265",
-  "1636012896713883650",
-  "1638206419194314755",
-  "1707081180238012491",
-  "1709135625121624157",
-  "1706692838539325789",
-  "1706731529022378346",
-  "1699485759038714134",
-  "1702771997296468365",
-  "1639031871148535808",
-  "1633395809763860480",
-];
-const YOUTUBE = ["LsgIRqjvit0"];
-const INSTAGRAM = ["C1cZlHJs7s0"];
+// Embed ids come from the content itself, so adding a post can't leave an
+// embed uncaptured (it would silently render as a bare "View on …" link).
+function contentSources() {
+  const files = [];
+  const walk = (dir) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      const path = join(dir, entry.name);
+      if (entry.isDirectory()) walk(path);
+      else if (entry.name.endsWith(".mdx") || entry.name.endsWith(".md")) files.push(path);
+    }
+  };
+  walk(content);
+  return files.map((f) => readFileSync(f, "utf8")).join("\n");
+}
+
+function collect(source, tag, normalise) {
+  const ids = new Set();
+  for (const m of source.matchAll(new RegExp(`<${tag}\\b[^>]*?(?:id|url)="([^"]+)"`, "g"))) {
+    const id = normalise(m[1]);
+    if (id) ids.add(id);
+  }
+  return [...ids];
+}
+
+const source = contentSources();
+const TWEETS = collect(source, "Tweet", (v) => v.match(/(\d{10,})/)?.[1]);
+const YOUTUBE = collect(
+  source,
+  "YouTube",
+  (v) => v.match(/(?:v=|youtu\.be\/|embed\/)([\w-]{6,})/)?.[1] ?? v.match(/^[\w-]{6,}$/)?.[0],
+);
+const INSTAGRAM = collect(
+  source,
+  "Instagram",
+  (v) => v.match(/instagram\.com\/(?:p|reel)\/([^/?#]+)/)?.[1] ?? v.match(/^[\w-]{5,}$/)?.[0],
+);
+
+console.log(`found ${TWEETS.length} tweets, ${YOUTUBE.length} youtube, ${INSTAGRAM.length} instagram`);
 
 mkdirSync(join(pub, "avatars"), { recursive: true });
 mkdirSync(join(pub, "media"), { recursive: true });
@@ -159,31 +178,40 @@ for (const id of YOUTUBE) {
 for (const id of INSTAGRAM) {
   try {
     const html = await fetch(`https://www.instagram.com/p/${id}/embed/captioned/`, {
-      headers: { "user-agent": "Mozilla/5.0" },
+      headers: {
+        "user-agent":
+          "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36",
+        "sec-fetch-dest": "iframe",
+        "sec-fetch-mode": "navigate",
+        "sec-fetch-site": "cross-site",
+        referer: "https://chrcit.com/",
+      },
     }).then((r) => r.text());
-    const un = html.replaceAll('\\"', '"').replaceAll("\\/", "/");
-    const display = [...un.matchAll(/"display_url":"(https:[^"]+)"/g)].map((m) => {
-      let s = m[1];
-      try {
-        s = JSON.parse(`"${s}"`);
-      } catch {
-        s = s.replaceAll("\\/", "/").replaceAll("\\u0026", "&");
-      }
-      return s;
-    });
+    const un = html
+      .replaceAll("\\\\\\/", "/")
+      .replaceAll("\\/", "/")
+      .replaceAll("\\u0026", "&")
+      .replaceAll("&amp;", "&");
     const unique = [];
     const seen = new Set();
-    for (const url of display) {
-      const key = url.split("?")[0];
-      if (seen.has(key)) continue;
-      seen.add(key);
-      unique.push(url);
+    for (const match of un.matchAll(/(\d+_\d+_\d+_n\.jpg)\?stp=dst-jpg_e35_tt6/g)) {
+      const fn = match[1];
+      if (seen.has(fn)) continue;
+      const chunk = un.slice(match.index, match.index + 1200);
+      const full = chunk.match(/^([^"\s<>]+oe=[0-9A-Fa-f]{8})/);
+      if (!full) continue;
+      seen.add(fn);
+      unique.push(`https://scontent-vie1-1.cdninstagram.com/v/t51.82787-15/${full[1]}`);
     }
     const images = [];
     for (const [i, url] of unique.entries()) {
       const dest = join(pub, "instagram", unique.length > 1 ? `${id}-${i}.jpg` : `${id}.jpg`);
       try {
-        await download(url, dest, { referer: "https://www.instagram.com/" });
+        const res = await fetch(url, {
+          headers: { "user-agent": "Mozilla/5.0", referer: "https://www.instagram.com/" },
+        });
+        if (!res.ok) throw new Error(`${res.status} ${url}`);
+        writeFileSync(dest, Buffer.from(await res.arrayBuffer()));
         images.push(publicPath(dest));
       } catch (e) {
         console.warn("ig image fail", id, i, e.message);
@@ -200,6 +228,12 @@ for (const id of INSTAGRAM) {
     if (!images.length) {
       const fallback = join(pub, "instagram", `${id}.jpg`);
       if (existsSync(fallback)) images.push(publicPath(fallback));
+    }
+    // Instagram blocks the embed endpoint often enough that a scrape returning
+    // nothing must not clobber a good cached entry.
+    if (!images.length && existing.instagram[id]) {
+      console.warn("instagram", id, "nothing captured, keeping cached entry");
+      continue;
     }
     out.instagram[id] = {
       id,

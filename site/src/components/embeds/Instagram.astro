@@ -38,15 +38,16 @@ const fmt = (n: number) => {
   if (n < 10000) return `${(n / 1000).toFixed(1).replace(/\.0$/, "")}K`;
   return `${Math.round(n / 1000)}K`;
 };
+const isCarousel = slides.length > 1;
 ---
 
-<article class="embed embed-ig" data-ig={slides.length > 1 ? "carousel" : "single"}>
+<article class="embed embed-ig" data-ig={isCarousel ? "carousel" : "single"}>
   <a class="ig-head" href={href} target="_blank" rel="noopener">
     <span class="ig-avatar" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-        <rect width="20" height="20" x="2" y="2" rx="5" />
-        <circle cx="12" cy="12" r="4" />
-        <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" stroke="none" />
+        <rect width="20" height="20" x="2" y="2" rx="5"></rect>
+        <circle cx="12" cy="12" r="4"></circle>
+        <circle cx="17.5" cy="6.5" r="0.6" fill="currentColor" stroke="none"></circle>
       </svg>
     </span>
     <span class="embed-who">
@@ -56,15 +57,22 @@ const fmt = (n: number) => {
   </a>
   {
     slides.length > 0 && (
-      <div class="ig-stage" data-ig-carousel={slides.length > 1 ? "true" : undefined}>
+      <div
+        class="ig-stage"
+        data-ig-carousel={isCarousel ? "true" : undefined}
+        tabindex={isCarousel ? 0 : undefined}
+        role={isCarousel ? "group" : undefined}
+        aria-roledescription={isCarousel ? "carousel" : undefined}
+        aria-label={isCarousel ? "Instagram photos" : undefined}
+      >
         <div class="ig-track">
           {slides.map((src, i) => (
             <div class="ig-slide">
-              <img src={src} alt="" />
+              <img src={src} alt={i === 0 ? caption || "" : ""} />
             </div>
           ))}
         </div>
-        {slides.length > 1 && (
+        {isCarousel && (
           <>
             <button type="button" class="ig-nav ig-prev" aria-label="Previous photo">
               ‹
@@ -72,9 +80,14 @@ const fmt = (n: number) => {
             <button type="button" class="ig-nav ig-next" aria-label="Next photo">
               ›
             </button>
-            <div class="ig-dots" aria-hidden="true">
+            <div class="ig-dots">
               {slides.map((_, i) => (
-                <i data-i={i} class={i === 0 ? "is-on" : undefined} />
+                <button
+                  type="button"
+                  data-i={i}
+                  class={i === 0 ? "is-on" : undefined}
+                  aria-label={`Photo ${i + 1} of ${slides.length}`}
+                />
               ))}
             </div>
           </>
@@ -85,13 +98,13 @@ const fmt = (n: number) => {
   <div class="ig-foot">
     <div class="ig-actions" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-        <path d="M12 21s-7-4.6-9.3-8.2C.7 9.7 2.2 6 6 6c2 0 3.4 1.1 4 2.1C10.6 7.1 12 6 14 6c3.8 0 5.3 3.7 3.3 6.8C19 16.4 12 21 12 21z" />
+        <path d="M12 21s-7-4.6-9.3-8.2C.7 9.7 2.2 6 6 6c2 0 3.4 1.1 4 2.1C10.6 7.1 12 6 14 6c3.8 0 5.3 3.7 3.3 6.8C19 16.4 12 21 12 21z"></path>
       </svg>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-        <path d="M21 12a9 9 0 0 1-13.5 7.8L3 21l1.3-4A9 9 0 1 1 21 12z" />
+        <path d="M21 12a9 9 0 0 1-13.5 7.8L3 21l1.3-4A9 9 0 1 1 21 12z"></path>
       </svg>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-        <path d="M4 12v8l16-8L4 4z" />
+        <path d="M4 12v8l16-8L4 4z"></path>
       </svg>
     </div>
     {likes > 0 && <p class="ig-likes">{fmt(likes)} likes</p>}
@@ -109,24 +122,62 @@ const fmt = (n: number) => {
 </article>
 
 <script>
-  document.querySelectorAll("[data-ig-carousel]").forEach((stage) => {
-    const root = stage as HTMLElement;
-    const track = root.querySelector(".ig-track") as HTMLElement | null;
-    const dots = [...root.querySelectorAll(".ig-dots i")];
-    const n = root.querySelectorAll(".ig-slide").length;
-    let i = 0;
-    const go = (next: number) => {
-      i = (next + n) % n;
-      if (track) track.style.transform = `translateX(${-i * 100}%)`;
-      dots.forEach((d, di) => d.classList.toggle("is-on", di === i));
-    };
-    root.querySelector(".ig-prev")?.addEventListener("click", (e) => {
-      e.preventDefault();
-      go(i - 1);
+  const bind = () => {
+    document.querySelectorAll("[data-ig-carousel]").forEach((stage) => {
+      const root = stage as HTMLElement;
+      if (root.dataset.bound === "true") return;
+      root.dataset.bound = "true";
+      const track = root.querySelector(".ig-track") as HTMLElement | null;
+      const dots = [...root.querySelectorAll(".ig-dots button")];
+      const n = root.querySelectorAll(".ig-slide").length;
+      if (!track || n < 2) return;
+      let i = 0;
+      const go = (next: number) => {
+        i = (next + n) % n;
+        track.style.transform = `translateX(${-i * 100}%)`;
+        dots.forEach((d, di) => d.classList.toggle("is-on", di === i));
+      };
+      const onNav = (e: Event, dir: number) => {
+        e.preventDefault();
+        e.stopPropagation();
+        go(i + dir);
+      };
+      root.querySelector(".ig-prev")?.addEventListener("click", (e) => onNav(e, -1));
+      root.querySelector(".ig-next")?.addEventListener("click", (e) => onNav(e, 1));
+      dots.forEach((d, di) => {
+        d.addEventListener("click", (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          go(di);
+        });
+      });
+      let x0: number | null = null;
+      root.addEventListener("pointerdown", (e) => {
+        if ((e.target as HTMLElement).closest(".ig-nav, .ig-dots")) return;
+        x0 = e.clientX;
+      });
+      root.addEventListener("pointerup", (e) => {
+        if (x0 == null) return;
+        const dx = e.clientX - x0;
+        x0 = null;
+        if (dx > 40) go(i - 1);
+        else if (dx < -40) go(i + 1);
+      });
+      root.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowLeft") {
+          e.preventDefault();
+          go(i - 1);
+        }
+        if (e.key === "ArrowRight") {
+          e.preventDefault();
+          go(i + 1);
+        }
+      });
     });
-    root.querySelector(".ig-next")?.addEventListener("click", (e) => {
-      e.preventDefault();
-      go(i + 1);
-    });
-  });
+  };
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", bind);
+  } else {
+    bind();
+  }
 </script>

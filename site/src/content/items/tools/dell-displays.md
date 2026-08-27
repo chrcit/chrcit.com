@@ -1,6 +1,8 @@
 ---
-title: "2× Dell 2.5K displays"
+title: "Dell 27 Plus USB-C Monitor"
 category: "tool"
 group: "Gear"
-meta: "Due an upgrade since 2024"
+meta: "S2725QC. The pair on the desk."
+url: "https://www.dell.com/en-us/shop/dell-27-plus-4k-usb-c-monitor-s2725qc/apd/210-brnc/monitors-monitor-accessories"
+rank: 2
 ---

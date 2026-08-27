@@ -15,6 +15,8 @@ Working docs for the chrcit.com redesign (essence, vibe, direction). Any agent o
 | `06-implementation-prompt.md` | Handoff prompt for the implementation agent. Ports the selected concept (C) to the real Astro site. |
 | `assets/` | Reference images (bento grid structure ref). |
 
+Related: `docs/fable-prelaunch/` is a separate pack (screenshots + prompt) for a pre-launch design critique in Fable. Not part of this exploration sequence.
+
 ## Process
 
 1. Gather context (done — see `01` and `02`).
@@ -35,4 +37,5 @@ Working docs for the chrcit.com redesign (essence, vibe, direction). Any agent o
 - 2026-08-25 (later): Round-1 answers in. **Direction decided: DITHER** (light, dithered/grainy, dry voice, writing pulse, archives as connection layer, no work showcase, music player cut) — see top of `03-essence-and-vibe.md`. Round-2 detail questions open in `04`.
 - 2026-08-25 (round 2): All blocking questions answered. Brief is complete in `03` (section 0): router-style link hub (bento structure ref in `assets/`, not its aesthetic), posts on-site, English only, generic referenced item schema (books + tools first), one free sans-serif, no non-negotiables.
 - 2026-08-25 (round 3): Stack decided — **Astro + MDX**, no CMS; item references as MDX components. React Router WIP (`app/`) retired as stack, salvage content/pipelines. Visual handoff prompt written: `05-visual-design-prompt.md`.
-- 2026-08-25 (exploration): 3 concepts built in `explorations/` (A Ledger, B Broadsheet, C Mosaic). **Christian picked C**; two feedback rounds applied (grouped Books/Tools tiles, merged lead tile with accordion router, real cover/icon images, art tile + struck copy removed, sticky minimal footer). Implementation handoff prompt written: `06-implementation-prompt.md`. **Next step: run that prompt, port concept C to the Astro site.**
+- 2026-08-25 (exploration): 3 concepts built in `explorations/` (A Ledger, B Broadsheet, C Mosaic). **Christian picked C**; two feedback rounds applied (grouped Books/Tools tiles, merged lead tile with accordion router, real cover/icon images, art tile + struck copy removed, sticky minimal footer). Implementation handoff prompt written: `06-implementation-prompt.md`.
+- 2026-08-27 (implementation): Concept C is live in `site/` — homepage mosaic (portrait, lead tile with roles accordion, shuffleable Books/Tools tiles, dithered weather field), plus books, uses, articles, projects, colophon and 404 pages. Content salvaged from the retired React Router app; social embeds are captured statically into `site/src/data/embeds.json` (Twitter, YouTube, Instagram, Reddit) so no third-party scripts load. Pre-launch critique pack for Fable assembled in `docs/fable-prelaunch/`. **Next step: run the Fable critique, then fold its verdict into launch fixes.**

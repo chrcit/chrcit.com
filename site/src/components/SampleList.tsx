@@ -5,7 +5,6 @@ export type SampleItem = {
   id: string;
   title: string;
   meta?: string;
-  rating?: number | null;
   url?: string | null;
   image?: string | null;
   kind: "book" | "tool";
@@ -52,10 +51,12 @@ export default function SampleList({
   const [shown, setShown] = useState(initial);
   const [spin, setSpin] = useState(false);
   const kind = items[0]?.kind ?? "book";
-  const tip = kind === "book" ? "Show another three books" : "Show another three tools";
+  const count = initial.length;
+  const tip =
+    kind === "book" ? `Show another ${count} books` : `Show another ${count} tools`;
 
   const reshuffle = () => {
-    setShown((cur) => pick(items, 3, cur.map((i) => i.id)));
+    setShown((cur) => pick(items, count, cur.map((i) => i.id)));
     setSpin(true);
   };
 
@@ -79,17 +80,20 @@ export default function SampleList({
       <ul className="items">
         {rows.map((item) => {
           const Tag = item.url ? "a" : "div";
+          const external = Boolean(item.url?.startsWith("http"));
           const linkProps = item.url
-            ? { href: item.url, target: "_blank" as const, rel: "noopener" }
+            ? external
+              ? { href: item.url, target: "_blank" as const, rel: "noopener" }
+              : { href: item.url }
             : {};
           return (
             <li key={item.id}>
               <Tag className="item-row dot-hover" {...linkProps}>
                 <span
-                  className={`i-thumb ${item.kind === "book" ? "is-cover" : "is-icon"} ${ditherFor(item.title)}`}
+                  className={`i-thumb ${item.kind === "book" ? "is-cover" : "is-icon"} ${item.image ? "" : ditherFor(item.title)}`}
                   aria-hidden="true"
                 >
-                  {item.title.charAt(0)}
+                  {!item.image && item.title.charAt(0)}
                   {item.image && (
                     <img
                       src={item.image}
@@ -107,9 +111,7 @@ export default function SampleList({
                     </span>
                   )}
                 </span>
-                {item.kind === "book" && item.rating != null ? (
-                  <span className="i-right">{item.rating}/10</span>
-                ) : item.url ? (
+                {item.url ? (
                   <span className="i-right link">→</span>
                 ) : (
                   <span className="i-right" />
