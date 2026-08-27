@@ -1,13 +1,7 @@
 .DS_Store
 .env
 node_modules/
-**/node_modules/
 .astro/
-astro-legacy/dist/
-
-# React Router
-/.react-router/
-/build/
-
-# Astro (DITHER redesign)
-site/dist/
+dist/
+.react-router/
+build/

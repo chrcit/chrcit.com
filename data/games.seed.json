@@ -1,9 +1,0 @@
-{
-  "profileUrl": "https://rawg.io/@chrcit/games",
-  "profileSections": ["owned", "toplay"],
-  "games": [],
-  "example": {
-    "rawgSlug": "hades",
-    "featured": true
-  }
-}
