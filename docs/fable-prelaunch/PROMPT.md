@@ -28,7 +28,7 @@ Those three sibling sites are all **dark**. This personal site is deliberately t
 
 ## 2. Attached screenshots
 
-Filenames match `docs/fable-prelaunch/screenshots/`. Desktop is 1440×900. Mobile is iPhone 14-ish (390×844). Images were attached in this numbered order. If the chat tool strips or renames files, reference them as **image 1** (`01`), **image 2** (`02`), … **image 20** (`20`).
+The original capture set in `docs/fable-prelaunch/screenshots/` was removed after the audit. If images are attached to this chat, use whatever filenames or order they have now. Historical numbering below is `01`–`20` from a 1440×900 desktop / 390×844 mobile `astro preview` pass.
 
 Homepage book/tool rows are one build-time random sample. Desktop and mobile shots of `/` show the same three. Which titles appear is not a design choice; the live site can reshuffle.
 
