@@ -13,7 +13,7 @@ pnpm build    # static build to dist/
 pnpm preview  # serve the build
 ```
 
-Cloudflare Pages: build `pnpm build`, output `dist`.
+Cloudflare Workers: build `pnpm build`, then `npx wrangler versions upload`. Config is `wrangler.jsonc` (assets from `./dist`).
 
 ## Content
 
