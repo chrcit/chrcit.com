@@ -25,7 +25,7 @@ const STATES = [
   </div>
   <div class="weather-field" data-weather-dither>
     <canvas aria-hidden="true"></canvas>
-    <div class="weather-dev" data-weather-dev>
+    <div class="weather-dev" data-weather-dev inert>
       {STATES.map((s) => (
         <button type="button" data-wx-code={s.code}>
           {s.label}
@@ -580,6 +580,28 @@ const STATES = [
 
       const panel = root.querySelector<HTMLElement>("[data-weather-dev]");
       if (panel) {
+        const openPanel = () => {
+          panel.classList.add("is-open");
+          panel.removeAttribute("inert");
+        };
+
+        let taps = 0;
+        let tapReset = 0;
+        root.addEventListener("click", (e) => {
+          if (panel.classList.contains("is-open")) return;
+          if ((e.target as HTMLElement).closest("[data-weather-dev]")) return;
+          window.clearTimeout(tapReset);
+          taps += 1;
+          if (taps >= 5) {
+            taps = 0;
+            openPanel();
+            return;
+          }
+          tapReset = window.setTimeout(() => {
+            taps = 0;
+          }, 1600);
+        });
+
         const mark = (el: Element | null) => {
           panel.querySelectorAll("[data-wx-code]").forEach((b) => b.classList.remove("is-on"));
           el?.classList.add("is-on");
@@ -620,6 +642,7 @@ const STATES = [
         if (forced != null) {
           override = { code: Number(forced), night: params.get("night") === "1" };
           code = Number(forced);
+          openPanel();
           render();
         }
       }
