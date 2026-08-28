@@ -541,6 +541,11 @@ body::after {
   overflow: auto;
   border-top: var(--hair);
 }
+@media (max-width: 560px) {
+  .role-panel {
+    padding-left: var(--tile-pad);
+  }
+}
 .role-panel p {
   font-size: clamp(1.22rem, 0.85rem + 0.7vw, 1.42rem);
   line-height: 1.45;
@@ -950,6 +955,9 @@ footer a:hover {
   margin-bottom: var(--gap);
   min-width: 0;
 }
+.page:has(.topic-block) {
+  gap: 36px;
+}
 .page-title {
   font-size: clamp(2.2rem, 1.45rem + 2.4vw, 2.7rem);
   font-weight: 840;
@@ -1002,17 +1010,32 @@ footer a:hover {
 .page-quote cite {
   font-style: normal;
 }
+.topic-block {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.topic-block[id] {
+  scroll-margin-top: 0;
+}
 .group-title {
+  position: sticky;
+  top: 0;
+  z-index: 4;
   font-size: clamp(1.35rem, 2.8vw, 2rem);
   font-weight: 840;
   letter-spacing: -0.03em;
   line-height: 1;
   text-transform: uppercase;
-  padding: 16px var(--tile-pad) 12px;
+  padding: 18px var(--tile-pad);
   margin: 0;
-  border-bottom: var(--rule);
+  background: var(--paper);
+  border: var(--rule);
 }
-.tile:has(.group-title) .items {
+.topic-block > .tile {
+  border-top: 0;
+}
+.tile > .items:first-child {
   border-top: 0;
 }
 
@@ -1170,6 +1193,16 @@ a.cover-card:active .cover-frame {
   font-style: italic;
   color: var(--ink);
   white-space: pre-line;
+  max-width: 62ch;
+}
+.highlight-cite {
+  margin: 8px 0 0;
+  padding-left: 16px;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  font-weight: 500;
+  font-style: normal;
+  line-height: 1.35;
   max-width: 62ch;
 }
 .tile:has(> .page-title + .highlight-empty) .page-title {

@@ -92,21 +92,24 @@ const showNav = topics.length >= 4;
 
     {
       topics.map((topic) => (
-        <section class="tile" id={topicId(topic.name)}>
+        <section class="topic-block" id={topicId(topic.name)}>
           <h3 class="group-title">{topic.name}</h3>
-          <ul class="highlights">
-            {topic.highlights.map((h) => (
-              <li>
-                <blockquote>{h.text}</blockquote>
-                {h.note && (
-                  <p class="highlight-note">
-                    <span class="highlight-note-label">Note</span>
-                    {h.note}
-                  </p>
-                )}
-              </li>
-            ))}
-          </ul>
+          <div class="tile">
+            <ul class="highlights">
+              {topic.highlights.map((h) => (
+                <li>
+                  <blockquote>{h.text}</blockquote>
+                  {author && <p class="highlight-cite">- {author}</p>}
+                  {h.note && (
+                    <p class="highlight-note">
+                      <span class="highlight-note-label">Note</span>
+                      {h.note}
+                    </p>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
         </section>
       ))
     }

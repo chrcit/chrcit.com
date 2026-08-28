@@ -6,10 +6,10 @@ import ItemRow from "../components/ItemRow.astro";
 const tools = (await getCollection("items")).filter((i) => i.data.category === "tool");
 
 const groupOrder = [
-  { key: "Gear", label: "Gear" },
   { key: "Stack", label: "Tech Stack" },
   { key: "Dev Tools", label: "Dev Tools" },
   { key: "Productivity", label: "Productivity" },
+  { key: "Gear", label: "Gear" },
 ];
 
 const groupedKeys = new Set(groupOrder.map((g) => g.key));
@@ -39,17 +39,17 @@ const groups = [
 
     {
       groups.map((group) => (
-        <section class="tile">
-          <h2 class="group-title" id={group.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}>
-            {group.name}
-          </h2>
-          <ul class="items items-split">
-            {group.items.map((item) => (
-              <li>
-                <ItemRow item={item} />
-              </li>
-            ))}
-          </ul>
+        <section class="topic-block" id={group.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}>
+          <h2 class="group-title">{group.name}</h2>
+          <div class="tile">
+            <ul class="items items-split">
+              {group.items.map((item) => (
+                <li>
+                  <ItemRow item={item} />
+                </li>
+              ))}
+            </ul>
+          </div>
         </section>
       ))
     }

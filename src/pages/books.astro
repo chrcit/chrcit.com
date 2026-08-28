@@ -36,14 +36,14 @@ const groups = genreOrder
 
     {
       groups.map((group) => (
-        <section class="tile">
-          <h2 class="group-title" id={group.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}>
-            {group.name}
-          </h2>
-          <div class="cover-grid">
-            {group.items.map((item) => (
-              <CoverCard item={item} />
-            ))}
+        <section class="topic-block" id={group.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}>
+          <h2 class="group-title">{group.name}</h2>
+          <div class="tile">
+            <div class="cover-grid">
+              {group.items.map((item) => (
+                <CoverCard item={item} />
+              ))}
+            </div>
           </div>
         </section>
       ))
