@@ -6,8 +6,7 @@
 // The field is a WebGL fragment shader quantised to a dither cell grid. It falls
 // back to the static CSS halftone on .weather-field if WebGL is unavailable, and
 // renders a single frame on low-power devices.
-const dev = import.meta.env.DEV;
-const DEV_STATES = [
+const STATES = [
   { label: "Clear", code: 0 },
   { label: "Mainly", code: 1 },
   { label: "Partly", code: 2 },
@@ -26,24 +25,20 @@ const DEV_STATES = [
   </div>
   <div class="weather-field" data-weather-dither>
     <canvas aria-hidden="true"></canvas>
-    {
-      dev && (
-        <div class="weather-dev" data-weather-dev>
-          {DEV_STATES.map((s) => (
-            <button type="button" data-wx-code={s.code}>
-              {s.label}
-            </button>
-          ))}
-          <button type="button" data-wx-night>
-            Night
-          </button>
-          <button type="button" data-wx-live>
-            Live
-          </button>
-          <input type="range" min="-12" max="36" value="18" data-wx-temp aria-label="Peak temperature" />
-        </div>
-      )
-    }
+    <div class="weather-dev" data-weather-dev>
+      {STATES.map((s) => (
+        <button type="button" data-wx-code={s.code}>
+          {s.label}
+        </button>
+      ))}
+      <button type="button" data-wx-night>
+        Night
+      </button>
+      <button type="button" data-wx-live>
+        Live
+      </button>
+      <input type="range" min="-12" max="36" value="18" data-wx-temp aria-label="Peak temperature" />
+    </div>
   </div>
 </section>
 
