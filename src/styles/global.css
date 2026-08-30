@@ -1893,6 +1893,10 @@ a.cover-card:active .cover-frame {
   }
 }
 @media (max-width: 560px) {
+  #books .items li:nth-child(n + 4),
+  #tools .items li:nth-child(n + 5) {
+    display: none;
+  }
   .mosaic {
     grid-template-columns: minmax(0, 1fr);
   }

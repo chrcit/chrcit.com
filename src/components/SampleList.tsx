@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { ditherFor } from "../utils/dither";
 
 export type SampleItem = {
@@ -35,32 +35,54 @@ function ShuffleIcon() {
   );
 }
 
+const MOBILE_MAX = 560;
+
 export default function SampleList({
   items,
   initial,
   moreHref,
   moreLabel,
   label,
+  mobileCount,
 }: {
   items: SampleItem[];
   initial: SampleItem[];
   moreHref: string;
   moreLabel: string;
   label: string;
+  mobileCount?: number;
 }) {
+  const desktopCount = initial.length;
+  const compact = mobileCount ?? desktopCount;
   const [shown, setShown] = useState(initial);
   const [spin, setSpin] = useState(false);
+  const [count, setCount] = useState(desktopCount);
   const kind = items[0]?.kind ?? "book";
-  const count = initial.length;
   const tip =
     kind === "book" ? `Show another ${count} books` : `Show another ${count} tools`;
+
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${MOBILE_MAX}px)`);
+    const apply = () => {
+      const next = mq.matches ? compact : desktopCount;
+      setCount(next);
+      setShown((cur) => {
+        if (cur.length === next) return cur;
+        if (cur.length > next) return cur.slice(0, next);
+        return [...cur, ...pick(items, next - cur.length, cur.map((i) => i.id))];
+      });
+    };
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, [items, compact, desktopCount]);
 
   const reshuffle = () => {
     setShown((cur) => pick(items, count, cur.map((i) => i.id)));
     setSpin(true);
   };
 
-  const rows = useMemo(() => shown, [shown]);
+  const rows = shown.slice(0, count);
 
   return (
     <>
