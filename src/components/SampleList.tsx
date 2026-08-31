@@ -35,7 +35,9 @@ function ShuffleIcon() {
   );
 }
 
-const MOBILE_MAX = 560;
+// Mosaic items go 2-col only at 1280px+ (see global.css). Below that, the list
+// is a single column and the homepage should show the compact sample.
+const COMPACT_MAX = 1279;
 
 export default function SampleList({
   items,
@@ -62,7 +64,7 @@ export default function SampleList({
     kind === "book" ? `Show another ${count} books` : `Show another ${count} tools`;
 
   useEffect(() => {
-    const mq = window.matchMedia(`(max-width: ${MOBILE_MAX}px)`);
+    const mq = window.matchMedia(`(max-width: ${COMPACT_MAX}px)`);
     const apply = () => {
       const next = mq.matches ? compact : desktopCount;
       setCount(next);
