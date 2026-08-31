@@ -1,7 +1,7 @@
 ---
 // Homepage mosaic tile: 1/4 sentence, 3/4 ordered-dither field.
-// A two-colour riso print (ink + accent spot) that happens to be listening to
-// Vienna's sky. Decorative, not a weather widget.
+// A three-colour riso print (ink + sky spot + accent disc) that happens to be
+// listening to Vienna's sky. Decorative, not a weather widget.
 //
 // The field is a WebGL fragment shader quantised to a dither cell grid. It falls
 // back to the static CSS halftone on .weather-field if WebGL is unavailable, and
@@ -73,13 +73,52 @@ const STATES = [
     if (code === 2) return sky("partly cloudy", { haze: 0.1, clouds: 0.58, sun: 0.62 });
     if (code === 3) return sky("overcast", { haze: 0.16, clouds: 0.96, sun: 0.1 });
     if (code === 45 || code === 48)
-      return sky("foggy", { haze: 0.18, clouds: 0.4, sun: 0.2, fog: 0.72 });
+      return sky("foggy", { haze: 0.22, clouds: 0.12, sun: 0.08, fog: 0.9 });
     if (code >= 51 && code <= 57)
       return sky("drizzly", { haze: 0.13, clouds: 0.78, sun: 0.14, rain: 0.35 });
     if ((code >= 71 && code <= 77) || code === 85 || code === 86)
       return sky("snowy", { haze: 0.14, clouds: 0.86, sun: 0.16, snow: 1 });
     if (code >= 95) return sky("stormy", { haze: 0.24, clouds: 1, sun: 0, rain: 1, storm: 1 });
     return sky("rainy", { haze: 0.17, clouds: 0.9, sun: 0.08, rain: 0.75 });
+  };
+
+  // Scene spot inks. Dithered onto paper (day) or ink (night) — not a sky gradient.
+  // Coverage is a separate knob so hue stays a real riso colour, not a washed mix.
+  const SKY_TINT: Record<string, { day: string; night: string; dayAmt: number; nightAmt: number }> = {
+    settling: { day: "#8a9aa6", night: "#3a465c", dayAmt: 0.62, nightAmt: 0.84 },
+    clear: { day: "#5ea0d4", night: "#3d4f9c", dayAmt: 0.92, nightAmt: 0.96 },
+    "mainly clear": { day: "#6498c4", night: "#3c508c", dayAmt: 0.84, nightAmt: 0.92 },
+    "partly cloudy": { day: "#6d96b8", night: "#3a4c7a", dayAmt: 0.76, nightAmt: 0.88 },
+    overcast: { day: "#7d93a8", night: "#364860", dayAmt: 0.78, nightAmt: 0.86 },
+    foggy: { day: "#c5cec2", night: "#4a5852", dayAmt: 0.58, nightAmt: 0.76 },
+    drizzly: { day: "#5b8aab", night: "#2f5470", dayAmt: 0.80, nightAmt: 0.90 },
+    rainy: { day: "#4e7fa3", night: "#274e68", dayAmt: 0.84, nightAmt: 0.92 },
+    snowy: { day: "#79b4d2", night: "#3a6182", dayAmt: 0.82, nightAmt: 0.90 },
+    stormy: { day: "#74608c", night: "#4c3870", dayAmt: 0.80, nightAmt: 0.94 },
+  };
+  const OCHRE = [0.776, 0.627, 0.322];
+
+  const hexRgb = (hex: string) => {
+    const n = hex.replace("#", "");
+    return [
+      parseInt(n.slice(0, 2), 16) / 255,
+      parseInt(n.slice(2, 4), 16) / 255,
+      parseInt(n.slice(4, 6), 16) / 255,
+    ];
+  };
+
+  const sceneSky = (s: Sky, night: boolean, heat: number) => {
+    const t = SKY_TINT[s.label] ?? SKY_TINT.clear;
+    const rgb = hexRgb(night ? t.night : t.day);
+    let amt = night ? t.nightAmt : t.dayAmt;
+    if (!night && heat > 0 && s.sun > 0.35) {
+      const w = heat * clamp01((s.sun - 0.35) / 0.65);
+      rgb[0] += (OCHRE[0] - rgb[0]) * w * 0.48;
+      rgb[1] += (OCHRE[1] - rgb[1]) * w * 0.48;
+      rgb[2] += (OCHRE[2] - rgb[2]) * w * 0.48;
+      amt = Math.min(1, amt + w * 0.08);
+    }
+    return { rgb, amt };
   };
 
   const viennaHour = () => {
@@ -135,10 +174,23 @@ const STATES = [
     uniform vec3 uInk;
     uniform vec3 uPaper;
     uniform vec3 uAccent;
+    uniform vec3 uSky;
+    uniform float uSkyAmt;
     uniform vec3 uPointer;
     uniform vec2 uPar;
 
     float hash11(float n) { return fract(sin(n * 127.1) * 43758.5453); }
+
+    float vnoise(vec2 p) {
+      vec2 i = floor(p);
+      vec2 f = fract(p);
+      f = f * f * (3.0 - 2.0 * f);
+      float a = hash11(i.x + i.y * 19.1);
+      float b = hash11(i.x + 1.0 + i.y * 19.1);
+      float c = hash11(i.x + (i.y + 1.0) * 19.1);
+      float d = hash11(i.x + 1.0 + (i.y + 1.0) * 19.1);
+      return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
+    }
 
     float bayer2(vec2 a) { a = floor(a); return fract(a.x * 0.5 + a.y * a.y * 0.75); }
 
@@ -198,16 +250,25 @@ const STATES = [
         + ceiling * 0.22 * clamp((0.55 - ay) / 0.55, 0.0, 1.0)
         + cover * (0.12 + 0.55 * shade);
 
-      float band = (0.05 + 0.18 * (0.5 + 0.5 * sin((ay * 7.5 - uTime * 0.05) * 6.2831853)))
-        * clamp(1.0 - ay * 0.5, 0.0, 1.0);
-      v = mix(v, band, uFog);
+      // Fog: soft milk, denser near the ground, no strata. Two octaves of
+      // interpolated noise so the print stays a field, not a venetian blind.
+      float n = vnoise(vec2(ax * 0.85 + uDrift * 0.03, ay * 0.7 + uTime * 0.01));
+      n = n * 0.7 + 0.3 * vnoise(vec2(ax * 2.2 - uDrift * 0.02, ay * 1.8 + 9.0));
+      float fogV = mix(0.34, 0.07, ay) + 0.10 * n;
+      v = mix(v, fogV, uFog);
       v -= uPointer.z * smoothstep(0.40, 0.0, distance(p, uPointer.xy)) * 0.26;
 
       float th = bayer8(cid);
-      float occ = clamp(cover + ceiling * 0.9, 0.0, 1.0);
+      float occ = clamp(cover + ceiling * 0.9 + uFog * 0.82, 0.0, 1.0);
       float inv = abs(uNight - uFlash);
       vec3 fg = mix(uInk, uPaper, inv);
-      vec3 bg = mix(uPaper, uInk, inv);
+      vec3 ground = mix(uPaper, uInk, inv);
+      // Sky spot dithered onto paper (day) or ink (night); more at the zenith.
+      float lift = uSkyAmt * mix(0.14, 1.0, pow(ay, 0.72));
+      lift += uHaze * 0.20 + uFog * mix(0.42, 0.16, ay);
+      lift = mix(lift, max(lift, uSkyAmt * 0.60), inv);
+      lift = clamp(lift, 0.0, 1.0);
+      vec3 bg = mix(ground, uSky, step(th, lift));
 
       float accent = 0.0;
       if (uSun > 0.03 && occ < 0.5) {
@@ -277,8 +338,8 @@ const STATES = [
 
       vec3 col = bg;
       if (accent > 0.5) col = uAccent;
-      else if (v > th) col = fg;
-      if (mark > 0.5) col = fg;
+      else if (v > th) col = mix(fg, uSky, 0.16 * (1.0 - inv) + 0.08 * inv);
+      if (mark > 0.5) col = mix(fg, uSky, 0.10);
       gl_FragColor = vec4(col, 1.0);
     }
   `;
@@ -354,6 +415,8 @@ const STATES = [
         ink: u("uInk"),
         paper: u("uPaper"),
         accent: u("uAccent"),
+        sky: u("uSky"),
+        skyAmt: u("uSkyAmt"),
         pointer: u("uPointer"),
         par: u("uPar"),
       };
@@ -410,12 +473,13 @@ const STATES = [
       let animate = !motion.matches && !weakDevice;
 
       const sentence = () => {
-        const peak = tempMax != null ? `${Math.round(tempMax)}` : "—";
+        if (tempMax == null) return `The weather today in Vienna is ${readSky(code).label}.`;
+        const peak = Math.round(tempMax);
         return `The weather today in Vienna is ${readSky(code).label} with temperatures peaking at ${peak}° Celsius.`;
       };
 
-      // Warm days print coarse, cold days print fine.
-      const grain = () => 2 + clamp01(((tempMax ?? 14) + 6) / 36) * 1.2;
+      // Fine print. Heat used to coarsen this; keep the cell tight.
+      const grain = () => 1.15 + clamp01(((tempMax ?? 14) + 6) / 36) * 0.35;
 
       const draw = () => {
         const dpr = Math.min(window.devicePixelRatio || 1, animate ? 2 : 3);
@@ -427,10 +491,12 @@ const STATES = [
           gl.viewport(0, 0, w, h);
         }
 
-        const cell = Math.max(2, Math.round(grain() * dpr));
+        const cell = Math.max(1, Math.round(grain() * dpr));
         const s = readSky(code);
         const night = override?.night ?? nightAt(hour);
         const flash = s.storm > 0 && clock < flashUntil ? 1 : 0;
+        const heat = clamp01(((tempMax ?? 14) - 24) / 12);
+        const tint = sceneSky(s, night, heat);
 
         gl.uniform2f(U.cells, Math.ceil(w / cell), Math.ceil(h / cell));
         gl.uniform1f(U.cell, cell);
@@ -442,10 +508,12 @@ const STATES = [
         gl.uniform1f(U.fog, s.fog);
         gl.uniform1f(U.rain, s.rain);
         gl.uniform1f(U.snow, s.snow);
-        gl.uniform1f(U.heat, clamp01(((tempMax ?? 14) - 24) / 12));
+        gl.uniform1f(U.heat, heat);
         gl.uniform1f(U.night, night ? 1 : 0);
         gl.uniform1f(U.flash, flash);
         gl.uniform1f(U.cloudCount, s.clouds < 0.15 ? 2 : s.clouds < 0.45 ? 4 : s.clouds < 0.8 ? 6 : 9);
+        gl.uniform3fv(U.sky, tint.rgb);
+        gl.uniform1f(U.skyAmt, tint.amt);
         gl.uniform3f(U.pointer, pointX, pointY, press);
         gl.uniform2f(U.par, parX, parY);
         gl.drawArrays(gl.TRIANGLES, 0, 3);
@@ -640,9 +708,12 @@ const STATES = [
         const params = new URLSearchParams(location.search);
         const forced = params.get("wx");
         if (forced != null) {
-          override = { code: Number(forced), night: params.get("night") === "1" };
+          const night = params.get("night") === "1";
+          override = { code: Number(forced), night };
           code = Number(forced);
           openPanel();
+          mark(panel.querySelector(`[data-wx-code="${code}"]`));
+          panel.querySelector("[data-wx-night]")?.classList.toggle("is-on", night);
           render();
         }
       }

@@ -1,0 +1,23 @@
+{
+  "name": "chrcit.com - Christian Cito",
+  "short_name": "chrcit.com",
+  "description": "Christian Cito. Product engineer, director at Arthouse, Vienna.",
+  "lang": "en",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "background_color": "#f3f0e7",
+  "theme_color": "#f3f0e7",
+  "icons": [
+    {
+      "src": "/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

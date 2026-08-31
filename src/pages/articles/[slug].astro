@@ -17,9 +17,24 @@ const { Content, headings } = await render(post);
 
 const date = post.data.publishedAt.toISOString().slice(0, 10);
 const kindLabel = post.data.kind === "annual" ? "Year in review" : "Notes";
+const socialImageType = post.data.image
+  ? `image/${post.data.image.format === "jpg" ? "jpeg" : post.data.image.format}`
+  : undefined;
 ---
 
-<Base title={`${post.data.title} | chrcit.com`} description={post.data.description}>
+<Base
+  title={`${post.data.title} | chrcit.com`}
+  description={post.data.description}
+  ogType="article"
+  ogImage={post.data.image?.src}
+  ogImageSquare={post.data.image ? null : undefined}
+  ogImageAlt={post.data.image ? `Illustration for ${post.data.title}` : undefined}
+  ogImageWidth={post.data.image?.width}
+  ogImageHeight={post.data.image?.height}
+  ogImageType={socialImageType}
+  articlePublishedTime={post.data.publishedAt}
+  articleAuthor="https://chrcit.com/"
+>
   <main class="page">
     <article class="tile article">
       <div class="tile-label">
@@ -30,7 +45,12 @@ const kindLabel = post.data.kind === "annual" ? "Year in review" : "Notes";
       {
         post.data.image && (
           <div class="article-hero">
-            <Image src={post.data.image} alt="" width={1280} height={720} />
+            <Image
+              src={post.data.image}
+              alt={`Illustration for ${post.data.title}`}
+              width={1280}
+              height={720}
+            />
           </div>
         )
       }

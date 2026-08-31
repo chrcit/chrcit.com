@@ -6,23 +6,29 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "check": "astro check",
+    "validate:site": "node scripts/validate-site.mjs",
     "preview": "astro preview",
     "deploy": "wrangler versions upload",
+    "deploy:check": "wrangler versions upload --dry-run",
     "astro": "astro",
     "embeds:capture": "node scripts/capture-embeds.mjs"
   },
   "dependencies": {
-    "@astrojs/mdx": "^4.3.12",
-    "@astrojs/react": "^4.4.2",
-    "@astrojs/sitemap": "^3.6.0",
-    "astro": "^5.16.0",
+    "@astrojs/mdx": "^7.0.8",
+    "@astrojs/react": "^6.0.4",
+    "@astrojs/sitemap": "^3.7.3",
+    "astro": "^7.2.9",
     "motion": "^12.26.2",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "sharp": "^0.35.4"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
     "@types/react": "^19.2.8",
-    "@types/react-dom": "^19.2.3"
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.127.1"
   }
 }

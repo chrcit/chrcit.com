@@ -18,9 +18,21 @@ export async function getStaticPaths() {
 
 const { project } = Astro.props;
 const { Content, headings } = await render(project);
+const socialImageType = project.data.image
+  ? `image/${project.data.image.format === "jpg" ? "jpeg" : project.data.image.format}`
+  : undefined;
 ---
 
-<Base title={`${project.data.title} | chrcit.com`} description={project.data.description}>
+<Base
+  title={`${project.data.title} | chrcit.com`}
+  description={project.data.description}
+  ogImage={project.data.image?.src}
+  ogImageSquare={project.data.image ? null : undefined}
+  ogImageAlt={project.data.image ? `Screenshot of ${project.data.title}` : undefined}
+  ogImageWidth={project.data.image?.width}
+  ogImageHeight={project.data.image?.height}
+  ogImageType={socialImageType}
+>
   <main class="page">
     <article class="tile article">
       <div class="tile-label">
@@ -30,7 +42,12 @@ const { Content, headings } = await render(project);
       {
         project.data.image && (
           <div class="article-hero">
-            <Image src={project.data.image} alt="" width={1280} height={720} />
+            <Image
+              src={project.data.image}
+              alt={`Screenshot of ${project.data.title}`}
+              width={1280}
+              height={720}
+            />
           </div>
         )
       }

@@ -2,6 +2,8 @@
 .env
 node_modules/
 .astro/
+.wrangler/
 dist/
 .react-router/
 build/
+scripts/.og-preview/

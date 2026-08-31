@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>og capture</title>
+    <style>
+      @font-face {
+        font-family: "Apfel Grotezk";
+        src: url("/fonts/apfel-grotezk/ApfelGrotezk-Satt.woff2") format("woff2");
+        font-weight: 800;
+        font-style: normal;
+        font-display: block;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        background: #f3f0e7;
+        overflow: hidden;
+      }
+      canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
+      }
+      .mark {
+        position: fixed;
+        z-index: 2;
+        left: 28px;
+        bottom: 22px;
+        margin: 0;
+        font-family: "Apfel Grotezk", sans-serif;
+        font-weight: 800;
+        font-size: 15px;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: #191611;
+        pointer-events: none;
+        user-select: none;
+      }
+      .square .mark {
+        left: 36px;
+        bottom: 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="field" aria-hidden="true"></canvas>
+    <p class="mark">chrcit.com</p>
+    <script>
+      // Capture-only. Shaders are injected from src/components/WeatherDither.astro.
+      const SHADERS = __SHADER_JSON__;
+
+      const q = new URLSearchParams(location.search);
+      const num = (k, d) => {
+        const v = q.get(k);
+        return v == null || v === "" ? d : Number(v);
+      };
+      const TIME = num("time", 11.2);
+      const DRIFT = num("drift", 22);
+      const CODE = num("code", 0);
+      const TEMP = num("temp", 26);
+      const CELL = num("cell", 0);
+      const NIGHT = q.get("night") === "1";
+      const MARK = q.get("mark") !== "0";
+
+      if (!MARK) document.querySelector(".mark")?.remove();
+
+      const sky = (label, p) => ({
+        label,
+        haze: 0.1,
+        clouds: 0.35,
+        sun: 0.5,
+        rain: 0,
+        snow: 0,
+        fog: 0,
+        storm: 0,
+        ...p,
+      });
+
+      const readSky = (code) => {
+        if (code == null) return sky("settling", {});
+        if (code === 0) return sky("clear", { haze: 0.05, clouds: 0.06, sun: 1 });
+        if (code === 1) return sky("mainly clear", { haze: 0.07, clouds: 0.26, sun: 0.88 });
+        if (code === 2) return sky("partly cloudy", { haze: 0.1, clouds: 0.58, sun: 0.62 });
+        if (code === 3) return sky("overcast", { haze: 0.16, clouds: 0.96, sun: 0.1 });
+        if (code === 45 || code === 48)
+          return sky("foggy", { haze: 0.22, clouds: 0.12, sun: 0.08, fog: 0.9 });
+        if (code >= 51 && code <= 57)
+          return sky("drizzly", { haze: 0.13, clouds: 0.78, sun: 0.14, rain: 0.35 });
+        if ((code >= 71 && code <= 77) || code === 85 || code === 86)
+          return sky("snowy", { haze: 0.14, clouds: 0.86, sun: 0.16, snow: 1 });
+        if (code >= 95) return sky("stormy", { haze: 0.24, clouds: 1, sun: 0, rain: 1, storm: 1 });
+        return sky("rainy", { haze: 0.17, clouds: 0.9, sun: 0.08, rain: 0.75 });
+      };
+
+      const SKY_TINT = {
+        settling: { day: "#8a9aa6", night: "#3a465c", dayAmt: 0.62, nightAmt: 0.84 },
+        clear: { day: "#5ea0d4", night: "#3d4f9c", dayAmt: 0.92, nightAmt: 0.96 },
+        "mainly clear": { day: "#6498c4", night: "#3c508c", dayAmt: 0.84, nightAmt: 0.92 },
+        "partly cloudy": { day: "#6d96b8", night: "#3a4c7a", dayAmt: 0.76, nightAmt: 0.88 },
+        overcast: { day: "#7d93a8", night: "#364860", dayAmt: 0.78, nightAmt: 0.86 },
+        foggy: { day: "#c5cec2", night: "#4a5852", dayAmt: 0.58, nightAmt: 0.76 },
+        drizzly: { day: "#5b8aab", night: "#2f5470", dayAmt: 0.8, nightAmt: 0.9 },
+        rainy: { day: "#4e7fa3", night: "#274e68", dayAmt: 0.84, nightAmt: 0.92 },
+        snowy: { day: "#79b4d2", night: "#3a6182", dayAmt: 0.82, nightAmt: 0.9 },
+        stormy: { day: "#74608c", night: "#4c3870", dayAmt: 0.8, nightAmt: 0.94 },
+      };
+      const OCHRE = [0.776, 0.627, 0.322];
+      const clamp01 = (n) => (n < 0 ? 0 : n > 1 ? 1 : n);
+
+      const hexRgb = (hex) => {
+        const n = hex.replace("#", "");
+        return [
+          parseInt(n.slice(0, 2), 16) / 255,
+          parseInt(n.slice(2, 4), 16) / 255,
+          parseInt(n.slice(4, 6), 16) / 255,
+        ];
+      };
+
+      const sceneSky = (s, night, heat) => {
+        const t = SKY_TINT[s.label] ?? SKY_TINT.clear;
+        const rgb = hexRgb(night ? t.night : t.day);
+        let amt = night ? t.nightAmt : t.dayAmt;
+        if (!night && heat > 0 && s.sun > 0.35) {
+          const w = heat * clamp01((s.sun - 0.35) / 0.65);
+          rgb[0] += (OCHRE[0] - rgb[0]) * w * 0.48;
+          rgb[1] += (OCHRE[1] - rgb[1]) * w * 0.48;
+          rgb[2] += (OCHRE[2] - rgb[2]) * w * 0.48;
+          amt = Math.min(1, amt + w * 0.08);
+        }
+        return { rgb, amt };
+      };
+
+      const compile = (gl, type, src) => {
+        const sh = gl.createShader(type);
+        if (!sh) return null;
+        gl.shaderSource(sh, src);
+        gl.compileShader(sh);
+        if (!gl.getShaderParameter(sh, gl.COMPILE_STATUS)) {
+          console.error("[og] shader", gl.getShaderInfoLog(sh));
+          gl.deleteShader(sh);
+          return null;
+        }
+        return sh;
+      };
+
+      const fail = (reason) => {
+        document.documentElement.dataset.og = "fail";
+        document.documentElement.dataset.ogError = reason;
+        console.error("[og]", reason);
+      };
+
+      const boot = async () => {
+        if (MARK) {
+          try {
+            await document.fonts.ready;
+          } catch {
+            /* still draw */
+          }
+        }
+
+        const canvas = document.getElementById("field");
+        const gl = canvas.getContext("webgl", {
+          alpha: false,
+          antialias: false,
+          depth: false,
+          stencil: false,
+          premultipliedAlpha: false,
+          preserveDrawingBuffer: true,
+          powerPreference: "high-performance",
+          failIfMajorPerformanceCaveat: false,
+        });
+        if (!gl) return fail("no webgl");
+
+        const vs = compile(gl, gl.VERTEX_SHADER, SHADERS.vert);
+        const fs = compile(gl, gl.FRAGMENT_SHADER, SHADERS.frag);
+        const prog = vs && fs ? gl.createProgram() : null;
+        if (!vs || !fs || !prog) return fail("shader compile");
+        gl.attachShader(prog, vs);
+        gl.attachShader(prog, fs);
+        gl.linkProgram(prog);
+        if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+          return fail(String(gl.getProgramInfoLog(prog)));
+        }
+        gl.useProgram(prog);
+
+        const quad = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, quad);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+        const aPos = gl.getAttribLocation(prog, "aPos");
+        gl.enableVertexAttribArray(aPos);
+        gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
+        const u = (name) => gl.getUniformLocation(prog, name);
+        const w = Math.max(1, Math.round(window.innerWidth));
+        const h = Math.max(1, Math.round(window.innerHeight));
+        if (w === h) document.body.classList.add("square");
+        canvas.width = w;
+        canvas.height = h;
+        gl.viewport(0, 0, w, h);
+
+        const s = readSky(CODE);
+        const heat = clamp01((TEMP - 24) / 12);
+        const tint = sceneSky(s, NIGHT, heat);
+        const grain = 1.15 + clamp01((TEMP + 6) / 36) * 0.35;
+        // Match homepage grain at dpr=2 so the print still reads at OG size.
+        const cell = CELL > 0 ? CELL : Math.max(1, Math.round(grain * 2));
+
+        gl.uniform2f(u("uCells"), Math.ceil(w / cell), Math.ceil(h / cell));
+        gl.uniform1f(u("uCell"), cell);
+        gl.uniform1f(u("uTime"), TIME);
+        gl.uniform1f(u("uDrift"), DRIFT);
+        gl.uniform1f(u("uHaze"), s.haze);
+        gl.uniform1f(u("uClouds"), s.clouds);
+        gl.uniform1f(u("uSun"), s.sun);
+        gl.uniform1f(u("uFog"), s.fog);
+        gl.uniform1f(u("uRain"), s.rain);
+        gl.uniform1f(u("uSnow"), s.snow);
+        gl.uniform1f(u("uHeat"), heat);
+        gl.uniform1f(u("uNight"), NIGHT ? 1 : 0);
+        gl.uniform1f(u("uFlash"), 0);
+        gl.uniform1f(u("uCloudCount"), s.clouds < 0.15 ? 2 : s.clouds < 0.45 ? 4 : s.clouds < 0.8 ? 6 : 9);
+        gl.uniform3fv(u("uInk"), hexRgb("#191611"));
+        gl.uniform3fv(u("uPaper"), hexRgb("#f3f0e7"));
+        gl.uniform3fv(u("uAccent"), hexRgb("#b5341c"));
+        gl.uniform3fv(u("uSky"), tint.rgb);
+        gl.uniform1f(u("uSkyAmt"), tint.amt);
+        gl.uniform3f(u("uPointer"), 0, 0, 0);
+        gl.uniform2f(u("uPar"), 0, 0);
+        gl.drawArrays(gl.TRIANGLES, 0, 3);
+        gl.finish();
+
+        document.documentElement.dataset.og = "ready";
+        document.documentElement.dataset.ogCell = String(cell);
+        document.documentElement.dataset.ogSky = s.label;
+      };
+
+      boot();
+    </script>
+  </body>
+</html>

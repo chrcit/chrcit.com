@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="squard" xmlns="http://www.w3.org/2000/svg" width="15mm" height="15mm" viewBox="0 0 42.52 42.52">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        fill: #01f;
+      }
+    </style>
+  </defs>
+  <rect class="cls-1" x="-1.41" y="-1.41" width="45.34" height="45.34"/>
+  <g>
+    <polygon class="cls-2" points="1.56 12.45 12.68 12.45 17.29 0 0 0 0 12.45 1.56 12.45"/>
+    <path class="cls-2" d="M24.11,12.45c-1.01-2.97-1.56-5.27-1.61-8.62h-2.43c-.11,3.35-.61,5.65-1.67,8.62h5.71Z"/>
+    <polygon class="cls-2" points="40.96 12.45 42.52 12.45 42.52 0 25.23 0 29.84 12.45 40.96 12.45"/>
+    <polygon class="cls-2" points="16.86 16.76 7.62 42.52 34.83 42.52 25.65 16.76 16.86 16.76"/>
+    <polygon class="cls-2" points="40.96 16.76 31.44 16.76 40.96 42.52 42.52 42.52 42.52 16.76 40.96 16.76"/>
+    <polygon class="cls-2" points="1.56 16.76 0 16.76 0 42.52 1.56 42.52 11.08 16.76 1.56 16.76"/>
+  </g>
+</svg>

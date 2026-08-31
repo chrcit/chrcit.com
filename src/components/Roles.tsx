@@ -14,14 +14,14 @@ const ROLES: Role[] = [
   {
     id: "arthouse",
     title: "Director, Strategist & Product Engineer at Arthouse",
-    favicon: "/images/favicons/arthouse.png",
+    favicon: "/images/favicons/arthouse.svg",
     body: "Arthouse is a creative engineering studio. We create great (digital) experiences and work across software, design, strategy and creative production.",
     links: [{ href: "https://madebyarthouse.com", label: "madebyarthouse.com →", external: true }],
   },
   {
     id: "hausgemacht",
     title: "Member of the technical staff & board at hausgemacht",
-    favicon: "/images/favicons/hausgemacht.png",
+    favicon: "/images/favicons/hausgemacht.svg",
     body: "hausgemacht is a non-profit techno collective based in Vienna, Austria. We host raves and s+ parties with a focus on creating safeR space for FLINTA*, queer and all people.",
     links: [{ href: "https://hausgemacht.org", label: "hausgemacht.org →", external: true }],
   },
@@ -41,7 +41,7 @@ const ROLES: Role[] = [
         Trying to get back into it but I once wrote a{" "}
         <a href="/articles/2023-year-in-review">2023 year in review</a> and used to be more
         active on{" "}
-        <a href="https://x.com/chrcit" target="_blank" rel="noopener">
+        <a href="https://x.com/chrcit" target="_blank" rel="noopener noreferrer">
           Twitter
         </a>
         .
@@ -53,10 +53,12 @@ const ROLES: Role[] = [
 function Summary({
   role,
   isOpen,
+  disabled = false,
   onToggle,
 }: {
   role: Role;
   isOpen: boolean;
+  disabled?: boolean;
   onToggle: (id: string) => void;
 }) {
   return (
@@ -64,6 +66,8 @@ function Summary({
       type="button"
       className="role-summary"
       aria-expanded={isOpen}
+      aria-controls={`role-panel-${role.id}`}
+      disabled={disabled}
       onClick={() => onToggle(role.id)}
     >
       <span className="r-brand">
@@ -147,9 +151,10 @@ export default function Roles() {
           data-role={role.id}
           className="role"
           aria-hidden={open ? true : undefined}
+          inert={open ? true : undefined}
           style={open === role.id ? { visibility: "hidden" } : undefined}
         >
-          <Summary role={role} isOpen={false} onToggle={toggle} />
+          <Summary role={role} isOpen={false} disabled={Boolean(open)} onToggle={toggle} />
         </div>
       ))}
 
@@ -164,6 +169,7 @@ export default function Roles() {
           <motion.div
             key={`panel-${active.id}`}
             className="role-panel"
+            id={`role-panel-${active.id}`}
             initial={reduce ? false : { opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={reduce ? undefined : { opacity: 0 }}
@@ -176,7 +182,7 @@ export default function Roles() {
                   <a
                     key={link.href}
                     href={link.href}
-                    {...(link.external ? { target: "_blank", rel: "noopener" } : {})}
+                    {...(link.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                   >
                     {link.label}
                   </a>

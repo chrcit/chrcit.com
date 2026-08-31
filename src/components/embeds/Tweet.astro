@@ -42,7 +42,7 @@ const fmt = (n?: number | null) => {
 {
   tweet ? (
     <article class="embed embed-tweet">
-      <a class="embed-tweet-link" href={url} target="_blank" rel="noopener">
+      <a class="embed-tweet-link" href={url} target="_blank" rel="noopener noreferrer">
         <span class="embed-head">
           {tweet.avatar && (
             <img class="embed-avatar" src={tweet.avatar} alt="" width="48" height="48" />
@@ -122,7 +122,7 @@ const fmt = (n?: number | null) => {
       </a>
     </article>
   ) : (
-    <a class="embed embed-fallback" href={url} target="_blank" rel="noopener">
+    <a class="embed embed-fallback" href={url} target="_blank" rel="noopener noreferrer">
       View on Twitter →
     </a>
   )

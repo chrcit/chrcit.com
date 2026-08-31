@@ -13,6 +13,8 @@ const groupOrder = [
 ];
 
 const groupedKeys = new Set(groupOrder.map((g) => g.key));
+const sectionId = (name: string) =>
+  name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "section";
 const groups = [
   ...groupOrder.map(({ key, label }) => ({
     name: label,
@@ -39,8 +41,14 @@ const groups = [
 
     {
       groups.map((group) => (
-        <section class="topic-block" id={group.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}>
-          <h2 class="group-title">{group.name}</h2>
+        <section
+          class="topic-block"
+          id={sectionId(group.name)}
+          aria-labelledby={`${sectionId(group.name)}-title`}
+        >
+          <h2 class="group-title" id={`${sectionId(group.name)}-title`}>
+            {group.name}
+          </h2>
           <div class="tile">
             <ul class="items items-split">
               {group.items.map((item) => (
