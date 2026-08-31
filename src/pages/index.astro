@@ -38,7 +38,7 @@ const booksAll: SampleItem[] = await Promise.all(
 
 const toolsAll: SampleItem[] = await Promise.all(
   items
-    .filter((i) => i.data.category === "tool" && i.data.url)
+    .filter((i) => i.data.category === "tool")
     .map(async (i) => {
       const img = i.data.icon
         ? await getImage({ src: i.data.icon, width: 160, height: 160 })
@@ -47,7 +47,7 @@ const toolsAll: SampleItem[] = await Promise.all(
         id: i.id,
         title: i.data.title,
         meta: i.data.group ? (groupLabel[i.data.group] ?? i.data.group) : undefined,
-        url: i.data.url ?? null,
+        url: `/uses/${i.id.replace(/^tools\//, "")}`,
         image: img?.src ?? null,
         kind: "tool" as const,
       };

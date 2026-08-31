@@ -28,26 +28,16 @@ const showNav = topics.length >= 4;
 ---
 
 <Base title={`${title} | chrcit.com`} description={description ?? `Notes on ${title}.`}>
-  <main class="page">
+  <main class="page book-page">
     <article class="tile">
       <div class="tile-label">
         <a href="/books">← Books</a>
-        <span class="tile-label-meta">
-          {rating != null && <span class="num">{rating}/10</span>}
-          {
-            highlightCount > 0 && (
-              <span>
-                {highlightCount} highlight{highlightCount === 1 ? "" : "s"}
-              </span>
-            )
-          }
-        </span>
       </div>
       <div class="book-head">
         <span class={`cover-frame ${ditherFor(title)}`}>
           {
             cover ? (
-              <Image src={cover} alt={`Cover of ${title}`} width={400} height={600} fit="cover" />
+              <Image src={cover} alt={`Cover of ${title}`} width={560} height={840} fit="cover" />
             ) : (
               <span class="cover-fallback">{title.charAt(0)}</span>
             )
@@ -58,6 +48,18 @@ const showNav = topics.length >= 4;
           <p class="book-meta">
             {[author, year].filter(Boolean).join(", ")}
           </p>
+          {
+            (rating != null || highlightCount > 0) && (
+              <p class="book-stats">
+                {rating != null && <span class="num">{rating}/10</span>}
+                {highlightCount > 0 && (
+                  <span>
+                    {highlightCount} highlight{highlightCount === 1 ? "" : "s"}
+                  </span>
+                )}
+              </p>
+            )
+          }
           {description && <p class="book-desc">{description}</p>}
           {
             url && (
@@ -67,33 +69,83 @@ const showNav = topics.length >= 4;
             )
           }
         </div>
+        {
+          showNav && (
+            <nav class="topic-nav topic-nav-rail" aria-label="Topics">
+              <div class="topic-nav-list">
+                {topics.map((topic) => (
+                  <a href={`#${topicId(topic.name)}`}>
+                    <span class="topic-nav-name">{topic.name}</span>
+                    <span class="topic-nav-count">{topic.highlights.length}</span>
+                  </a>
+                ))}
+              </div>
+            </nav>
+          )
+        }
       </div>
     </article>
 
-    <section class="tile">
-      <h2 class="page-title">Highlights</h2>
+    <section class="tile highlights-head">
+      <h2 class="highlights-title">Highlights</h2>
       {topics.length === 0 && <p class="highlight-empty">No highlights saved for this one.</p>}
+      {
+        showNav && (
+          <nav class="topic-nav topic-nav-index" aria-label="Topics">
+            <div class="topic-nav-list">
+              {topics.map((topic) => (
+                <a href={`#${topicId(topic.name)}`}>
+                  <span class="topic-nav-name">{topic.name}</span>
+                  <span class="topic-nav-count">{topic.highlights.length}</span>
+                </a>
+              ))}
+            </div>
+          </nav>
+        )
+      }
     </section>
-
-    {
-      showNav && (
-        <nav class="tile topic-nav" aria-label="Topics">
-          <div class="topic-nav-list">
-            {topics.map((topic) => (
-              <a href={`#${topicId(topic.name)}`}>
-                {topic.name}
-                <span class="topic-nav-count">{topic.highlights.length}</span>
-              </a>
-            ))}
-          </div>
-        </nav>
-      )
-    }
 
     {
       topics.map((topic) => (
         <section class="topic-block" id={topicId(topic.name)}>
-          <h3 class="group-title">{topic.name}</h3>
+          <div class="topic-head">
+            <h3 class="group-title">
+              {showNav ? (
+                <button
+                  type="button"
+                  class="topic-jump-btn"
+                  aria-expanded="false"
+                  aria-controls={`jump-${topicId(topic.name)}`}
+                >
+                  <span class="group-title-text">{topic.name}</span>
+                  <svg class="topic-jump-chevron" viewBox="0 0 16 16" aria-hidden="true">
+                    <path
+                      d="M3 6l5 5 5-5"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      stroke-linecap="square"
+                      stroke-linejoin="miter"
+                    />
+                  </svg>
+                </button>
+              ) : (
+                topic.name
+              )}
+            </h3>
+            {showNav && (
+              <nav class="topic-jump" id={`jump-${topicId(topic.name)}`} aria-label="Topics">
+                <div class="topic-jump-inner">
+                  {topics.map((item) => (
+                    <a href={`#${topicId(item.name)}`}>
+                      <span class="topic-nav-name">{item.name}</span>
+                      <span class="topic-nav-count">{item.highlights.length}</span>
+                    </a>
+                  ))}
+                </div>
+              </nav>
+            )}
+          </div>
           <div class="tile">
             <ul class="highlights">
               {topic.highlights.map((h) => (
@@ -114,4 +166,68 @@ const showNav = topics.length >= 4;
       ))
     }
   </main>
+
+  <script>
+    const page = document.querySelector(".book-page");
+    const links = [...document.querySelectorAll(".book-page :is(.topic-nav, .topic-jump) a")];
+    if (links.length) {
+      const seen = new Set<string>();
+      const headings: HTMLElement[] = [];
+      for (const a of links) {
+        const id = a.hash.slice(1);
+        if (!id || seen.has(id)) continue;
+        seen.add(id);
+        const el = document.getElementById(id);
+        if (el) headings.push(el);
+      }
+
+      const setActive = (id: string) => {
+        links.forEach((a) => {
+          a.toggleAttribute("data-active", a.hash === `#${id}`);
+        });
+      };
+
+      const io = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((e) => e.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+          if (visible?.target.id) setActive(visible.target.id);
+        },
+        { rootMargin: "0px 0px -70% 0px", threshold: [0, 0.25, 1] },
+      );
+      headings.forEach((h) => io.observe(h));
+    }
+
+    const heads = [...document.querySelectorAll<HTMLElement>(".book-page .topic-head")];
+    const panelOf = (head: HTMLElement) => head.querySelector<HTMLElement>(".topic-jump");
+    const closeHeads = () => {
+      heads.forEach((head) => {
+        head.classList.remove("is-open");
+        head.querySelector(".topic-jump-btn")?.setAttribute("aria-expanded", "false");
+        const panel = panelOf(head);
+        if (panel) panel.style.maxHeight = "0px";
+      });
+    };
+    heads.forEach((head) => {
+      const btn = head.querySelector<HTMLButtonElement>(".topic-jump-btn");
+      if (!btn) return;
+      btn.addEventListener("click", () => {
+        const open = !head.classList.contains("is-open");
+        closeHeads();
+        if (open) {
+          head.classList.add("is-open");
+          btn.setAttribute("aria-expanded", "true");
+          const panel = panelOf(head);
+          if (panel) panel.style.maxHeight = `${panel.scrollHeight}px`;
+        }
+      });
+    });
+    page?.querySelectorAll(".topic-jump a").forEach((a) => {
+      a.addEventListener("click", () => closeHeads());
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeHeads();
+    });
+  </script>
 </Base>

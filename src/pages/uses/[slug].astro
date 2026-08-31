@@ -1,0 +1,127 @@
+---
+import { getCollection, render } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+import { Image } from "astro:assets";
+import Base from "../../layouts/Base.astro";
+import ItemThumb from "../../components/ItemThumb.astro";
+import ItemRow from "../../components/ItemRow.astro";
+
+const groupLabel: Record<string, string> = {
+  Gear: "Gear",
+  Stack: "Tech Stack",
+  "Dev Tools": "Dev Tools",
+  Productivity: "Productivity",
+};
+
+const RELATED_MAX = 6;
+
+export async function getStaticPaths() {
+  const tools = (await getCollection("items")).filter((i) => i.data.category === "tool");
+  return tools.map((tool) => {
+    const slug = tool.id.replace(/^tools\//, "");
+    return { params: { slug }, props: { tool, tools } };
+  });
+}
+
+interface Props {
+  tool: CollectionEntry<"items">;
+  tools: CollectionEntry<"items">[];
+}
+
+const { tool, tools } = Astro.props;
+const { title, meta, description, url, group, icon } = tool.data;
+const groupName = group ? (groupLabel[group] ?? group) : undefined;
+const hasBody = Boolean(tool.body?.trim());
+const { Content } = await render(tool);
+const media = (tool.data.media ?? []).filter((item) => item.image || item.video);
+
+const relatedIds = tool.data.related ?? [];
+const byId = new Map(tools.map((item) => [item.id, item]));
+const related =
+  relatedIds.length > 0
+    ? relatedIds
+        .map((id) => byId.get(id))
+        .filter((item): item is CollectionEntry<"items"> => Boolean(item) && item.id !== tool.id)
+    : tools
+        .filter((item) => item.id !== tool.id && item.data.group === group)
+        .sort(
+          (a, b) =>
+            (a.data.rank ?? 99) - (b.data.rank ?? 99) || a.data.title.localeCompare(b.data.title),
+        )
+        .slice(0, RELATED_MAX);
+
+const videoSrc = (src: string) => (src.startsWith("http") || src.startsWith("/") ? src : `/${src}`);
+---
+
+<Base title={`${title} | chrcit.com`} description={description ?? meta ?? title}>
+  <main class="page tool-page">
+    <article class="tile">
+      <div class="tile-label">
+        <a href="/uses">← Tools</a>
+        {groupName && <span class="tile-label-meta">{groupName}</span>}
+      </div>
+      <div class="tool-head">
+        <div class="tool-icon">
+          <ItemThumb title={title} image={icon} isIcon />
+        </div>
+        <div class="tool-copy">
+          <h1 class="page-title">{title}</h1>
+          {
+            url && (
+              <a class="tool-out" href={url} target="_blank" rel="noopener">
+                Site →
+              </a>
+            )
+          }
+          {hasBody && (
+            <div class="prose">
+              <Content />
+            </div>
+          )}
+        </div>
+      </div>
+      {
+        media.length > 0 && (
+          <div class="tool-media">
+            {media.map((item) => (
+              <figure class="tool-media-item">
+                {item.video ? (
+                  <video controls playsinline preload="metadata" src={videoSrc(item.video)}>
+                    {item.alt}
+                  </video>
+                ) : (
+                  item.image && (
+                    <Image
+                      src={item.image}
+                      alt={item.alt ?? ""}
+                      widths={[480, 800, 1200]}
+                      sizes="(max-width: 560px) 100vw, (max-width: 1100px) 50vw, 360px"
+                    />
+                  )
+                )}
+                {item.caption && <figcaption>{item.caption}</figcaption>}
+              </figure>
+            ))}
+          </div>
+        )
+      }
+    </article>
+
+    {
+      related.length > 0 && (
+        <section class="topic-block">
+          <h2 class="group-title">Related</h2>
+          <div class="tile">
+            <ul class="items items-split">
+              {related.map((item) => (
+                <li>
+                  <ItemRow item={item} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )
+    }
+  </main>
+</Base>

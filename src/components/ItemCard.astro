@@ -14,8 +14,10 @@ const flag = category === "book" ? "Book" : (group ?? "Tool");
 const metaLine = category === "book" ? [author, year].filter(Boolean).join(", ") : meta;
 const note = category === "book" ? description : undefined;
 const image = category === "book" ? cover : icon;
-const Tag = url ? "a" : "div";
-const linkProps = url ? { href: url, target: "_blank", rel: "noopener" } : {};
+const href = category === "tool" ? `/uses/${item.id.replace(/^tools\//, "")}` : url;
+const Tag = href ? "a" : "div";
+const linkProps =
+  category === "tool" ? { href } : href ? { href, target: "_blank", rel: "noopener" } : {};
 ---
 
 <Tag class="item-card dot-hover" {...linkProps}>
@@ -35,7 +37,7 @@ const linkProps = url ? { href: url, target: "_blank", rel: "noopener" } : {};
           <i style={`width:${rating * 10}%`} />
         </span>
       </span>
-    ) : url ? (
+    ) : href ? (
       <span class="i-right link">→</span>
     ) : (
       <span class="i-right" />

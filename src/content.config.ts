@@ -16,7 +16,7 @@ const items = defineCollection({
       url: z.string().optional(),
       // one-line note shown under the title (dry; humour lives here)
       meta: z.string().optional(),
-      // longer note for archive pages
+      // longer note for archive pages; tools: short one-liner on the detail head
       description: z.string().optional(),
       // tools only: Gear / Stack / Dev Tools / Productivity
       group: z.string().optional(),
@@ -25,6 +25,19 @@ const items = defineCollection({
       genre: z.string().optional(),
       cover: image().optional(),
       icon: image().optional(),
+      // tools: screenshots/video. Local images: ./media/macbook-pro-1.jpg next to the tool file.
+      media: z
+        .array(
+          z.object({
+            image: image().optional(),
+            video: z.string().optional(),
+            alt: z.string().optional(),
+            caption: z.string().optional(),
+          }),
+        )
+        .optional(),
+      // tools: other item ids in this collection, e.g. "tools/cursor". Absent = same group.
+      related: z.array(z.string()).optional(),
       tags: z.array(z.string()).default([]),
     }),
 });
