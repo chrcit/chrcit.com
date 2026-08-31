@@ -14,14 +14,14 @@ const ROLES: Role[] = [
   {
     id: "arthouse",
     title: "Director, Strategist & Product Engineer at Arthouse",
-    favicon: "/images/favicons/arthouse.png",
+    favicon: "/images/favicons/arthouse.svg",
     body: "Arthouse is a creative engineering studio. We create great (digital) experiences and work across software, design, strategy and creative production.",
     links: [{ href: "https://madebyarthouse.com", label: "madebyarthouse.com →", external: true }],
   },
   {
     id: "hausgemacht",
     title: "Member of the technical staff & board at hausgemacht",
-    favicon: "/images/favicons/hausgemacht.png",
+    favicon: "/images/favicons/hausgemacht.svg",
     body: "hausgemacht is a non-profit techno collective based in Vienna, Austria. We host raves and s+ parties with a focus on creating safeR space for FLINTA*, queer and all people.",
     links: [{ href: "https://hausgemacht.org", label: "hausgemacht.org →", external: true }],
   },
