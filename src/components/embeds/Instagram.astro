@@ -42,7 +42,7 @@ const isCarousel = slides.length > 1;
 ---
 
 <article class="embed embed-ig" data-ig={isCarousel ? "carousel" : "single"}>
-  <a class="ig-head" href={href} target="_blank" rel="noopener">
+  <a class="ig-head" href={href} target="_blank" rel="noopener noreferrer">
     <span class="ig-avatar" aria-hidden="true">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
         <rect width="20" height="20" x="2" y="2" rx="5"></rect>
@@ -63,12 +63,12 @@ const isCarousel = slides.length > 1;
         tabindex={isCarousel ? 0 : undefined}
         role={isCarousel ? "group" : undefined}
         aria-roledescription={isCarousel ? "carousel" : undefined}
-        aria-label={isCarousel ? "Instagram photos" : undefined}
+        aria-label={isCarousel ? `Instagram photos, photo 1 of ${slides.length}` : undefined}
       >
         <div class="ig-track">
           {slides.map((src, i) => (
-            <div class="ig-slide">
-              <img src={src} alt={i === 0 ? caption || "" : ""} />
+            <div class="ig-slide" aria-hidden={i === 0 ? undefined : true}>
+              <img src={src} alt={`Photo ${i + 1} from Instagram post by ${handle}`} />
             </div>
           ))}
         </div>
@@ -86,6 +86,7 @@ const isCarousel = slides.length > 1;
                   type="button"
                   data-i={i}
                   class={i === 0 ? "is-on" : undefined}
+                  aria-pressed={i === 0}
                   aria-label={`Photo ${i + 1} of ${slides.length}`}
                 />
               ))}
@@ -115,7 +116,7 @@ const isCarousel = slides.length > 1;
         </p>
       )
     }
-    <a class="ig-more" href={href} target="_blank" rel="noopener">
+    <a class="ig-more" href={href} target="_blank" rel="noopener noreferrer">
       View on Instagram →
     </a>
   </div>
@@ -128,6 +129,7 @@ const isCarousel = slides.length > 1;
       if (root.dataset.bound === "true") return;
       root.dataset.bound = "true";
       const track = root.querySelector(".ig-track") as HTMLElement | null;
+      const slides = [...root.querySelectorAll(".ig-slide")];
       const dots = [...root.querySelectorAll(".ig-dots button")];
       const n = root.querySelectorAll(".ig-slide").length;
       if (!track || n < 2) return;
@@ -135,7 +137,15 @@ const isCarousel = slides.length > 1;
       const go = (next: number) => {
         i = (next + n) % n;
         track.style.transform = `translateX(${-i * 100}%)`;
-        dots.forEach((d, di) => d.classList.toggle("is-on", di === i));
+        slides.forEach((slide, si) => {
+          if (si === i) slide.removeAttribute("aria-hidden");
+          else slide.setAttribute("aria-hidden", "true");
+        });
+        dots.forEach((d, di) => {
+          d.classList.toggle("is-on", di === i);
+          d.setAttribute("aria-pressed", String(di === i));
+        });
+        root.setAttribute("aria-label", `Instagram photos, photo ${i + 1} of ${n}`);
       };
       const onNav = (e: Event, dir: number) => {
         e.preventDefault();

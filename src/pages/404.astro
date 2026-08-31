@@ -2,10 +2,16 @@
 import Base from "../layouts/Base.astro";
 ---
 
-<Base title="Not found | chrcit.com" description="This page does not exist.">
+<Base
+  title="Not found | chrcit.com"
+  description="This page does not exist."
+  noindex
+  canonical={null}
+>
   <main class="page">
     <section class="tile">
       <div class="tile-label"><span>404</span><span class="num">not found</span></div>
+      <h1 class="page-title">Page not found</h1>
       <div class="prose">
         <p>Nothing here. <a href="/">Back to chrcit.com</a>.</p>
       </div>

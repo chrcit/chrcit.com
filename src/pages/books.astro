@@ -15,6 +15,9 @@ const genreOrder = [
   "Fiction",
 ];
 
+const sectionId = (name: string) =>
+  name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "section";
+
 const groups = genreOrder
   .map((name) => ({
     name,
@@ -36,8 +39,14 @@ const groups = genreOrder
 
     {
       groups.map((group) => (
-        <section class="topic-block" id={group.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}>
-          <h2 class="group-title">{group.name}</h2>
+        <section
+          class="topic-block"
+          id={sectionId(group.name)}
+          aria-labelledby={`${sectionId(group.name)}-title`}
+        >
+          <h2 class="group-title" id={`${sectionId(group.name)}-title`}>
+            {group.name}
+          </h2>
           <div class="tile">
             <div class="cover-grid">
               {group.items.map((item) => (
@@ -49,7 +58,7 @@ const groups = genreOrder
       ))
     }
 
-    <section class="tile">
+    <figure class="tile">
       <blockquote class="page-quote">
         <p>
           Of all the things written, I love only what a person has written with his own blood.
@@ -57,6 +66,6 @@ const groups = genreOrder
         </p>
         <footer>Friedrich Nietzsche, <cite>The Gay Science</cite></footer>
       </blockquote>
-    </section>
+    </figure>
   </main>
 </Base>

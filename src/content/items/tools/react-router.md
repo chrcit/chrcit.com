@@ -2,7 +2,7 @@
 title: "React Router"
 category: "tool"
 group: "Stack"
-meta: "Full-stack React framework."
+meta: "Routing and data loading for React."
 url: "https://reactrouter.com"
 icon: "./icons/react-router.png"
 rank: 3

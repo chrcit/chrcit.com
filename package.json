@@ -6,8 +6,11 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "check": "astro check",
+    "validate:site": "node scripts/validate-site.mjs",
     "preview": "astro preview",
     "deploy": "wrangler versions upload",
+    "deploy:check": "wrangler versions upload --dry-run",
     "astro": "astro",
     "embeds:capture": "node scripts/capture-embeds.mjs"
   },
@@ -22,7 +25,10 @@
     "sharp": "^0.35.4"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
     "@types/react": "^19.2.8",
-    "@types/react-dom": "^19.2.3"
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^5.9.3",
+    "wrangler": "^4.127.1"
   }
 }

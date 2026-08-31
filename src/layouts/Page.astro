@@ -2,9 +2,11 @@
 import Base from "./Base.astro";
 
 const { frontmatter } = Astro.props;
+const pageTitle = frontmatter.title ?? "chrcit.com";
+const pageDescription = frontmatter.description ?? `${pageTitle} - chrcit.com`;
 ---
 
-<Base title={`${frontmatter.title} | chrcit.com`} description={frontmatter.description}>
+<Base title={`${pageTitle} | chrcit.com`} description={pageDescription}>
   <main class="page">
     <section class="tile">
       <div class="tile-label"><span></span><span class="num">chrcit.com</span></div>

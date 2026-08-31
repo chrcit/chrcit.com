@@ -17,9 +17,9 @@ const href = `/books/${slug}`;
   <span class={`cover-frame ${ditherFor(title)}`}>
     {
       cover ? (
-        <Image src={cover} alt={title} width={400} height={600} fit="cover" loading="lazy" />
+        <Image src={cover} alt="" width={400} height={600} fit="cover" loading="lazy" />
       ) : (
-        <span class="cover-fallback">{title.charAt(0)}</span>
+        <span class="cover-fallback" aria-hidden="true">{title.charAt(0)}</span>
       )
     }
     {rating != null && <span class="cover-score">{rating}/10</span>}

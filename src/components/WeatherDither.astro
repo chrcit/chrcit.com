@@ -473,7 +473,8 @@ const STATES = [
       let animate = !motion.matches && !weakDevice;
 
       const sentence = () => {
-        const peak = tempMax != null ? `${Math.round(tempMax)}` : "—";
+        if (tempMax == null) return `The weather today in Vienna is ${readSky(code).label}.`;
+        const peak = Math.round(tempMax);
         return `The weather today in Vienna is ${readSky(code).label} with temperatures peaking at ${peak}° Celsius.`;
       };
 

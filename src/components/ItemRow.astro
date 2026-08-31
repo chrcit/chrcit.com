@@ -29,7 +29,7 @@ const image = category === "book" ? cover : icon;
 const href = category === "tool" ? `/uses/${item.id.replace(/^tools\//, "")}` : url;
 const Tag = href ? "a" : "div";
 const linkProps =
-  category === "tool" ? { href } : href ? { href, target: "_blank", rel: "noopener" } : {};
+  category === "tool" ? { href } : href ? { href, target: "_blank", rel: "noopener noreferrer" } : {};
 const catClass = category === "tool" && subtitle === "group";
 ---
 

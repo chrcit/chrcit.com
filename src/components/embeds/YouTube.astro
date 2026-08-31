@@ -16,7 +16,7 @@ const video = (embeds.youtube as Record<string, {
 const url = video?.url ?? `https://www.youtube.com/watch?v=${videoId}`;
 ---
 
-<a class="embed embed-yt" href={url} target="_blank" rel="noopener">
+<a class="embed embed-yt" href={url} target="_blank" rel="noopener noreferrer">
   <span class="embed-thumb">
     {video?.thumb && <img src={video.thumb} alt="" width="1280" height="720" />}
     <span class="embed-play" aria-hidden="true">▶</span>

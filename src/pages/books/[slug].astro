@@ -63,7 +63,7 @@ const showNav = topics.length >= 4;
           {description && <p class="book-desc">{description}</p>}
           {
             url && (
-              <a class="book-out" href={url} target="_blank" rel="noopener">
+              <a class="book-out" href={url} target="_blank" rel="noopener noreferrer">
                 On Goodreads →
               </a>
             )
@@ -134,7 +134,13 @@ const showNav = topics.length >= 4;
               )}
             </h3>
             {showNav && (
-              <nav class="topic-jump" id={`jump-${topicId(topic.name)}`} aria-label="Topics">
+              <nav
+                class="topic-jump"
+                id={`jump-${topicId(topic.name)}`}
+                aria-label="Topics"
+                aria-hidden="true"
+                inert
+              >
                 <div class="topic-jump-inner">
                   {topics.map((item) => (
                     <a href={`#${topicId(item.name)}`}>
@@ -169,7 +175,9 @@ const showNav = topics.length >= 4;
 
   <script>
     const page = document.querySelector(".book-page");
-    const links = [...document.querySelectorAll(".book-page :is(.topic-nav, .topic-jump) a")];
+    const links = [
+      ...document.querySelectorAll<HTMLAnchorElement>(".book-page :is(.topic-nav, .topic-jump) a"),
+    ];
     if (links.length) {
       const seen = new Set<string>();
       const headings: HTMLElement[] = [];
@@ -206,7 +214,11 @@ const showNav = topics.length >= 4;
         head.classList.remove("is-open");
         head.querySelector(".topic-jump-btn")?.setAttribute("aria-expanded", "false");
         const panel = panelOf(head);
-        if (panel) panel.style.maxHeight = "0px";
+        if (panel) {
+          panel.style.maxHeight = "0px";
+          panel.setAttribute("aria-hidden", "true");
+          panel.setAttribute("inert", "");
+        }
       });
     };
     heads.forEach((head) => {
@@ -219,7 +231,11 @@ const showNav = topics.length >= 4;
           head.classList.add("is-open");
           btn.setAttribute("aria-expanded", "true");
           const panel = panelOf(head);
-          if (panel) panel.style.maxHeight = `${panel.scrollHeight}px`;
+          if (panel) {
+            panel.removeAttribute("aria-hidden");
+            panel.removeAttribute("inert");
+            panel.style.maxHeight = `${panel.scrollHeight}px`;
+          }
         }
       });
     });

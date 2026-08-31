@@ -41,7 +41,7 @@ const related =
   relatedIds.length > 0
     ? relatedIds
         .map((id) => byId.get(id))
-        .filter((item): item is CollectionEntry<"items"> => Boolean(item) && item.id !== tool.id)
+        .filter((item): item is CollectionEntry<"items"> => item !== undefined && item.id !== tool.id)
     : tools
         .filter((item) => item.id !== tool.id && item.data.group === group)
         .sort(
@@ -68,7 +68,7 @@ const videoSrc = (src: string) => (src.startsWith("http") || src.startsWith("/")
           <h1 class="page-title">{title}</h1>
           {
             url && (
-              <a class="tool-out" href={url} target="_blank" rel="noopener">
+              <a class="tool-out" href={url} target="_blank" rel="noopener noreferrer">
                 Site →
               </a>
             )

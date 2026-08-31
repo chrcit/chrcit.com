@@ -12,5 +12,7 @@ export default defineConfig({
     "/writing": "/",
     "/writing/2023-year-in-review": "/articles/2023-year-in-review",
     "/projects": "/",
+    "/privacy-policy": "/privacy",
+    "/books/breaking-out-of-homeostasis": "/books",
   },
 });

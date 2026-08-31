@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://chrcit.com/sitemap-index.xml
