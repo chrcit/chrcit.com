@@ -14,6 +14,6 @@ Vienna time is computed in the browser. Weather is fetched from [Open-Meteo](htt
 ## Stack
 
 - [Astro](https://astro.build/): pages, content collections, MDX
-- [Inter Tight](https://fontsource.org/fonts/inter-tight): the only typeface, self-hosted
+- [Apfel Grotezk](https://www.collletttivo.it/typefaces/apfel-grotezk): the only typeface, self-hosted
 - [Plausible](https://plausible.io/): analytics, no cookies
 - [Open-Meteo](https://open-meteo.com/): Vienna temperature, client-side

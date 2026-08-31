@@ -1,5 +1,4 @@
 ---
-import "@fontsource-variable/inter-tight";
 import "../styles/global.css";
 import Elsewhere from "../components/Elsewhere.astro";
 import ViennaNow from "../components/ViennaNow.astro";
@@ -30,6 +29,20 @@ const ogImage = new URL("/og-image.png", Astro.site ?? "https://chrcit.com");
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="canonical" href={canonical.href} />
+    <link
+      rel="preload"
+      href="/fonts/apfel-grotezk/ApfelGrotezk-Regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/apfel-grotezk/ApfelGrotezk-Fett.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />

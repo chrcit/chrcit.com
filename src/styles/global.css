@@ -1,6 +1,35 @@
 /* DITHER — Concept C "Mosaic" ported from docs/redesign/explorations/concept-c.html.
    Tokens, tile geometry and hover interactions are locked; do not tune without flagging. */
 
+@font-face {
+  font-family: "Apfel Grotezk";
+  src: url("/fonts/apfel-grotezk/ApfelGrotezk-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Apfel Grotezk";
+  src: url("/fonts/apfel-grotezk/ApfelGrotezk-Mittel.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Apfel Grotezk";
+  src: url("/fonts/apfel-grotezk/ApfelGrotezk-Fett.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Apfel Grotezk";
+  src: url("/fonts/apfel-grotezk/ApfelGrotezk-Satt.woff2") format("woff2");
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --paper: #f3f0e7;
   --ink: #191611;
@@ -26,9 +55,10 @@ html {
 body {
   background: var(--paper);
   color: var(--ink);
-  font-family: "Inter Tight Variable", "Inter Tight", sans-serif;
-  font-weight: 450;
+  font-family: "Apfel Grotezk", sans-serif;
+  font-weight: 400;
   line-height: 1.4;
+  font-synthesis: italic;
   -webkit-font-smoothing: antialiased;
 }
 
