@@ -373,6 +373,8 @@ body::after {
   min-height: 360px;
   min-width: 0;
   overflow: hidden;
+  touch-action: pan-y;
+  -webkit-tap-highlight-color: transparent;
 }
 /* static halftone that shows through if the canvas never starts */
 .weather-field::before {

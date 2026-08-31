@@ -4,8 +4,9 @@
 // listening to Vienna's sky. Decorative, not a weather widget.
 //
 // The field is a WebGL fragment shader quantised to a dither cell grid. It falls
-// back to the static CSS halftone on .weather-field if WebGL is unavailable, and
-// renders a single frame on low-power devices.
+// back to the static CSS halftone on .weather-field if WebGL is unavailable.
+// Reduced motion, data-saver, and a critically low battery freeze the print.
+// Phones still run the loop; they just get a leaner backing-store.
 const STATES = [
   { label: "Clear", code: 0 },
   { label: "Mainly", code: 1 },
@@ -363,14 +364,17 @@ const STATES = [
   const canvas = root?.querySelector("canvas");
 
   if (row && root && canvas) {
-    const gl = canvas.getContext("webgl", {
+    const glOpts: WebGLContextAttributes = {
       alpha: false,
       antialias: false,
       depth: false,
       stencil: false,
-      powerPreference: "low-power",
+      powerPreference: "default",
       preserveDrawingBuffer: false,
-    });
+    };
+    const gl =
+      canvas.getContext("webgl", glOpts) ||
+      (canvas.getContext("experimental-webgl", glOpts) as WebGLRenderingContext | null);
     const vs = gl && compile(gl, gl.VERTEX_SHADER, VERT);
     const fs = gl && compile(gl, gl.FRAGMENT_SHADER, FRAG);
     const prog = gl && vs && fs ? gl.createProgram() : null;
@@ -383,6 +387,34 @@ const STATES = [
     if (!gl || !prog || !gl.getProgramParameter(prog, gl.LINK_STATUS)) {
       // Leaves the static CSS halftone underneath in place.
       canvas.remove();
+      const paintCopy = (nextCode: number | null, nextMax: number | null) => {
+        const s = readSky(nextCode);
+        if (copy) {
+          copy.textContent =
+            nextMax == null
+              ? `The weather today in Vienna is ${s.label}.`
+              : `The weather today in Vienna is ${s.label} with temperatures peaking at ${Math.round(nextMax)}° Celsius.`;
+        }
+        row.setAttribute(
+          "aria-label",
+          `The weather today in Vienna is ${s.label}${nextMax != null ? `, peaking at ${Math.round(nextMax)}° Celsius` : ""}`,
+        );
+      };
+      try {
+        const cached = JSON.parse(sessionStorage.getItem("chrcit-vienna-wx-2") || "null");
+        if (cached && typeof cached.code === "number") {
+          paintCopy(cached.code, typeof cached.tempMax === "number" ? cached.tempMax : null);
+        }
+      } catch {
+        /* ignore */
+      }
+      window.addEventListener("vienna:now", ((e: CustomEvent) => {
+        if (typeof e.detail?.code !== "number") return;
+        paintCopy(
+          e.detail.code,
+          typeof e.detail?.tempMax === "number" ? e.detail.tempMax : null,
+        );
+      }) as EventListener);
     } else {
       gl.useProgram(prog);
       const quad = gl.createBuffer();
@@ -438,10 +470,15 @@ const STATES = [
         }>;
       };
       const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-      const weakDevice =
+      // Phones report 4 GB / 4 cores even when the GPU is fine. Use that to
+      // drop backing-store, not to freeze the print into a still.
+      const lean =
+        window.matchMedia("(pointer: coarse)").matches ||
         (nav.hardwareConcurrency ?? 8) <= 4 ||
-        (nav.deviceMemory ?? 8) <= 4 ||
-        nav.connection?.saveData === true;
+        (nav.deviceMemory ?? 8) <= 4;
+      let drained = false;
+      const wantAnimate = () =>
+        !motion.matches && nav.connection?.saveData !== true && !drained;
 
       let code: number | null = null;
       let hour = viennaHour();
@@ -470,7 +507,7 @@ const STATES = [
       let running = false;
       let visible = true;
       let slow = 0;
-      let animate = !motion.matches && !weakDevice;
+      let animate = wantAnimate();
 
       const sentence = () => {
         if (tempMax == null) return `The weather today in Vienna is ${readSky(code).label}.`;
@@ -482,7 +519,7 @@ const STATES = [
       const grain = () => 1.15 + clamp01(((tempMax ?? 14) + 6) / 36) * 0.35;
 
       const draw = () => {
-        const dpr = Math.min(window.devicePixelRatio || 1, animate ? 2 : 3);
+        const dpr = Math.min(window.devicePixelRatio || 1, animate ? (lean ? 1.5 : 2) : 3);
         const w = Math.max(1, Math.round(root.clientWidth * dpr));
         const h = Math.max(1, Math.round(root.clientHeight * dpr));
         if (canvas.width !== w || canvas.height !== h) {
@@ -527,7 +564,9 @@ const STATES = [
         stamp = now;
         if (dt > 0.2) slow = Math.min(60, slow + 2);
         else slow = Math.max(0, slow - 1);
-        if (slow >= 40) {
+        // Ignore the first couple of seconds: mobile GPUs hitch on the first
+        // draws, and that used to freeze the print into a still.
+        if (slow >= 40 && clock > 14) {
           stop();
           animate = false;
           draw();
@@ -553,10 +592,13 @@ const STATES = [
         if (running || !animate || !visible || document.hidden) return;
         running = true;
         last = 0;
+        slow = 0;
+        root.dataset.weatherLive = "1";
         raf = requestAnimationFrame(step);
       };
       const stop = () => {
         running = false;
+        root.dataset.weatherLive = "0";
         cancelAnimationFrame(raf);
       };
 
@@ -606,44 +648,63 @@ const STATES = [
 
       document.addEventListener("visibilitychange", () => (document.hidden ? stop() : start()));
 
-      motion.addEventListener("change", () => {
-        animate = !motion.matches && !weakDevice;
+      const applyAnimate = (next: boolean) => {
+        animate = next;
         if (animate) start();
         else {
           stop();
           draw();
         }
-      });
+      };
+
+      motion.addEventListener("change", () => applyAnimate(wantAnimate()));
 
       nav.getBattery?.().then((bat) => {
         const check = () => {
-          const drained = bat.level <= 0.2 && !bat.charging;
-          animate = !motion.matches && !weakDevice && !drained;
-          if (animate) start();
-          else {
-            stop();
-            draw();
-          }
+          drained = bat.level <= 0.2 && !bat.charging;
+          applyAnimate(wantAnimate());
         };
         bat.addEventListener("levelchange", check);
         bat.addEventListener("chargingchange", check);
         check();
       });
 
+      const trackPointer = (e: PointerEvent) => {
+        const b = root.getBoundingClientRect();
+        const h = Math.max(1, b.height);
+        const w = Math.max(1, b.width);
+        pointX = (e.clientX - b.left) / h;
+        pointY = (e.clientY - b.top) / h;
+        normX = ((e.clientX - b.left) / w - 0.5) * 2;
+        normY = ((e.clientY - b.top) / h - 0.5) * 2;
+      };
+
       root.addEventListener("pointermove", (e) => {
         if (!animate) return;
-        const b = root.getBoundingClientRect();
-        pointX = (e.clientX - b.left) / b.height;
-        pointY = (e.clientY - b.top) / b.height;
-        normX = ((e.clientX - b.left) / b.width - 0.5) * 2;
-        normY = ((e.clientY - b.top) / b.height - 0.5) * 2;
+        trackPointer(e);
         pointA = 1;
       });
-      root.addEventListener("pointerleave", () => (pointA = 0));
-      root.addEventListener("pointerdown", () => {
+      root.addEventListener("pointerdown", (e) => {
         if (!animate) return;
+        trackPointer(e);
+        pointA = 1;
         gust = Math.min(9, gust + 6);
         if (readSky(code).storm > 0) flashUntil = clock + 0.18;
+      });
+      root.addEventListener("pointerup", (e) => {
+        if (e.pointerType !== "mouse") pointA = 0;
+      });
+      root.addEventListener("pointercancel", () => {
+        pointA = 0;
+      });
+      root.addEventListener("pointerleave", () => {
+        pointA = 0;
+      });
+
+      canvas.addEventListener("webglcontextlost", () => {
+        stop();
+        animate = false;
+        canvas.remove();
       });
 
       const panel = root.querySelector<HTMLElement>("[data-weather-dev]");
