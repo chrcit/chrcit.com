@@ -8,4 +8,4 @@ icon: "./icons/drizzle.png"
 rank: 5
 ---
 
-Schema in TypeScript, queries that still look like SQL. Migrations stay in the repo.
+Schema and queries in TypeScript that still read like SQL.

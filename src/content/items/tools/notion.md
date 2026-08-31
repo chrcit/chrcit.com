@@ -2,10 +2,10 @@
 title: "Notion"
 category: "tool"
 group: "Productivity"
-meta: "Docs and notes."
+meta: "Wiki and project management tool."
 url: "https://www.notion.so"
 icon: "./icons/notion.png"
 rank: 9
 ---
 
-For pages I need to share with other people. Linear and the filesystem cover most of the rest.
+Good tool for non-coding project management and knowledge bases. A bit bloated.

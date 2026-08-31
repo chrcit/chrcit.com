@@ -2,10 +2,10 @@
 title: "Linear"
 category: "tool"
 group: "Productivity"
-meta: "Issue tracker."
+meta: "Best software project management tool ever made."
 url: "https://linear.app"
 icon: "./icons/linear.png"
 rank: 3
 ---
 
-Source of truth for work in progress. I keep projects small and issues short.
+Where my teams and I keep track of our coding work.

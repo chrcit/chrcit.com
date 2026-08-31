@@ -2,10 +2,10 @@
 title: "Timing"
 category: "tool"
 group: "Productivity"
-meta: "Automatic time tracking."
+meta: "Automatic time tracking based on rules."
 url: "https://timingapp.com"
 icon: "./icons/timing.png"
 rank: 10
 ---
 
-I look at it weekly. It's a record, not a target.
+Allows me to spend less than 1h a month on time tracking.

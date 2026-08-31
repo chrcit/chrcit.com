@@ -2,8 +2,8 @@
 title: "SQL"
 category: "tool"
 group: "Stack"
-meta: "Postgres, mostly."
+meta: "50 year old database query language."
 rank: 6
 ---
 
-I write it by hand when the ORM is in the way, and I read it when something is slow.
+Most of my work uses relational databases with SQL as a query language. MySQL, Postgres, SQLite.

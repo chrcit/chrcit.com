@@ -8,4 +8,4 @@ icon: "./icons/mailbrew.png"
 rank: 12
 ---
 
-I skim it once. If something matters, I open the source.
+Bundles the newsletters and feeds I follow into one mail instead of spreading them across my inbox.

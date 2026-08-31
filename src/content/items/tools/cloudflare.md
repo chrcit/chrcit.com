@@ -2,10 +2,10 @@
 title: "Cloudflare"
 category: "tool"
 group: "Stack"
-meta: "DNS, CDN, and Workers."
+meta: "Serverless cloud platform."
 url: "https://www.cloudflare.com"
 icon: "./icons/cloudflare.png"
 rank: 8
 ---
 
-This site is on Cloudflare, along with the rest of the DNS I have to keep working.
+Hosting for content sites and simpler web apps.

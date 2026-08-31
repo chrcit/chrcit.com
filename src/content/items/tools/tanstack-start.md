@@ -2,10 +2,10 @@
 title: "TanStack Start"
 category: "tool"
 group: "Stack"
-meta: "Full-stack React, without Next."
+meta: "Full-stack React framework."
 url: "https://tanstack.com/start"
 icon: "./icons/tanstack-start.png"
 rank: 4
 ---
 
-Server functions, routing, and the bits I used to assemble by hand.
+My current default for more complex full-stack web apps.

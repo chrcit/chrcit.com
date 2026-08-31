@@ -2,10 +2,10 @@
 title: "Railway"
 category: "tool"
 group: "Stack"
-meta: "App hosting."
+meta: "App and database hosting."
 url: "https://railway.app"
 icon: "./icons/railway.png"
 rank: 7
 ---
 
-For apps that need a server and a database. I deploy from git. Env vars live there.
+For things too complex for serverless and small enough not to need a hyper-scaler.

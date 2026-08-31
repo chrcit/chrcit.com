@@ -2,10 +2,10 @@
 title: "Figma"
 category: "tool"
 group: "Dev Tools"
-meta: "Layout and UI."
+meta: "Design and layout."
 url: "https://www.figma.com"
 icon: "./icons/figma.png"
 rank: 7
 ---
 
-I design enough to ship, then I build it. Files stay simple.
+Still my favourite design tool besides going direct to code.

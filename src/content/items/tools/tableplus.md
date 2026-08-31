@@ -2,10 +2,10 @@
 title: "TablePlus"
 category: "tool"
 group: "Dev Tools"
-meta: "Postgres GUI."
+meta: "Database management tool."
 url: "https://tableplus.com"
 icon: "./icons/tableplus.png"
 rank: 8
 ---
 
-Connections for local, staging, and production. Production is read-only unless I mean it.
+For browsing through tables and data.

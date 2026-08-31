@@ -2,10 +2,10 @@
 title: "TailwindCSS"
 category: "tool"
 group: "Stack"
-meta: "Utility CSS."
+meta: "Utility CSS framework."
 url: "https://tailwindcss.com"
 icon: "./icons/tailwindcss.png"
 rank: 9
 ---
 
-Classes in the markup, tokens in the theme. I don't maintain a large design system in CSS files.
+After adopting the utility CSS approach I can't go back to classic stylesheets.
