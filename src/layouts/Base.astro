@@ -16,6 +16,8 @@ const {
 const year = new Date().getFullYear();
 const canonical = new URL(Astro.url.pathname, Astro.site ?? "https://chrcit.com");
 const ogImage = new URL("/og-image.png", Astro.site ?? "https://chrcit.com");
+const ogImageSquare = new URL("/og-image-square.png", Astro.site ?? "https://chrcit.com");
+const ogAlt = "Dithered print of a clear sunny sky with a red sun. chrcit.com";
 ---
 
 <!doctype html>
@@ -50,10 +52,20 @@ const ogImage = new URL("/og-image.png", Astro.site ?? "https://chrcit.com");
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical.href} />
     <meta property="og:image" content={ogImage.href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content={ogAlt} />
+    <meta property="og:image" content={ogImageSquare.href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="1200" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content={ogAlt} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage.href} />
+    <meta name="twitter:image:alt" content={ogAlt} />
   </head>
   <body>
     <div class="wrap">
