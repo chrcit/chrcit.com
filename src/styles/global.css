@@ -578,9 +578,9 @@ body::after {
   height: 28px;
   display: block;
 }
-/* Invert on press everywhere; hover only on fine pointers. Touch browsers
-   latch :hover after a tap, and the close control is pinned over the first
-   row, so Arthouse stayed inverted after any open/close. */
+/* Invert on press. Hover only on fine pointers, and only after the pointer
+   has moved since the last press — the close control is pinned over the
+   first row, so leftover :hover/:focus would otherwise stick on Arthouse. */
 .role-summary:active {
   background: var(--ink);
   color: var(--paper);
@@ -594,14 +594,14 @@ body::after {
   color: var(--paper);
 }
 @media (hover: hover) and (pointer: fine) {
-  .role-summary:hover {
+  .roles:not(.is-hover-locked) .role-summary:hover {
     background: var(--ink);
     color: var(--paper);
   }
-  .role-summary:hover .r-plus {
+  .roles:not(.is-hover-locked) .role-summary:hover .r-plus {
     color: var(--paper);
   }
-  .role-summary:hover .r-mark {
+  .roles:not(.is-hover-locked) .role-summary:hover .r-mark {
     border-color: var(--paper);
     background: var(--ink);
     color: var(--paper);
