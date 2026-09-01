@@ -171,6 +171,12 @@ for (const file of htmlFiles) {
     nonemptyMeta(html, "property", "og:image", "og:image meta", display, { allowMultiple: true });
     const h1s = tags(html, "h1");
     if (h1s.length !== 1) errors.push(`${display}: expected exactly one h1, found ${h1s.length}`);
+
+    const plausible = tags(html, "script").some((tag) => {
+      const attrs = attributes(tag);
+      return attrs.get("src") === "/js/script.js" && attrs.get("data-domain") === "chrcit.com";
+    });
+    if (!plausible) errors.push(`${display}: missing Plausible script`);
   }
   await checkInternalLinks(file, html);
 }

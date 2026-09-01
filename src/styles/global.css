@@ -551,6 +551,7 @@ body::after {
   column-gap: 12px;
   padding: 12px var(--tile-pad);
   margin: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 .r-brand {
   display: flex;
@@ -577,17 +578,34 @@ body::after {
   height: 28px;
   display: block;
 }
-.role-summary:hover {
+/* Invert on press everywhere; hover only on fine pointers. Touch browsers
+   latch :hover after a tap, and the close control is pinned over the first
+   row, so Arthouse stayed inverted after any open/close. */
+.role-summary:active {
   background: var(--ink);
   color: var(--paper);
 }
-.role-summary:hover .r-plus {
+.role-summary:active .r-plus {
   color: var(--paper);
 }
-.role-summary:hover .r-mark {
+.role-summary:active .r-mark {
   border-color: var(--paper);
   background: var(--ink);
   color: var(--paper);
+}
+@media (hover: hover) and (pointer: fine) {
+  .role-summary:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .role-summary:hover .r-plus {
+    color: var(--paper);
+  }
+  .role-summary:hover .r-mark {
+    border-color: var(--paper);
+    background: var(--ink);
+    color: var(--paper);
+  }
 }
 .r-title {
   font-size: 1.08rem;
@@ -1046,6 +1064,11 @@ footer a:hover {
 .page.book-page,
 .page.tool-page {
   gap: var(--gap);
+}
+.tile-text .text-measure {
+  max-width: calc(68ch + 2 * var(--tile-pad));
+  width: 100%;
+  margin-inline: auto;
 }
 .page-title {
   font-size: clamp(2.2rem, 1.45rem + 2.4vw, 2.7rem);
