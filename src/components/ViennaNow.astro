@@ -14,12 +14,7 @@
   (() => {
     const root = document.querySelector("[data-vienna-now]");
     if (!root) return;
-
     const timeEl = root.querySelector("[data-vienna-time]");
-    const wxEl = root.querySelector("[data-vienna-wx]");
-    const iconEl = root.querySelector("[data-vienna-icon]");
-    const tempEl = root.querySelector("[data-vienna-temp]");
-
     const tz = "Europe/Vienna";
     const timeFmt = new Intl.DateTimeFormat("en-GB", {
       timeZone: tz,
@@ -27,17 +22,26 @@
       minute: "2-digit",
       hour12: false,
     });
-
     const tick = () => {
       const now = new Date();
-      const label = timeFmt.format(now);
       if (timeEl) {
         timeEl.dateTime = now.toISOString();
-        timeEl.textContent = label;
+        timeEl.textContent = timeFmt.format(now);
       }
     };
     tick();
     setInterval(tick, 1000 * 15);
+  })();
+</script>
+
+<script>
+  import { pickViennaWx, VIENNA_WX_KEY } from "../utils/weather";
+
+  const root = document.querySelector("[data-vienna-now]");
+  if (root) {
+    const wxEl = root.querySelector<HTMLElement>("[data-vienna-wx]");
+    const iconEl = root.querySelector<HTMLElement>("[data-vienna-icon]");
+    const tempEl = root.querySelector<HTMLElement>("[data-vienna-temp]");
 
     const ICONS = {
       clear:
@@ -53,7 +57,7 @@
         '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="miter"><path d="M4.4 8.2h6.8A2 2 0 0 0 11.4 4.2 3 3 0 0 0 5.8 3.4 2.2 2.2 0 0 0 4.4 8.2z"/><path d="M8.6 8.4L6.6 12h2.2l-1.6 3"/></svg>',
     };
 
-    const iconFor = (code) => {
+    const iconFor = (code: number) => {
       if (code === 0 || code === 1) return ICONS.clear;
       if (code === 2) return ICONS.cloud;
       if (code === 3) return ICONS.overcast;
@@ -66,73 +70,66 @@
 
     const viennaHour = () => {
       const parts = new Intl.DateTimeFormat("en-GB", {
-        timeZone: tz,
+        timeZone: "Europe/Vienna",
         hour: "2-digit",
         hour12: false,
       }).formatToParts(new Date());
       return Number(parts.find((p) => p.type === "hour")?.value ?? "12");
     };
 
-    const emit = (payload) => {
+    const emit = (wx: { temp: number; code: number; todayCode: number; tempMax: number }) => {
       window.dispatchEvent(
         new CustomEvent("vienna:now", {
           detail: {
-            code: typeof payload.code === "number" ? payload.code : null,
+            code: wx.code,
+            todayCode: wx.todayCode,
             hour: viennaHour(),
-            temp: typeof payload.temp === "number" ? payload.temp : null,
-            tempMax: typeof payload.tempMax === "number" ? payload.tempMax : null,
+            temp: wx.temp,
+            tempMax: wx.tempMax,
           },
         }),
       );
     };
 
-    const applyWx = (temp, code, tempMax) => {
+    const applyWx = (wx: { temp: number; code: number; todayCode: number; tempMax: number }) => {
       if (!wxEl || !iconEl || !tempEl) return;
-      const rounded = Math.round(temp);
-      iconEl.innerHTML = iconFor(code);
+      const rounded = Math.round(wx.temp);
+      iconEl.innerHTML = iconFor(wx.code);
       tempEl.textContent = `${rounded}°`;
       wxEl.hidden = false;
       wxEl.setAttribute("title", `Vienna ${rounded}°C`);
-      emit({ temp, code, tempMax });
+      emit(wx);
     };
 
-    const KEY = "chrcit-vienna-wx-2";
     const TTL = 20 * 60 * 1000;
     try {
-      const cached = JSON.parse(sessionStorage.getItem(KEY) || "null");
-      if (cached && Date.now() - cached.at < TTL) applyWx(cached.temp, cached.code, cached.tempMax);
-    } catch (_) {}
+      const cached = JSON.parse(sessionStorage.getItem(VIENNA_WX_KEY) || "null");
+      if (cached && Date.now() - cached.at < TTL && typeof cached.temp === "number") {
+        applyWx({
+          temp: cached.temp,
+          code: cached.code,
+          todayCode: typeof cached.todayCode === "number" ? cached.todayCode : cached.code,
+          tempMax: cached.tempMax,
+        });
+      }
+    } catch {
+      /* ignore */
+    }
 
     const url =
-      "https://api.open-meteo.com/v1/forecast?latitude=48.2082&longitude=16.3738&current=temperature_2m,weather_code&daily=temperature_2m_max,weather_code&timezone=Europe%2FVienna&forecast_days=1";
+      "https://api.open-meteo.com/v1/forecast?latitude=48.2082&longitude=16.3738&current=temperature_2m,weather_code&hourly=weather_code,precipitation,is_day&daily=temperature_2m_max&timezone=Europe%2FVienna&forecast_days=1";
     fetch(url, { referrerPolicy: "no-referrer" })
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((data) => {
-        const temp = data && data.current && data.current.temperature_2m;
-        const currentCode = data && data.current && data.current.weather_code;
-        const dailyCode =
-          data && data.daily && Array.isArray(data.daily.weather_code)
-            ? data.daily.weather_code[0]
-            : currentCode;
-        const tempMax =
-          data && data.daily && Array.isArray(data.daily.temperature_2m_max)
-            ? data.daily.temperature_2m_max[0]
-            : temp;
-        const code = typeof dailyCode === "number" ? dailyCode : currentCode;
-        if (typeof temp !== "number" || typeof code !== "number") return;
-        applyWx(temp, code, typeof tempMax === "number" ? tempMax : temp);
+        const wx = pickViennaWx(data);
+        if (!wx) return;
+        applyWx(wx);
         try {
-          sessionStorage.setItem(
-            KEY,
-            JSON.stringify({
-              at: Date.now(),
-              temp,
-              code,
-              tempMax: typeof tempMax === "number" ? tempMax : temp,
-            }),
-          );
-        } catch (_) {}
+          sessionStorage.setItem(VIENNA_WX_KEY, JSON.stringify({ at: Date.now(), ...wx }));
+        } catch {
+          /* ignore */
+        }
       })
       .catch(() => {});
-  })();
+  }
 </script>
