@@ -8,11 +8,12 @@ const pageDescription = frontmatter.description ?? `${pageTitle} - chrcit.com`;
 
 <Base title={`${pageTitle} | chrcit.com`} description={pageDescription}>
   <main class="page">
-    <section class="tile">
-      <div class="tile-label"><span></span><span class="num">chrcit.com</span></div>
-      <h1 class="page-title">{frontmatter.title}</h1>
-      <div class="prose">
-        <slot />
+    <section class="tile tile-text">
+      <div class="text-measure">
+        <h1 class="page-title">{frontmatter.title}</h1>
+        <div class="prose">
+          <slot />
+        </div>
       </div>
     </section>
   </main>

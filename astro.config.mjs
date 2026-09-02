@@ -7,6 +7,20 @@ import react from "@astrojs/react";
 export default defineConfig({
   site: "https://chrcit.com",
   integrations: [mdx(), sitemap(), react()],
+  vite: {
+    server: {
+      proxy: {
+        "/js/script.js": {
+          target: "https://plausible.io",
+          changeOrigin: true,
+        },
+        "/api/event": {
+          target: "https://plausible.io",
+          changeOrigin: true,
+        },
+      },
+    },
+  },
   redirects: {
     "/articles": "/",
     "/writing": "/",

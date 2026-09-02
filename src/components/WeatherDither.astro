@@ -44,6 +44,8 @@ const STATES = [
 </section>
 
 <script>
+  import { VIENNA_WX_KEY } from "../utils/weather";
+
   type Sky = {
     label: string;
     haze: number;
@@ -401,17 +403,25 @@ const STATES = [
         );
       };
       try {
-        const cached = JSON.parse(sessionStorage.getItem("chrcit-vienna-wx-2") || "null");
+        const cached = JSON.parse(sessionStorage.getItem(VIENNA_WX_KEY) || "null");
         if (cached && typeof cached.code === "number") {
-          paintCopy(cached.code, typeof cached.tempMax === "number" ? cached.tempMax : null);
+          const headline =
+            typeof cached.todayCode === "number" ? cached.todayCode : cached.code;
+          paintCopy(headline, typeof cached.tempMax === "number" ? cached.tempMax : null);
         }
       } catch {
         /* ignore */
       }
       window.addEventListener("vienna:now", ((e: CustomEvent) => {
-        if (typeof e.detail?.code !== "number") return;
+        const headline =
+          typeof e.detail?.todayCode === "number"
+            ? e.detail.todayCode
+            : typeof e.detail?.code === "number"
+              ? e.detail.code
+              : null;
+        if (headline == null) return;
         paintCopy(
-          e.detail.code,
+          headline,
           typeof e.detail?.tempMax === "number" ? e.detail.tempMax : null,
         );
       }) as EventListener);
@@ -481,10 +491,15 @@ const STATES = [
         !motion.matches && nav.connection?.saveData !== true && !drained;
 
       let code: number | null = null;
+      let todayCode: number | null = null;
       let hour = viennaHour();
       let tempMax: number | null = null;
       let override: { code?: number; night?: boolean } | null = null;
-      const live = { code: null as number | null, tempMax: null as number | null };
+      const live = {
+        code: null as number | null,
+        todayCode: null as number | null,
+        tempMax: null as number | null,
+      };
 
       let clock = 12;
       let drift = 12;
@@ -509,10 +524,13 @@ const STATES = [
       let slow = 0;
       let animate = wantAnimate();
 
+      const headlineCode = () => (override ? code : (todayCode ?? code));
+
       const sentence = () => {
-        if (tempMax == null) return `The weather today in Vienna is ${readSky(code).label}.`;
+        const s = readSky(headlineCode());
+        if (tempMax == null) return `The weather today in Vienna is ${s.label}.`;
         const peak = Math.round(tempMax);
-        return `The weather today in Vienna is ${readSky(code).label} with temperatures peaking at ${peak}° Celsius.`;
+        return `The weather today in Vienna is ${s.label} with temperatures peaking at ${peak}° Celsius.`;
       };
 
       // Fine print. Heat used to coarsen this; keep the cell tight.
@@ -604,7 +622,7 @@ const STATES = [
 
       const render = () => {
         if (copy) copy.textContent = sentence();
-        const s = readSky(code);
+        const s = readSky(headlineCode());
         row.setAttribute(
           "aria-label",
           `The weather today in Vienna is ${s.label}${tempMax != null ? `, peaking at ${Math.round(tempMax)}° Celsius` : ""}`,
@@ -613,9 +631,11 @@ const STATES = [
       };
 
       try {
-        const cached = JSON.parse(sessionStorage.getItem("chrcit-vienna-wx-2") || "null");
+        const cached = JSON.parse(sessionStorage.getItem(VIENNA_WX_KEY) || "null");
         if (cached) {
           if (typeof cached.code === "number") code = live.code = cached.code;
+          if (typeof cached.todayCode === "number") todayCode = live.todayCode = cached.todayCode;
+          else todayCode = live.todayCode = live.code;
           if (typeof cached.tempMax === "number") tempMax = live.tempMax = cached.tempMax;
         }
       } catch {
@@ -627,9 +647,12 @@ const STATES = [
 
       window.addEventListener("vienna:now", ((e: CustomEvent) => {
         if (typeof e.detail?.code === "number") live.code = e.detail.code;
+        if (typeof e.detail?.todayCode === "number") live.todayCode = e.detail.todayCode;
+        else if (typeof e.detail?.code === "number") live.todayCode = e.detail.code;
         if (typeof e.detail?.tempMax === "number") live.tempMax = e.detail.tempMax;
         if (override) return;
         code = live.code;
+        todayCode = live.todayCode;
         tempMax = live.tempMax;
         hour = typeof e.detail?.hour === "number" ? e.detail.hour : viennaHour();
         render();
@@ -761,6 +784,7 @@ const STATES = [
           mark(null);
           panel.querySelector("[data-wx-night]")?.classList.remove("is-on");
           code = live.code;
+          todayCode = live.todayCode;
           tempMax = live.tempMax;
           hour = viennaHour();
           render();

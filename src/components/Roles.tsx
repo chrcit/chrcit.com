@@ -55,11 +55,13 @@ function Summary({
   isOpen,
   disabled = false,
   onToggle,
+  onLockHover,
 }: {
   role: Role;
   isOpen: boolean;
   disabled?: boolean;
   onToggle: (id: string) => void;
+  onLockHover: (origin: { x: number; y: number }) => void;
 }) {
   return (
     <button
@@ -68,7 +70,11 @@ function Summary({
       aria-expanded={isOpen}
       aria-controls={`role-panel-${role.id}`}
       disabled={disabled}
-      onClick={() => onToggle(role.id)}
+      onPointerDown={(e) => onLockHover({ x: e.clientX, y: e.clientY })}
+      onClick={(e) => {
+        onToggle(role.id);
+        if (e.detail !== 0) e.currentTarget.blur();
+      }}
     >
       <span className="r-brand">
         {role.favicon && (
@@ -102,15 +108,41 @@ function Summary({
 
 export default function Roles() {
   const wrapRef = useRef<HTMLDivElement>(null);
+  const hoverLockOrigin = useRef<{ x: number; y: number } | null>(null);
   const [open, setOpen] = useState<string | null>(null);
+  const [hoverLocked, setHoverLocked] = useState(false);
   const [rowH, setRowH] = useState(0);
   const [fromY, setFromY] = useState(0);
   const reduce = useReducedMotion();
 
+  const lockHover = (origin?: { x: number; y: number } | null) => {
+    hoverLockOrigin.current = origin ?? null;
+    setHoverLocked(true);
+  };
+
+  useEffect(() => {
+    if (!hoverLocked) return;
+    const onMove = (e: PointerEvent) => {
+      const origin = hoverLockOrigin.current;
+      if (origin) {
+        const dx = e.clientX - origin.x;
+        const dy = e.clientY - origin.y;
+        if (dx * dx + dy * dy < 16) return;
+      }
+      hoverLockOrigin.current = null;
+      setHoverLocked(false);
+    };
+    window.addEventListener("pointermove", onMove);
+    return () => window.removeEventListener("pointermove", onMove);
+  }, [hoverLocked]);
+
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpen(null);
+      if (e.key === "Escape") {
+        lockHover();
+        setOpen(null);
+      }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
@@ -137,7 +169,7 @@ export default function Roles() {
   return (
     <div
       ref={wrapRef}
-      className={`roles${open ? " is-open" : ""}`}
+      className={`roles${open ? " is-open" : ""}${hoverLocked ? " is-hover-locked" : ""}`}
       style={
         {
           ...(rowH ? { "--row-h": `${rowH}px` } : {}),
@@ -154,13 +186,19 @@ export default function Roles() {
           inert={open ? true : undefined}
           style={open === role.id ? { visibility: "hidden" } : undefined}
         >
-          <Summary role={role} isOpen={false} disabled={Boolean(open)} onToggle={toggle} />
+          <Summary
+            role={role}
+            isOpen={false}
+            disabled={Boolean(open)}
+            onToggle={toggle}
+            onLockHover={lockHover}
+          />
         </div>
       ))}
 
       {active && (
         <div className="role role-pin is-open">
-          <Summary role={active} isOpen onToggle={toggle} />
+          <Summary role={active} isOpen onToggle={toggle} onLockHover={lockHover} />
         </div>
       )}
 
