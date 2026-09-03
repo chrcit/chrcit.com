@@ -1,61 +1,40 @@
 ---
-import { getCollection } from "astro:content";
-import { getImage } from "astro:assets";
+export const prerender = false;
+
+import { env } from "cloudflare:workers";
 import Base from "../layouts/Base.astro";
 import Roles from "../components/Roles.tsx";
 import SampleList, { type SampleItem } from "../components/SampleList.tsx";
 import WeatherDither from "../components/WeatherDither.astro";
+import { loadHomeItems } from "../utils/home-items";
+import {
+  BOOK_SAMPLE_SIZE,
+  HOME_CACHE_CONTROL,
+  TOOL_SAMPLE_SIZE,
+  pickItems,
+} from "../utils/home-sample";
 
-const items = await getCollection("items");
-
-const sample = <T,>(arr: T[], n: number) =>
-  [...arr].sort(() => Math.random() - 0.5).slice(0, n);
-
-const groupLabel: Record<string, string> = {
-  Gear: "Gear",
-  Stack: "Tech Stack",
-  "Dev Tools": "Dev Tools",
-  Productivity: "Productivity",
+const readCatalog = async (): Promise<{ books: SampleItem[]; tools: SampleItem[] }> => {
+  const url = new URL("/home-items.json", Astro.url);
+  const res = env.ASSETS ? await env.ASSETS.fetch(url) : await fetch(url);
+  if (!res.ok) throw new Error(`home catalog ${res.status}`);
+  return res.json();
 };
 
-const booksAll: SampleItem[] = await Promise.all(
-  items
-    .filter((i) => i.data.category === "book")
-    .map(async (i) => {
-      const img = i.data.cover
-        ? await getImage({ src: i.data.cover, width: 240, height: 360 })
-        : null;
-      return {
-        id: i.id,
-        title: i.data.title,
-        meta: [i.data.author, i.data.year].filter(Boolean).join(", "),
-        url: `/${i.id}`,
-        image: img?.src ?? null,
-        kind: "book" as const,
-      };
-    }),
-);
+let booksAll: SampleItem[];
+let toolsAll: SampleItem[];
+try {
+  const catalog = await readCatalog();
+  booksAll = catalog.books;
+  toolsAll = catalog.tools;
+} catch {
+  ({ books: booksAll, tools: toolsAll } = await loadHomeItems(false));
+}
 
-const toolsAll: SampleItem[] = await Promise.all(
-  items
-    .filter((i) => i.data.category === "tool")
-    .map(async (i) => {
-      const img = i.data.icon
-        ? await getImage({ src: i.data.icon, width: 160, height: 160 })
-        : null;
-      return {
-        id: i.id,
-        title: i.data.title,
-        meta: i.data.group ? (groupLabel[i.data.group] ?? i.data.group) : undefined,
-        url: `/uses/${i.id.replace(/^tools\//, "")}`,
-        image: img?.src ?? null,
-        kind: "tool" as const,
-      };
-    }),
-);
+const bookSample = pickItems(booksAll, BOOK_SAMPLE_SIZE);
+const toolSample = pickItems(toolsAll, TOOL_SAMPLE_SIZE);
 
-const bookSample = sample(booksAll, 6);
-const toolSample = sample(toolsAll, 8);
+Astro.response.headers.set("Cache-Control", HOME_CACHE_CONTROL);
 ---
 
 <Base>
