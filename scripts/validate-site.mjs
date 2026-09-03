@@ -5,9 +5,11 @@ import { dirname, extname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const dist = resolve(root, "dist");
+const dist = resolve(root, "dist/client");
 const origin = "https://chrcit.com";
 const errors = [];
+// On-demand routes are not written to dist. Treat them as valid link targets.
+const ssrRoutes = new Set(["/"]);
 
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 const decodeHtml = (value) =>
@@ -110,6 +112,7 @@ const checkInternalLinks = async (file, html) => {
       continue;
     }
     if (url.origin !== origin) continue;
+    if (ssrRoutes.has(url.pathname) || ssrRoutes.has(url.pathname.replace(/\/+$/, "") || "/")) continue;
     let pathname;
     try {
       pathname = decodeURIComponent(url.pathname);
@@ -138,7 +141,7 @@ for (const file of htmlFiles) {
   const display = relative(root, file);
   const html = await readFile(file, "utf8");
   const isRedirect = /<meta\b[^>]*http-equiv\s*=\s*["']?refresh\b/i.test(html);
-  const isNotFound = display === "dist/404.html";
+  const isNotFound = display === "dist/client/404.html";
 
   // Astro emits redirect documents without the normal page shell. They are intentionally
   // excluded from document metadata/H1 checks, but their links still get resolved below.
@@ -185,13 +188,13 @@ const notFound = join(dist, "404.html");
 if (await hasFile(notFound)) {
   const robots = metaTags(await readFile(notFound, "utf8"), "name", "robots");
   if (robots.length !== 1 || !/\bnoindex\b/i.test(attributes(robots[0]).get("content") ?? "")) {
-    errors.push("dist/404.html: expected a robots meta tag containing noindex");
+    errors.push("dist/client/404.html: expected a robots meta tag containing noindex");
   }
-} else errors.push("dist/404.html: missing built 404 page");
+} else errors.push("dist/client/404.html: missing built 404 page");
 
 const robotsPath = join(dist, "robots.txt");
-if (!(await hasFile(robotsPath))) errors.push("dist/robots.txt: missing");
-else if (!(await readFile(robotsPath, "utf8")).trim()) errors.push("dist/robots.txt: empty");
+if (!(await hasFile(robotsPath))) errors.push("dist/client/robots.txt: missing");
+else if (!(await readFile(robotsPath, "utf8")).trim()) errors.push("dist/client/robots.txt: empty");
 
 let sitemap;
 for (const name of ["sitemap.xml", "sitemap-index.xml"]) {
@@ -201,7 +204,7 @@ for (const name of ["sitemap.xml", "sitemap-index.xml"]) {
     break;
   }
 }
-if (!sitemap) errors.push("dist: missing sitemap.xml or sitemap-index.xml");
+if (!sitemap) errors.push("dist/client: missing sitemap.xml or sitemap-index.xml");
 else if (!(await readFile(sitemap, "utf8")).trim()) errors.push(`${relative(root, sitemap)}: empty`);
 
 if (errors.length) {

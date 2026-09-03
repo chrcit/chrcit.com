@@ -9,11 +9,11 @@ interactions are locked (see `docs/redesign/03-essence-and-vibe.md`).
 ```bash
 pnpm install
 pnpm dev      # develop
-pnpm build    # static build to dist/
-pnpm preview  # serve the build
+pnpm build    # client assets to dist/client, worker to dist/server
+pnpm preview  # serve the build in workerd
 ```
 
-Cloudflare Workers: build `pnpm build`, then `npx wrangler versions upload`. Config is `wrangler.jsonc` (assets from `./dist`).
+Cloudflare Workers: build `pnpm build`, then `npx wrangler versions upload`. Config is `wrangler.jsonc` (assets from `./dist/client`). The homepage is server-rendered; other pages stay static.
 
 ## Content
 
@@ -31,6 +31,6 @@ import Item from "../../components/Item.astro";
 <Item ref="tools/raycast" variant="row" />
 ```
 
-The homepage Books/Tools tiles are build-time random samples (re-rolled per
-build). To pin a pick instead, replace the `sample()` call in
-`src/pages/index.astro` with authored `getEntry` lookups.
+The homepage Books/Tools tiles are a random sample. The HTML is cached at the
+edge for five minutes, so visitors hitting the same colo see the same pick until
+it expires. Shuffle still picks a new set in the browser for that visitor only.
