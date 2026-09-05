@@ -19,6 +19,7 @@ export default defineConfig({
         "/js/script.js": {
           target: "https://plausible.io",
           changeOrigin: true,
+          rewrite: () => "/js/script.outbound-links.js",
         },
         "/api/event": {
           target: "https://plausible.io",

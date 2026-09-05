@@ -28,7 +28,7 @@ export default {
     const url = new URL(request.url);
 
     if (url.pathname === SCRIPT && request.method === "GET") {
-      const res = await fetch("https://plausible.io/js/script.js");
+      const res = await fetch("https://plausible.io/js/script.outbound-links.js");
       const headers = new Headers(res.headers);
       headers.set("Cache-Control", "public, max-age=86400");
       headers.delete("set-cookie");
