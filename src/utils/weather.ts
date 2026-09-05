@@ -3,6 +3,11 @@
 // Headline the remaining daytime instead; the icon/dither use current sky.
 
 export const VIENNA_WX_KEY = "chrcit-vienna-wx-3";
+export const VIENNA_WX_PATH = "/api/weather";
+export const WEATHER_CACHE_TTL = 15 * 60;
+export const WEATHER_CACHE_CONTROL = `public, max-age=${WEATHER_CACHE_TTL}, s-maxage=${WEATHER_CACHE_TTL}`;
+export const OPEN_METEO_FORECAST_URL =
+  "https://api.open-meteo.com/v1/forecast?latitude=48.2082&longitude=16.3738&current=temperature_2m,weather_code&hourly=weather_code,precipitation,is_day&daily=temperature_2m_max&timezone=Europe%2FVienna&forecast_days=1";
 
 export type OpenMeteoForecast = {
   current?: {

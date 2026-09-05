@@ -15,7 +15,7 @@ As a visitor to this site:
 - nothing is sold or used for advertising
 - no information about personal and behavioral trends is collected and analyzed
 - the Vienna clock runs in your browser only
-- current weather for Vienna is requested from Open-Meteo in your browser (see below)
+- current weather for Vienna is requested from this site, which caches a forecast from Open-Meteo (see below)
 
 ## Complete privacy policy
 
@@ -54,7 +54,7 @@ This data collection is initially for technical reasons so that our website can 
 
 #### Vienna weather
 
-The top of the site shows the current time in Vienna (computed in your browser, no network) and the current temperature. The temperature is requested directly from Open-Meteo (`api.open-meteo.com`) by your browser. We do not store that request. Open-Meteo may see your IP address as part of serving the forecast. No cookies are set by this site for weather. Details: [Open-Meteo](https://open-meteo.com/).
+The top of the site shows the current time in Vienna (computed in your browser, no network) and the current temperature. The temperature is requested from this site (`/api/weather`). The server fetches a Vienna forecast from Open-Meteo and caches it for 15 minutes, so your browser does not contact Open-Meteo and a traffic spike does not multiply into thousands of forecast calls. We do not store that request beyond the short-lived cache. No cookies are set by this site for weather. Details: [Open-Meteo](https://open-meteo.com/).
 
 #### Website statistics
 

@@ -1,5 +1,5 @@
 ---
-// Clock is local (Europe/Vienna). Weather is fetched in the browser from Open-Meteo.
+// Clock is local (Europe/Vienna). Weather comes from /api/weather (Open-Meteo, edge-cached).
 ---
 
 <span class="vienna-now" data-vienna-now>
@@ -35,7 +35,7 @@
 </script>
 
 <script>
-  import { pickViennaWx, VIENNA_WX_KEY } from "../utils/weather";
+  import { pickViennaWx, VIENNA_WX_KEY, VIENNA_WX_PATH, WEATHER_CACHE_TTL } from "../utils/weather";
 
   const root = document.querySelector("[data-vienna-now]");
   if (root) {
@@ -101,7 +101,7 @@
       emit(wx);
     };
 
-    const TTL = 20 * 60 * 1000;
+    const TTL = WEATHER_CACHE_TTL * 1000;
     try {
       const cached = JSON.parse(sessionStorage.getItem(VIENNA_WX_KEY) || "null");
       if (cached && Date.now() - cached.at < TTL && typeof cached.temp === "number") {
@@ -116,9 +116,7 @@
       /* ignore */
     }
 
-    const url =
-      "https://api.open-meteo.com/v1/forecast?latitude=48.2082&longitude=16.3738&current=temperature_2m,weather_code&hourly=weather_code,precipitation,is_day&daily=temperature_2m_max&timezone=Europe%2FVienna&forecast_days=1";
-    fetch(url, { referrerPolicy: "no-referrer" })
+    fetch(VIENNA_WX_PATH, { referrerPolicy: "no-referrer" })
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((data) => {
         const wx = pickViennaWx(data);

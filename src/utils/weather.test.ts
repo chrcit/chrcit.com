@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
-import { pickViennaWx, type OpenMeteoForecast } from "./weather.ts";
+import {
+  OPEN_METEO_FORECAST_URL,
+  WEATHER_CACHE_TTL,
+  pickViennaWx,
+  type OpenMeteoForecast,
+} from "./weather.ts";
 
 // 2026-09-01 Vienna, ~10:30. A thunderstorm at midnight made Open-Meteo's
 // daily.weather_code = 95, while the rest of the day is dry and mainly clear.
@@ -112,4 +117,16 @@ test("without hourly data, current sky wins over a missing daily code", () => {
 
 test("rejects a payload with no current observation", () => {
   assert.equal(pickViennaWx({ daily: { temperature_2m_max: [27] } }), null);
+});
+
+test("the forecast URL pins Vienna and asks for headline fields", () => {
+  const url = new URL(OPEN_METEO_FORECAST_URL);
+  assert.equal(url.hostname, "api.open-meteo.com");
+  assert.equal(url.searchParams.get("latitude"), "48.2082");
+  assert.equal(url.searchParams.get("longitude"), "16.3738");
+  assert.equal(url.searchParams.get("timezone"), "Europe/Vienna");
+  assert.equal(url.searchParams.get("forecast_days"), "1");
+  assert.match(url.searchParams.get("current") ?? "", /temperature_2m/);
+  assert.match(url.searchParams.get("hourly") ?? "", /weather_code/);
+  assert.equal(WEATHER_CACHE_TTL, 15 * 60);
 });
