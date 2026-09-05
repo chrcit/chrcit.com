@@ -1069,6 +1069,7 @@ footer a:hover {
   max-width: calc(68ch + 2 * var(--tile-pad));
   width: 100%;
   margin-inline: auto;
+  padding: 0 var(--tile-pad) 32px;
 }
 .page-title {
   font-size: clamp(2.2rem, 1.45rem + 2.4vw, 2.7rem);
@@ -1076,6 +1077,23 @@ footer a:hover {
   letter-spacing: -0.03em;
   line-height: 1.1;
   padding: 22px var(--tile-pad);
+}
+.tile-text .page-title {
+  padding: 24px 0 16px;
+}
+.tile-text .prose > h2:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+@media (min-width: 900px) {
+  .tile-text .text-measure {
+    max-width: calc(68ch + 64px);
+    padding: 0 32px 44px;
+  }
+  .tile-text .page-title {
+    padding: 36px 0 20px;
+  }
 }
 .tile-label + .page-title {
   padding-top: 4px;
