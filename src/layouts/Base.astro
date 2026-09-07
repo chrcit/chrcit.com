@@ -14,7 +14,11 @@ interface Props {
   ogType?: "website" | "article";
   /** Primary social image. The landscape site image is used when omitted. */
   ogImage?: string | URL;
-  /** Optional secondary image for clients that prefer a square preview. */
+  /**
+   * Optional extra Open Graph image. Do not set this for Twitter cards:
+   * X reads the last `og:image` when it falls back from `twitter:image`, and a
+   * square asset with `summary_large_image` gets cropped.
+   */
   ogImageSquare?: string | URL | null;
   ogImageAlt?: string;
   ogImageWidth?: number;
@@ -32,7 +36,7 @@ const {
   noindex = false,
   ogType = "website",
   ogImage = "/og-image.png",
-  ogImageSquare = "/og-image-square.png",
+  ogImageSquare = null,
   ogImageAlt = "Dithered print of a clear sunny sky with a red sun. chrcit.com",
   ogImageWidth = 1200,
   ogImageHeight = 630,
