@@ -171,7 +171,24 @@ for (const file of htmlFiles) {
       const key = attribute === "rel" ? "href" : "content";
       if (!(attributes(matches[0]).get(key) ?? "").trim()) errors.push(`${display}: ${label} is empty`);
     }
-    nonemptyMeta(html, "property", "og:image", "og:image meta", display, { allowMultiple: true });
+    nonemptyMeta(html, "property", "og:image", "og:image meta", display);
+    nonemptyMeta(html, "name", "twitter:card", "twitter:card meta", display);
+    nonemptyMeta(html, "name", "twitter:image", "twitter:image meta", display);
+    const twitterCard = attributes(metaTags(html, "name", "twitter:card")[0] ?? "").get("content") ?? "";
+    if (twitterCard && twitterCard !== "summary_large_image") {
+      errors.push(`${display}: twitter:card should be summary_large_image, found ${JSON.stringify(twitterCard)}`);
+    }
+    const ogImages = metaTags(html, "property", "og:image").map((tag) => attributes(tag).get("content") ?? "");
+    const twitterImage = attributes(metaTags(html, "name", "twitter:image")[0] ?? "").get("content") ?? "";
+    if (twitterImage && !/^https:\/\//i.test(twitterImage)) {
+      errors.push(`${display}: twitter:image must be an absolute https URL`);
+    }
+    if (twitterImage.includes("og-image-square")) {
+      errors.push(`${display}: twitter:image points at the square asset; summary_large_image needs the landscape image`);
+    }
+    if (ogImages.length === 1 && twitterImage && ogImages[0] !== twitterImage) {
+      errors.push(`${display}: twitter:image should match og:image so X and Open Graph stay in sync`);
+    }
     const h1s = tags(html, "h1");
     if (h1s.length !== 1) errors.push(`${display}: expected exactly one h1, found ${h1s.length}`);
 
