@@ -9,6 +9,7 @@ export default defineConfig({
   integrations: [mdx(), sitemap(), react()],
   vite: {
     server: {
+      allowedHosts: ["eternity.tail5d0ee5.ts.net"],
       proxy: {
         "/js/script.js": {
           target: "https://plausible.io",
