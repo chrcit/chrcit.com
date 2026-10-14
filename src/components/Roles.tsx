@@ -19,6 +19,13 @@ const ROLES: Role[] = [
     links: [{ href: "https://madebyarthouse.com", label: "madebyarthouse.com →", external: true }],
   },
   {
+    id: "planthouse",
+    title: "Marketing Head at Planthouse",
+    favicon: "/images/favicons/planthouse.svg",
+    body: "Planthouse sells tropical houseplants like Monstera, Alocasia and Philodendron from Vienna, Austria. Sales start in spring 2027.",
+    links: [{ href: "https://www.planthouse.at", label: "planthouse.at →", external: true }],
+  },
+  {
     id: "hausgemacht",
     title: "Member of the technical staff & board at hausgemacht",
     favicon: "/images/favicons/hausgemacht.svg",
